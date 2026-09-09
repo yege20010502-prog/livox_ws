@@ -1,0 +1,23 @@
+[0.324s] Invoking command in '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /root/deepRoboticsl/deepcontrol/build/dog_control_bridge -- -j8 -l8
+[0.480s] [35m[1mConsolidate compiler generated dependencies of target dog_control_bridge[0m
+[4.721s] [100%] Built target dog_control_bridge
+[5.166s] Invoked command in '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /root/deepRoboticsl/deepcontrol/build/dog_control_bridge -- -j8 -l8
+[5.185s] Invoking command in '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /root/deepRoboticsl/deepcontrol/build/dog_control_bridge
+[5.206s] -- Install configuration: ""
+[5.215s] -- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/lib/dog_control_bridge/dog_control_bridge
+[5.227s] -- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/ament_index/resource_index/package_run_dependencies/dog_control_bridge
+[5.320s] -- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/ament_index/resource_index/parent_prefix_path/dog_control_bridge
+[5.424s] -- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/environment/ament_prefix_path.sh
+[5.441s] -- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/environment/ament_prefix_path.dsv
+[5.452s] -- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/environment/path.sh
+[5.465s] -- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/environment/path.dsv
+[5.555s] -- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/local_setup.bash
+[5.649s] -- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/local_setup.sh
+[5.832s] -- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/local_setup.zsh
+[5.935s] -- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/local_setup.dsv
+[5.953s] -- Installing: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/package.dsv
+[5.959s] -- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/ament_index/resource_index/packages/dog_control_bridge
+[5.966s] -- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/cmake/dog_control_bridgeConfig.cmake
+[6.142s] -- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/cmake/dog_control_bridgeConfig-version.cmake
+[6.235s] -- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/package.xml
+[6.252s] Invoked command in '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /root/deepRoboticsl/deepcontrol/build/dog_control_bridge

@@ -1,0 +1,2 @@
+Invoking command in '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /root/deepRoboticsl/deepcontrol/build/dog_control_bridge -- -j8 -l8
+Invoked command in '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /root/deepRoboticsl/deepcontrol/build/dog_control_bridge -- -j8 -l8

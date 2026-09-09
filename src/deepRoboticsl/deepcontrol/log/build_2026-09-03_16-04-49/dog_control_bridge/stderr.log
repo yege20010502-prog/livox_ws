@@ -1,0 +1,5 @@
+[0mCMake Error: The current CMakeCache.txt directory /root/nav/livox_ws/src/deepRoboticsl/deepcontrol/build/dog_control_bridge/CMakeCache.txt is different than the directory /root/deepRoboticsl/deepcontrol/build/dog_control_bridge where CMakeCache.txt was created. This may result in binaries being created in the wrong place. If you are not sure, reedit the CMakeCache.txt[0m
+/bin/sh: 1: cd: can't cd to /root/deepRoboticsl/deepcontrol/build/dog_control_bridge
+gmake[2]: *** [CMakeFiles/dog_control_bridge.dir/build.make:1290: CMakeFiles/dog_control_bridge.dir/depend] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:136: CMakeFiles/dog_control_bridge.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

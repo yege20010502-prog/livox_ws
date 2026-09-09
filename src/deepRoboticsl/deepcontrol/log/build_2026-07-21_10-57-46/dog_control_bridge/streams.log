@@ -1,0 +1,5 @@
+[0.064s] Invoking command in '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /root/deepRoboticsl/deepcontrol -DCMAKE_INSTALL_PREFIX=/root/deepRoboticsl/deepcontrol/install/dog_control_bridge
+[0.373s] -- The C compiler identification is GNU 11.4.0
+[0.705s] -- The CXX compiler identification is GNU 11.4.0
+[0.818s] -- Detecting C compiler ABI info
+[2.059s] Invoked command in '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge' returned '-2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /root/deepRoboticsl/deepcontrol -DCMAKE_INSTALL_PREFIX=/root/deepRoboticsl/deepcontrol/install/dog_control_bridge

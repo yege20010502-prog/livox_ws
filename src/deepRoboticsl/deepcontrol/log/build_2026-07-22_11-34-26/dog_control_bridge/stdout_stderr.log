@@ -1,0 +1,4 @@
+[35m[1mConsolidate compiler generated dependencies of target dog_control_bridge[0m
+gmake[2]: *** [CMakeFiles/dog_control_bridge.dir/build.make:1290: CMakeFiles/dog_control_bridge.dir/depend] Interrupt
+gmake[1]: *** [CMakeFiles/Makefile2:136: CMakeFiles/dog_control_bridge.dir/all] Interrupt
+gmake: *** [Makefile:146: all] Interrupt

@@ -1,0 +1,51 @@
+[2.041s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--packages-select', 'fastlio2']
+[2.051s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=8, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=['fastlio2'], packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7fb42b44c0>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7fb4283f70>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7fb4283f70>>)
+[3.504s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[3.530s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[3.538s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[3.541s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[3.553s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[3.564s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[3.566s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/root/nav/livox_ws/src'
+[3.568s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[3.580s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[3.590s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[3.599s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[3.603s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[3.612s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[3.621s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[3.625s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[3.634s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[3.781s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[3.789s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[3.791s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[3.802s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[3.804s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[3.815s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main) by extensions ['ignore', 'ignore_ament_install']
+[3.817s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main) by extension 'ignore'
+[3.828s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main) by extension 'ignore_ament_install'
+[3.831s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main) by extensions ['colcon_pkg']
+[3.843s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main) by extension 'colcon_pkg'
+[3.853s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main) by extensions ['colcon_meta']
+[3.856s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main) by extension 'colcon_meta'
+[3.865s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main) by extensions ['ros']
+[3.868s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main) by extension 'ros'
+[3.880s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main) by extensions ['cmake', 'python']
+[3.891s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main) by extension 'cmake'
+[3.901s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main) by extension 'python'
+[3.905s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main) by extensions ['python_setup_py']
+[3.917s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main) by extension 'python_setup_py'
+[3.927s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main/fastlio2) by extensions ['ignore', 'ignore_ament_install']
+[3.938s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main/fastlio2) by extension 'ignore'
+[3.942s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main/fastlio2) by extension 'ignore_ament_install'
+[3.951s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main/fastlio2) by extensions ['colcon_pkg']
+[3.960s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main/fastlio2) by extension 'colcon_pkg'
+[3.964s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main/fastlio2) by extensions ['colcon_meta']
+[3.971s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main/fastlio2) by extension 'colcon_meta'
+[3.973s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main/fastlio2) by extensions ['ros']
+[3.974s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main/fastlio2) by extension 'ros'
+[4.024s] DEBUG:colcon.colcon_core.package_identification:Package 'FASTLIO2_ROS2-main/fastlio2' with type 'ros.ament_cmake' and name 'fastlio2'
+[4.037s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main/hba) by extensions ['ignore', 'ignore_ament_install']
+[4.046s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main/hba) by extension 'ignore'
+[4.049s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main/hba) by extension 'ignore_ament_install'
+[4.061s] Level 1:colcon.colcon_core.package_identification:_identify(FASTLIO2_ROS2-main/hba) by extensions ['colcon_pkg']

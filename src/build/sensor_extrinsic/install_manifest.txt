@@ -1,0 +1,16 @@
+/root/nav/livox_ws/src/install/sensor_extrinsic/share/ament_index/resource_index/package_run_dependencies/sensor_extrinsic
+/root/nav/livox_ws/src/install/sensor_extrinsic/share/ament_index/resource_index/parent_prefix_path/sensor_extrinsic
+/root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/environment/ament_prefix_path.sh
+/root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/environment/ament_prefix_path.dsv
+/root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/environment/path.sh
+/root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/environment/path.dsv
+/root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/local_setup.bash
+/root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/local_setup.sh
+/root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/local_setup.zsh
+/root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/local_setup.dsv
+/root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/package.dsv
+/root/nav/livox_ws/src/install/sensor_extrinsic/share/ament_index/resource_index/packages/sensor_extrinsic
+/root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/cmake/sensor_extrinsicConfig.cmake
+/root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/cmake/sensor_extrinsicConfig-version.cmake
+/root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/package.xml
+/root/nav/livox_ws/src/install/sensor_extrinsic/lib/sensor_extrinsic/lidar_extrinsic_publisher

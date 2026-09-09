@@ -1,0 +1,5 @@
+if(EXISTS "/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/tools/nav3d_pcl_tools_tests[1]_tests.cmake")
+  include("/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/tools/nav3d_pcl_tools_tests[1]_tests.cmake")
+else()
+  add_test(nav3d_pcl_tools_tests_NOT_BUILT nav3d_pcl_tools_tests_NOT_BUILT)
+endif()

@@ -1,0 +1,1 @@
+ament_cmake_symlink_install_targets("TARGET_FILES" "/root/nav/livox_ws/src/deepRoboticsl/deepcontrol/build/dog_control_bridge/dog_control_bridge" "TARGETS" "dog_control_bridge" "DESTINATION" "lib/dog_control_bridge")

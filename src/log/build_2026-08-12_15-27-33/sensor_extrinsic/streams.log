@@ -1,0 +1,7 @@
+[0.026s] Invoking command in '/root/nav/livox_ws/src/build/sensor_extrinsic': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /root/nav/livox_ws/src/sensor_extrinsic -DCMAKE_INSTALL_PREFIX=/root/nav/livox_ws/src/install/sensor_extrinsic
+[0.038s] -- Configuring incomplete, errors occurred!
+[0.045s] [31mCMake Error at CMakeLists.txt:29:
+[0.053s]   Parse error.  Function missing ending ")".  End of file reached.
+[0.063s] 
+[0.070s] [0m
+[0.078s] Invoked command in '/root/nav/livox_ws/src/build/sensor_extrinsic' returned '1': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /root/nav/livox_ws/src/sensor_extrinsic -DCMAKE_INSTALL_PREFIX=/root/nav/livox_ws/src/install/sensor_extrinsic

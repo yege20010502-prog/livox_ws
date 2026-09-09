@@ -1,0 +1,49 @@
+imu_topic: /livox/imu
+lidar_topic: /livox/lidar
+
+# FAST-LIO2 internal state uses the IMU/body reference frame.
+body_frame: imu_link
+world_frame: odom
+
+print_time_cost: false
+
+# Livox MID360 reports acceleration in g. Convert it to m/s^2 before
+# propagation; keep this configurable for other IMU drivers.
+imu_acc_scale: 9.80665
+
+# 姣忛殧澶氬皯涓偣鍙栦竴涓偣銆傚厛闄嶄綆涓㈢偣閲忥紝淇濊瘉鍖归厤绋冲畾
+lidar_filter_num: 2      
+
+lidar_min_range: 0.5
+lidar_max_range: 30.0
+
+# MID360 + 瀹ゅ唴鏈哄櫒鐙楃殑鍒濆寤鸿
+scan_resolution: 0.10
+map_resolution: 0.15
+
+
+# 褰撳墠 1000 m 瀵瑰鍐呮満鍣ㄧ嫍杩囧ぇ
+cube_len: 200.0
+
+# Effective local map detection range.
+det_range: 40.0
+
+move_thresh: 1.5
+
+na: 0.1
+ng: 0.1
+nba: 0.0001
+nbg: 0.0001
+
+imu_init_num: 1000
+
+near_search_num: 5
+ieskf_max_iter: 4
+
+gravity_align: true
+esti_il: false
+
+r_il: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+t_il: [-0.011, -0.02329, 0.04412]
+
+lidar_cov_inv: 1000.0

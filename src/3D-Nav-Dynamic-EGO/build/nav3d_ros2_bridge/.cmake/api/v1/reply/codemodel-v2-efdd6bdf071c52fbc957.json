@@ -1,0 +1,150 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-eb7be1a3066330e940aa.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						4,
+						6
+					]
+				},
+				{
+					"build" : "nav3d_core_build",
+					"jsonFile" : "directory-nav3d_core_build-e35a4c44bd2961afc157.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/core",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "nav3d_tools_build",
+					"jsonFile" : "directory-nav3d_tools_build-ced5fa63737b1a80c7e0.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/tools",
+					"targetIndexes" : 
+					[
+						2,
+						3,
+						5
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2
+					],
+					"name" : "nav3d_ros2_bridge",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "nav3d_bridge_node::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-nav3d_bridge_node-3add8324741b7595f00a.json",
+					"name" : "nav3d_bridge_node",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "nav3d_core::@4ea3a97cf260985a8dac",
+					"jsonFile" : "target-nav3d_core-0376d15c265fec6945a4.json",
+					"name" : "nav3d_core",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "nav3d_octomap_trajectory_demo::@3dc9e3e4c13ae65f06e4",
+					"jsonFile" : "target-nav3d_octomap_trajectory_demo-7df1b4a5ad77db862002.json",
+					"name" : "nav3d_octomap_trajectory_demo",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "nav3d_pcl_tools::@3dc9e3e4c13ae65f06e4",
+					"jsonFile" : "target-nav3d_pcl_tools-02c742e62178289b1bf5.json",
+					"name" : "nav3d_pcl_tools",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "nav3d_ros2_bridge_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-nav3d_ros2_bridge_uninstall-e173feb95404aaa4f3b0.json",
+					"name" : "nav3d_ros2_bridge_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "nav3d_standalone_demo::@3dc9e3e4c13ae65f06e4",
+					"jsonFile" : "target-nav3d_standalone_demo-57633431fe362dba11f4.json",
+					"name" : "nav3d_standalone_demo",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-ed0c9587f684d45850df.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge",
+		"source" : "/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

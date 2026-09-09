@@ -1,0 +1,102 @@
+[0.341s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--paths', 'ros2_bridge/nav3d_ros2_bridge', '--packages-select', 'nav3d_ros2_bridge']
+[0.342s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=8, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=['/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge'], packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=['nav3d_ros2_bridge'], packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7f9e014190>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7f9dfe3cd0>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7f9dfe3cd0>>)
+[0.805s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.815s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.816s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.818s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.819s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.820s] Level 1:colcon.colcon_core.package_discovery:PathPackageDiscovery.discover(['/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge'])
+[0.823s] Level 1:colcon.colcon_core.package_identification:_identify(/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge) by extensions ['ignore', 'ignore_ament_install']
+[0.824s] Level 1:colcon.colcon_core.package_identification:_identify(/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge) by extension 'ignore'
+[0.826s] Level 1:colcon.colcon_core.package_identification:_identify(/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge) by extension 'ignore_ament_install'
+[0.827s] Level 1:colcon.colcon_core.package_identification:_identify(/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge) by extensions ['colcon_pkg']
+[0.828s] Level 1:colcon.colcon_core.package_identification:_identify(/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge) by extension 'colcon_pkg'
+[0.830s] Level 1:colcon.colcon_core.package_identification:_identify(/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge) by extensions ['colcon_meta']
+[0.831s] Level 1:colcon.colcon_core.package_identification:_identify(/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge) by extension 'colcon_meta'
+[0.833s] Level 1:colcon.colcon_core.package_identification:_identify(/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge) by extensions ['ros']
+[0.834s] Level 1:colcon.colcon_core.package_identification:_identify(/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge) by extension 'ros'
+[0.881s] DEBUG:colcon.colcon_core.package_identification:Package '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge' with type 'ros.ament_cmake' and name 'nav3d_ros2_bridge'
+[0.883s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.935s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.937s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.950s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 1 installed packages in /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install
+[0.953s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 10 installed packages in /root/nav/livox_ws/install
+[0.957s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 332 installed packages in /opt/ros/humble
+[0.961s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[1.103s] Level 5:colcon.colcon_core.verb:set package 'nav3d_ros2_bridge' build argument 'cmake_args' from command line to 'None'
+[1.105s] Level 5:colcon.colcon_core.verb:set package 'nav3d_ros2_bridge' build argument 'cmake_target' from command line to 'None'
+[1.107s] Level 5:colcon.colcon_core.verb:set package 'nav3d_ros2_bridge' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.109s] Level 5:colcon.colcon_core.verb:set package 'nav3d_ros2_bridge' build argument 'cmake_clean_cache' from command line to 'False'
+[1.111s] Level 5:colcon.colcon_core.verb:set package 'nav3d_ros2_bridge' build argument 'cmake_clean_first' from command line to 'False'
+[1.113s] Level 5:colcon.colcon_core.verb:set package 'nav3d_ros2_bridge' build argument 'cmake_force_configure' from command line to 'False'
+[1.114s] Level 5:colcon.colcon_core.verb:set package 'nav3d_ros2_bridge' build argument 'ament_cmake_args' from command line to 'None'
+[1.116s] Level 5:colcon.colcon_core.verb:set package 'nav3d_ros2_bridge' build argument 'catkin_cmake_args' from command line to 'None'
+[1.117s] Level 5:colcon.colcon_core.verb:set package 'nav3d_ros2_bridge' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.120s] DEBUG:colcon.colcon_core.verb:Building package 'nav3d_ros2_bridge' with the following arguments: {'ament_cmake_args': None, 'build_base': '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge', 'merge_install': False, 'path': '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge', 'symlink_install': False, 'test_result_base': None}
+[1.122s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[1.126s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[1.128s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge' with build type 'ament_cmake'
+[1.130s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge'
+[1.142s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[1.144s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.146s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.471s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge -- -j8 -l8
+[25.116s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge -- -j8 -l8
+[25.151s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge
+[25.523s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(nav3d_ros2_bridge)
+[25.565s] Level 1:colcon.colcon_core.environment:checking '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge' for CMake module files
+[25.570s] Level 1:colcon.colcon_core.environment:checking '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge' for CMake config files
+[25.576s] Level 1:colcon.colcon_core.shell:create_environment_hook('nav3d_ros2_bridge', 'cmake_prefix_path')
+[25.582s] INFO:colcon.colcon_core.shell:Creating environment hook '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/hook/cmake_prefix_path.ps1'
+[25.683s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/hook/cmake_prefix_path.dsv'
+[25.776s] INFO:colcon.colcon_core.shell:Creating environment hook '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/hook/cmake_prefix_path.sh'
+[25.869s] Level 1:colcon.colcon_core.environment:checking '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib'
+[25.872s] Level 1:colcon.colcon_core.environment:checking '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/bin'
+[25.874s] Level 1:colcon.colcon_core.environment:checking '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib/pkgconfig/nav3d_ros2_bridge.pc'
+[25.878s] Level 1:colcon.colcon_core.environment:checking '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib/python3.10/site-packages'
+[25.881s] Level 1:colcon.colcon_core.environment:checking '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/bin'
+[25.884s] INFO:colcon.colcon_core.shell:Creating package script '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/package.ps1'
+[25.974s] INFO:colcon.colcon_core.shell:Creating package descriptor '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/package.dsv'
+[26.070s] INFO:colcon.colcon_core.shell:Creating package script '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/package.sh'
+[26.163s] INFO:colcon.colcon_core.shell:Creating package script '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/package.bash'
+[26.254s] INFO:colcon.colcon_core.shell:Creating package script '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/package.zsh'
+[26.353s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/colcon-core/packages/nav3d_ros2_bridge)
+[26.446s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(nav3d_ros2_bridge)
+[26.450s] Level 1:colcon.colcon_core.environment:checking '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge' for CMake module files
+[26.454s] Level 1:colcon.colcon_core.environment:checking '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge' for CMake config files
+[26.467s] Level 1:colcon.colcon_core.shell:create_environment_hook('nav3d_ros2_bridge', 'cmake_prefix_path')
+[26.471s] INFO:colcon.colcon_core.shell:Creating environment hook '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/hook/cmake_prefix_path.ps1'
+[26.562s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/hook/cmake_prefix_path.dsv'
+[26.653s] INFO:colcon.colcon_core.shell:Creating environment hook '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/hook/cmake_prefix_path.sh'
+[26.743s] Level 1:colcon.colcon_core.environment:checking '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib'
+[26.746s] Level 1:colcon.colcon_core.environment:checking '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/bin'
+[26.748s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge
+[26.749s] Level 1:colcon.colcon_core.environment:checking '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib/pkgconfig/nav3d_ros2_bridge.pc'
+[26.753s] Level 1:colcon.colcon_core.environment:checking '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib/python3.10/site-packages'
+[26.758s] Level 1:colcon.colcon_core.environment:checking '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/bin'
+[26.763s] INFO:colcon.colcon_core.shell:Creating package script '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/package.ps1'
+[26.855s] INFO:colcon.colcon_core.shell:Creating package descriptor '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/package.dsv'
+[26.946s] INFO:colcon.colcon_core.shell:Creating package script '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/package.sh'
+[27.038s] INFO:colcon.colcon_core.shell:Creating package script '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/package.bash'
+[27.131s] INFO:colcon.colcon_core.shell:Creating package script '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/package.zsh'
+[27.221s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/colcon-core/packages/nav3d_ros2_bridge)
+[27.311s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[27.314s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[27.316s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[27.320s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[27.446s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.notify_send': Could not find 'notify-send'
+[27.449s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[27.451s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[27.452s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[27.478s] DEBUG:colcon.colcon_notification.desktop_notification.notify2:Failed to initialize notify2: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.Notifications was not provided by any .service files
+[27.480s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[27.484s] INFO:colcon.colcon_core.shell:Creating prefix script '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/local_setup.ps1'
+[27.580s] INFO:colcon.colcon_core.shell:Creating prefix util module '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/_local_setup_util_ps1.py'
+[27.681s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/setup.ps1'
+[27.776s] INFO:colcon.colcon_core.shell:Creating prefix script '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/local_setup.sh'
+[27.867s] INFO:colcon.colcon_core.shell:Creating prefix util module '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/_local_setup_util_sh.py'
+[27.960s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/setup.sh'
+[28.060s] INFO:colcon.colcon_core.shell:Creating prefix script '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/local_setup.bash'
+[28.152s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/setup.bash'
+[28.249s] INFO:colcon.colcon_core.shell:Creating prefix script '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/local_setup.zsh'
+[28.341s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/setup.zsh'

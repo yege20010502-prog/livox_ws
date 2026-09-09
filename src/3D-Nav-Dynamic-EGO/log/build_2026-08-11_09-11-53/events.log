@@ -1,0 +1,286 @@
+[0.000000] (-) TimerEvent: {}
+[0.002721] (nav3d_ros2_bridge) JobQueued: {'identifier': 'nav3d_ros2_bridge', 'dependencies': OrderedDict()}
+[0.004122] (nav3d_ros2_bridge) JobStarted: {'identifier': 'nav3d_ros2_bridge'}
+[0.097058] (-) TimerEvent: {}
+[0.206223] (nav3d_ros2_bridge) JobProgress: {'identifier': 'nav3d_ros2_bridge', 'progress': 'cmake'}
+[0.211313] (-) TimerEvent: {}
+[0.302932] (nav3d_ros2_bridge) JobProgress: {'identifier': 'nav3d_ros2_bridge', 'progress': 'build'}
+[0.310216] (nav3d_ros2_bridge) Command: {'cmd': ['/usr/bin/cmake', '--build', '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge', '--', '-j8', '-l8'], 'cwd': '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('UMS_MOUNTPOINT', '/mnt/ums'), ('GST_V4L2_PREFERRED_FOURCC', 'NV12:YU12:NV16:YUY2'), ('USER', 'root'), ('SSH_CLIENT', '172.31.205.215 51042 22'), ('XDG_SESSION_TYPE', 'tty'), ('SHLVL', '1'), ('USB_FUNCS', 'adb'), ('LD_LIBRARY_PATH', '/root/nav/livox_ws/install/pcd2pgm/lib:/root/nav/livox_ws/install/fast_lio/lib:/root/nav/livox_ws/install/livox_ros_driver2/lib:/root/nav/livox_ws/install/interface/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib'), ('MOTD_SHOWN', 'pam'), ('HOME', '/root'), ('OLDPWD', '/root/nav/livox_ws'), ('SSH_TTY', '/dev/pts/4'), ('GST_INSPECT_NO_COLORS', '1'), ('ROS_PYTHON_VERSION', '3'), ('COGL_DRIVER', 'gles2'), ('PLAYBIN2_PREFERRED_VIDEOSINK', 'xvimagesink'), ('GST_VIDEO_DECODER_QOS', '0'), ('LC_CTYPE', 'C.UTF-8'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/0/bus'), ('DEBUGINFOD_URLS', ''), ('COLCON_PREFIX_PATH', '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install:/root/nav/livox_ws/install'), ('GST_V4L2SRC_MAX_RESOLUTION', '3840x2160'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'root'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm-256color'), ('GST_GL_API', 'gles2'), ('XDG_SESSION_ID', 'c8'), ('GST_VIDEO_CONVERT_PREFERRED_FORMAT', 'NV12:NV16:I420:YUY2'), ('GST_V4L2SRC_RK_DEVICES', '_mainpath:_selfpath:_bypass:_scale'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/0'), ('GST_GL_PLATFORM', 'egl'), ('GST_DEBUG_NO_COLOR', '1'), ('GST_V4L2SRC_DEFAULT_DEVICE', '/dev/video-camera0'), ('ADBD_SHELL', '/bin/bash'), ('RMW_IMPLEMENTATION', 'rmw_fastrtps_cpp'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GST_V4L2_USE_LIBV4L2', '1'), ('ROS_DOMAIN_ID', '0'), ('UMS_SIZE', '256M'), ('AMENT_PREFIX_PATH', '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge:/root/nav/livox_ws/install/unitree_move_bridge:/root/nav/livox_ws/install/trajectory_tracker:/root/nav/livox_ws/install/pgo:/root/nav/livox_ws/install/pcd2pgm:/root/nav/livox_ws/install/localizer:/root/nav/livox_ws/install/fastlio2:/root/nav/livox_ws/install/fast_lio:/root/nav/livox_ws/install/livox_ros_driver2:/root/nav/livox_ws/install/hba:/root/nav/livox_ws/install/interface:/opt/ros/humble'), ('SHELL', '/bin/bash'), ('UMS_RO', '0'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('UMS_FSTYPE', 'vfat'), ('PWD', '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge'), ('SSH_CONNECTION', '172.31.205.215 51042 172.31.205.142 22'), ('AUTOVIDEOSINK_PREFERRED', 'xvimagesink'), ('ADB_TCP_PORT', '5555'), ('PYTHONPATH', '/root/nav/livox_ws/install/fast_lio/local/lib/python3.10/dist-packages:/root/nav/livox_ws/install/livox_ros_driver2/local/lib/python3.10/dist-packages:/root/nav/livox_ws/install/interface/local/lib/python3.10/dist-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('UMS_MOUNT', '0'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge:/root/nav/livox_ws/install/unitree_move_bridge:/root/nav/livox_ws/install/trajectory_tracker:/root/nav/livox_ws/install/pgo:/root/nav/livox_ws/install/pcd2pgm:/root/nav/livox_ws/install/localizer:/root/nav/livox_ws/install/fastlio2:/root/nav/livox_ws/install/fast_lio:/root/nav/livox_ws/install/livox_ros_driver2:/root/nav/livox_ws/install/hba:/root/nav/livox_ws/install/interface:/opt/ros/humble'), ('UMS_FILE', '/userdata/ums_shared.img')]), 'shell': False}
+[0.345820] (-) TimerEvent: {}
+[0.448159] (-) TimerEvent: {}
+[0.551694] (-) TimerEvent: {}
+[0.644320] (nav3d_ros2_bridge) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target nav3d_core\x1b[0m\n'}
+[0.652354] (-) TimerEvent: {}
+[0.754919] (-) TimerEvent: {}
+[0.857769] (-) TimerEvent: {}
+[0.961004] (-) TimerEvent: {}
+[1.064222] (-) TimerEvent: {}
+[1.166734] (-) TimerEvent: {}
+[1.269772] (-) TimerEvent: {}
+[1.372429] (-) TimerEvent: {}
+[1.475896] (-) TimerEvent: {}
+[1.578962] (-) TimerEvent: {}
+[1.683017] (-) TimerEvent: {}
+[1.786878] (-) TimerEvent: {}
+[1.889989] (-) TimerEvent: {}
+[1.993458] (-) TimerEvent: {}
+[2.096229] (-) TimerEvent: {}
+[2.199520] (-) TimerEvent: {}
+[2.302253] (-) TimerEvent: {}
+[2.405330] (-) TimerEvent: {}
+[2.508718] (-) TimerEvent: {}
+[2.612181] (-) TimerEvent: {}
+[2.714573] (-) TimerEvent: {}
+[2.817375] (-) TimerEvent: {}
+[2.919784] (-) TimerEvent: {}
+[3.021585] (-) TimerEvent: {}
+[3.131386] (-) TimerEvent: {}
+[3.235176] (-) TimerEvent: {}
+[3.337932] (-) TimerEvent: {}
+[3.440769] (-) TimerEvent: {}
+[3.542790] (-) TimerEvent: {}
+[3.644999] (-) TimerEvent: {}
+[3.747276] (-) TimerEvent: {}
+[3.850086] (-) TimerEvent: {}
+[3.952984] (-) TimerEvent: {}
+[4.056050] (-) TimerEvent: {}
+[4.158630] (-) TimerEvent: {}
+[4.262263] (-) TimerEvent: {}
+[4.363865] (-) TimerEvent: {}
+[4.466338] (-) TimerEvent: {}
+[4.569023] (-) TimerEvent: {}
+[4.672291] (-) TimerEvent: {}
+[4.774583] (-) TimerEvent: {}
+[4.877181] (-) TimerEvent: {}
+[4.979660] (-) TimerEvent: {}
+[5.082634] (-) TimerEvent: {}
+[5.185773] (-) TimerEvent: {}
+[5.288310] (-) TimerEvent: {}
+[5.390648] (-) TimerEvent: {}
+[5.493057] (-) TimerEvent: {}
+[5.595892] (-) TimerEvent: {}
+[5.699491] (-) TimerEvent: {}
+[5.802879] (-) TimerEvent: {}
+[5.905619] (-) TimerEvent: {}
+[6.008646] (-) TimerEvent: {}
+[6.113787] (-) TimerEvent: {}
+[6.216067] (-) TimerEvent: {}
+[6.318885] (-) TimerEvent: {}
+[6.423048] (-) TimerEvent: {}
+[6.525646] (-) TimerEvent: {}
+[6.629338] (-) TimerEvent: {}
+[6.732015] (-) TimerEvent: {}
+[6.834593] (-) TimerEvent: {}
+[6.937324] (-) TimerEvent: {}
+[7.040371] (-) TimerEvent: {}
+[7.142597] (-) TimerEvent: {}
+[7.246239] (-) TimerEvent: {}
+[7.349198] (-) TimerEvent: {}
+[7.452755] (-) TimerEvent: {}
+[7.555335] (-) TimerEvent: {}
+[7.657966] (-) TimerEvent: {}
+[7.760730] (-) TimerEvent: {}
+[7.865159] (-) TimerEvent: {}
+[7.968438] (-) TimerEvent: {}
+[8.070730] (-) TimerEvent: {}
+[8.173152] (-) TimerEvent: {}
+[8.275898] (-) TimerEvent: {}
+[8.378448] (-) TimerEvent: {}
+[8.480742] (-) TimerEvent: {}
+[8.583487] (-) TimerEvent: {}
+[8.686251] (-) TimerEvent: {}
+[8.788340] (-) TimerEvent: {}
+[8.890998] (-) TimerEvent: {}
+[8.993913] (-) TimerEvent: {}
+[9.097275] (-) TimerEvent: {}
+[9.200201] (-) TimerEvent: {}
+[9.302263] (-) TimerEvent: {}
+[9.404915] (-) TimerEvent: {}
+[9.508216] (-) TimerEvent: {}
+[9.610810] (-) TimerEvent: {}
+[9.713428] (-) TimerEvent: {}
+[9.882370] (-) TimerEvent: {}
+[9.899731] (nav3d_ros2_bridge) StdoutLine: {'line': b'[ 73%] Built target nav3d_core\n'}
+[9.944958] (nav3d_ros2_bridge) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target nav3d_pcl_tools\x1b[0m\n'}
+[9.982486] (-) TimerEvent: {}
+[10.149005] (-) TimerEvent: {}
+[10.251895] (-) TimerEvent: {}
+[10.354580] (-) TimerEvent: {}
+[10.458287] (-) TimerEvent: {}
+[10.560683] (-) TimerEvent: {}
+[10.663130] (-) TimerEvent: {}
+[10.766117] (-) TimerEvent: {}
+[10.868765] (-) TimerEvent: {}
+[10.971533] (-) TimerEvent: {}
+[11.074240] (-) TimerEvent: {}
+[11.177185] (-) TimerEvent: {}
+[11.279324] (-) TimerEvent: {}
+[11.381575] (-) TimerEvent: {}
+[11.484314] (-) TimerEvent: {}
+[11.587119] (-) TimerEvent: {}
+[11.690527] (-) TimerEvent: {}
+[11.793232] (-) TimerEvent: {}
+[11.895948] (-) TimerEvent: {}
+[11.998345] (-) TimerEvent: {}
+[12.100541] (-) TimerEvent: {}
+[12.203140] (-) TimerEvent: {}
+[12.305664] (-) TimerEvent: {}
+[12.408367] (-) TimerEvent: {}
+[12.511156] (-) TimerEvent: {}
+[12.614818] (-) TimerEvent: {}
+[12.718485] (-) TimerEvent: {}
+[12.820697] (-) TimerEvent: {}
+[12.923214] (-) TimerEvent: {}
+[13.025397] (-) TimerEvent: {}
+[13.128097] (-) TimerEvent: {}
+[13.230660] (-) TimerEvent: {}
+[13.333871] (-) TimerEvent: {}
+[13.436367] (-) TimerEvent: {}
+[13.538674] (-) TimerEvent: {}
+[13.641339] (-) TimerEvent: {}
+[13.744544] (-) TimerEvent: {}
+[13.847453] (-) TimerEvent: {}
+[13.950034] (-) TimerEvent: {}
+[14.052072] (-) TimerEvent: {}
+[14.155014] (-) TimerEvent: {}
+[14.257441] (-) TimerEvent: {}
+[14.360154] (-) TimerEvent: {}
+[14.462268] (-) TimerEvent: {}
+[14.564720] (-) TimerEvent: {}
+[14.667194] (-) TimerEvent: {}
+[14.770581] (-) TimerEvent: {}
+[14.872464] (-) TimerEvent: {}
+[14.974655] (-) TimerEvent: {}
+[15.076794] (-) TimerEvent: {}
+[15.245808] (-) TimerEvent: {}
+[15.288994] (nav3d_ros2_bridge) StdoutLine: {'line': b'[ 80%] Built target nav3d_pcl_tools\n'}
+[15.328404] (nav3d_ros2_bridge) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target nav3d_octomap_trajectory_demo\x1b[0m\n'}
+[15.342820] (nav3d_ros2_bridge) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target nav3d_standalone_demo\x1b[0m\n'}
+[15.351769] (-) TimerEvent: {}
+[15.354366] (nav3d_ros2_bridge) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target nav3d_bridge_node\x1b[0m\n'}
+[15.451947] (-) TimerEvent: {}
+[15.554585] (-) TimerEvent: {}
+[15.657613] (-) TimerEvent: {}
+[15.760202] (-) TimerEvent: {}
+[15.864814] (-) TimerEvent: {}
+[15.967607] (-) TimerEvent: {}
+[16.071687] (-) TimerEvent: {}
+[16.174352] (-) TimerEvent: {}
+[16.276431] (-) TimerEvent: {}
+[16.378034] (-) TimerEvent: {}
+[16.480362] (-) TimerEvent: {}
+[16.582158] (-) TimerEvent: {}
+[16.685663] (-) TimerEvent: {}
+[16.788691] (-) TimerEvent: {}
+[16.892958] (-) TimerEvent: {}
+[16.995560] (-) TimerEvent: {}
+[17.098228] (-) TimerEvent: {}
+[17.200511] (-) TimerEvent: {}
+[17.303389] (-) TimerEvent: {}
+[17.406009] (-) TimerEvent: {}
+[17.509358] (-) TimerEvent: {}
+[17.612363] (-) TimerEvent: {}
+[17.625898] (nav3d_ros2_bridge) StdoutLine: {'line': b'[ 86%] Built target nav3d_standalone_demo\n'}
+[17.712604] (-) TimerEvent: {}
+[17.752585] (nav3d_ros2_bridge) StdoutLine: {'line': b'[ 93%] Built target nav3d_octomap_trajectory_demo\n'}
+[17.812691] (-) TimerEvent: {}
+[17.915006] (-) TimerEvent: {}
+[18.017427] (-) TimerEvent: {}
+[18.119594] (-) TimerEvent: {}
+[18.221966] (-) TimerEvent: {}
+[18.324594] (-) TimerEvent: {}
+[18.426846] (-) TimerEvent: {}
+[18.529240] (-) TimerEvent: {}
+[18.631780] (-) TimerEvent: {}
+[18.733841] (-) TimerEvent: {}
+[18.836752] (-) TimerEvent: {}
+[18.938527] (-) TimerEvent: {}
+[19.040791] (-) TimerEvent: {}
+[19.143868] (-) TimerEvent: {}
+[19.246732] (-) TimerEvent: {}
+[19.349281] (-) TimerEvent: {}
+[19.451760] (-) TimerEvent: {}
+[19.554051] (-) TimerEvent: {}
+[19.656834] (-) TimerEvent: {}
+[19.759610] (-) TimerEvent: {}
+[19.862389] (-) TimerEvent: {}
+[19.965210] (-) TimerEvent: {}
+[20.069516] (-) TimerEvent: {}
+[20.172347] (-) TimerEvent: {}
+[20.274621] (-) TimerEvent: {}
+[20.377375] (-) TimerEvent: {}
+[20.479618] (-) TimerEvent: {}
+[20.582339] (-) TimerEvent: {}
+[20.684677] (-) TimerEvent: {}
+[20.787083] (-) TimerEvent: {}
+[20.889833] (-) TimerEvent: {}
+[20.991794] (-) TimerEvent: {}
+[21.093751] (-) TimerEvent: {}
+[21.196705] (-) TimerEvent: {}
+[21.279059] (nav3d_ros2_bridge) StdoutLine: {'line': b'[100%] Built target nav3d_bridge_node\n'}
+[21.296937] (-) TimerEvent: {}
+[21.481883] (-) TimerEvent: {}
+[21.653294] (-) TimerEvent: {}
+[21.825091] (-) TimerEvent: {}
+[21.998230] (-) TimerEvent: {}
+[22.171185] (-) TimerEvent: {}
+[22.343375] (-) TimerEvent: {}
+[22.516390] (-) TimerEvent: {}
+[22.693894] (-) TimerEvent: {}
+[22.866428] (-) TimerEvent: {}
+[23.037046] (-) TimerEvent: {}
+[23.207902] (-) TimerEvent: {}
+[23.378924] (-) TimerEvent: {}
+[23.551025] (-) TimerEvent: {}
+[23.722528] (-) TimerEvent: {}
+[23.894801] (-) TimerEvent: {}
+[23.979454] (nav3d_ros2_bridge) CommandEnded: {'returncode': 0}
+[23.989553] (nav3d_ros2_bridge) JobProgress: {'identifier': 'nav3d_ros2_bridge', 'progress': 'install'}
+[23.994882] (-) TimerEvent: {}
+[24.014921] (nav3d_ros2_bridge) Command: {'cmd': ['/usr/bin/cmake', '--install', '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge'], 'cwd': '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('UMS_MOUNTPOINT', '/mnt/ums'), ('GST_V4L2_PREFERRED_FOURCC', 'NV12:YU12:NV16:YUY2'), ('USER', 'root'), ('SSH_CLIENT', '172.31.205.215 51042 22'), ('XDG_SESSION_TYPE', 'tty'), ('SHLVL', '1'), ('USB_FUNCS', 'adb'), ('LD_LIBRARY_PATH', '/root/nav/livox_ws/install/pcd2pgm/lib:/root/nav/livox_ws/install/fast_lio/lib:/root/nav/livox_ws/install/livox_ros_driver2/lib:/root/nav/livox_ws/install/interface/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib'), ('MOTD_SHOWN', 'pam'), ('HOME', '/root'), ('OLDPWD', '/root/nav/livox_ws'), ('SSH_TTY', '/dev/pts/4'), ('GST_INSPECT_NO_COLORS', '1'), ('ROS_PYTHON_VERSION', '3'), ('COGL_DRIVER', 'gles2'), ('PLAYBIN2_PREFERRED_VIDEOSINK', 'xvimagesink'), ('GST_VIDEO_DECODER_QOS', '0'), ('LC_CTYPE', 'C.UTF-8'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/0/bus'), ('DEBUGINFOD_URLS', ''), ('COLCON_PREFIX_PATH', '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install:/root/nav/livox_ws/install'), ('GST_V4L2SRC_MAX_RESOLUTION', '3840x2160'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'root'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm-256color'), ('GST_GL_API', 'gles2'), ('XDG_SESSION_ID', 'c8'), ('GST_VIDEO_CONVERT_PREFERRED_FORMAT', 'NV12:NV16:I420:YUY2'), ('GST_V4L2SRC_RK_DEVICES', '_mainpath:_selfpath:_bypass:_scale'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/0'), ('GST_GL_PLATFORM', 'egl'), ('GST_DEBUG_NO_COLOR', '1'), ('GST_V4L2SRC_DEFAULT_DEVICE', '/dev/video-camera0'), ('ADBD_SHELL', '/bin/bash'), ('RMW_IMPLEMENTATION', 'rmw_fastrtps_cpp'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GST_V4L2_USE_LIBV4L2', '1'), ('ROS_DOMAIN_ID', '0'), ('UMS_SIZE', '256M'), ('AMENT_PREFIX_PATH', '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge:/root/nav/livox_ws/install/unitree_move_bridge:/root/nav/livox_ws/install/trajectory_tracker:/root/nav/livox_ws/install/pgo:/root/nav/livox_ws/install/pcd2pgm:/root/nav/livox_ws/install/localizer:/root/nav/livox_ws/install/fastlio2:/root/nav/livox_ws/install/fast_lio:/root/nav/livox_ws/install/livox_ros_driver2:/root/nav/livox_ws/install/hba:/root/nav/livox_ws/install/interface:/opt/ros/humble'), ('SHELL', '/bin/bash'), ('UMS_RO', '0'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('UMS_FSTYPE', 'vfat'), ('PWD', '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge'), ('SSH_CONNECTION', '172.31.205.215 51042 172.31.205.142 22'), ('AUTOVIDEOSINK_PREFERRED', 'xvimagesink'), ('ADB_TCP_PORT', '5555'), ('PYTHONPATH', '/root/nav/livox_ws/install/fast_lio/local/lib/python3.10/dist-packages:/root/nav/livox_ws/install/livox_ros_driver2/local/lib/python3.10/dist-packages:/root/nav/livox_ws/install/interface/local/lib/python3.10/dist-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('UMS_MOUNT', '0'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge:/root/nav/livox_ws/install/unitree_move_bridge:/root/nav/livox_ws/install/trajectory_tracker:/root/nav/livox_ws/install/pgo:/root/nav/livox_ws/install/pcd2pgm:/root/nav/livox_ws/install/localizer:/root/nav/livox_ws/install/fastlio2:/root/nav/livox_ws/install/fast_lio:/root/nav/livox_ws/install/livox_ros_driver2:/root/nav/livox_ws/install/hba:/root/nav/livox_ws/install/interface:/opt/ros/humble'), ('UMS_FILE', '/userdata/ums_shared.img')]), 'shell': False}
+[24.044742] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[24.054018] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/nav3d_octomap_msgs_library_path.sh\n'}
+[24.145704] (-) TimerEvent: {}
+[24.147282] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/nav3d_octomap_msgs_library_path.dsv\n'}
+[24.156663] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib/nav3d_ros2_bridge/nav3d_bridge_node\n'}
+[24.247648] (-) TimerEvent: {}
+[24.252368] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib/nav3d_ros2_bridge/nav3d_cmd_vel_pose_sim.py\n'}
+[24.260450] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib/nav3d_ros2_bridge/nav3d_local_replan_smoke.py\n'}
+[24.280807] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/launch\n'}
+[24.372282] (-) TimerEvent: {}
+[24.375371] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/launch/nav3d_bridge.launch.py\n'}
+[24.386444] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/launch/nav3d_local_replan_smoke.launch.py\n'}
+[24.394771] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/rviz\n'}
+[24.402955] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/rviz/nav3d.rviz\n'}
+[24.412627] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/config\n'}
+[24.425564] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/config/nav3d_bridge.yaml\n'}
+[24.438047] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/ament_index/resource_index/package_run_dependencies/nav3d_ros2_bridge\n'}
+[24.449220] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/ament_index/resource_index/parent_prefix_path/nav3d_ros2_bridge\n'}
+[24.466933] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/ament_prefix_path.sh\n'}
+[24.559661] (-) TimerEvent: {}
+[24.562107] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/ament_prefix_path.dsv\n'}
+[24.653084] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/path.sh\n'}
+[24.744253] (-) TimerEvent: {}
+[24.747159] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/path.dsv\n'}
+[24.755835] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/local_setup.bash\n'}
+[24.847010] (-) TimerEvent: {}
+[24.849910] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/local_setup.sh\n'}
+[24.942387] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/local_setup.zsh\n'}
+[25.036477] (-) TimerEvent: {}
+[25.039447] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/local_setup.dsv\n'}
+[25.130247] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/package.dsv\n'}
+[25.225479] (-) TimerEvent: {}
+[25.228285] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/ament_index/resource_index/packages/nav3d_ros2_bridge\n'}
+[25.321745] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/cmake/nav3d_ros2_bridgeConfig.cmake\n'}
+[25.339148] (-) TimerEvent: {}
+[25.341001] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/cmake/nav3d_ros2_bridgeConfig-version.cmake\n'}
+[25.434829] (nav3d_ros2_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/package.xml\n'}
+[25.527401] (-) TimerEvent: {}
+[25.612600] (nav3d_ros2_bridge) CommandEnded: {'returncode': 0}
+[25.630346] (-) TimerEvent: {}
+[25.735636] (-) TimerEvent: {}
+[25.916903] (-) TimerEvent: {}
+[26.103066] (-) TimerEvent: {}
+[26.183264] (nav3d_ros2_bridge) JobEnded: {'identifier': 'nav3d_ros2_bridge', 'rc': 0}
+[26.275487] (-) TimerEvent: {}
+[26.278012] (-) EventReactorShutdown: {}

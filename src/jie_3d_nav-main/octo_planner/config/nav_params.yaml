@@ -1,0 +1,46 @@
+relocalization_bin_file: ""
+relocalization_pcd_file: /root/nav/livox_ws/maps/map831/map_indoor_clean.pcd
+map_package_dir: /root/nav/livox_ws/maps/map831/maps/map_obstacles
+show_rviz: false
+show_map_gui: false
+publish_d1_odom: false
+use_static_odom_to_base: false
+
+d1_controller:
+  ros__parameters:
+    # Lite3 body frame and tracking geometry.
+    map_frame: "map"
+    base_frame: "base_link"
+    robot_center_offset_frame: "base_link"
+    robot_center_offset_x: 0.0
+    robot_center_offset_y: 0.0
+    robot_center_offset_z: 0.0
+    tracking_point_reached_xy_tolerance: 0.40
+    tracking_point_marker_scale: 0.28
+
+    # OpenCV top-down debug view.
+    enable_tracking_debug_view: true
+    tracking_debug_view_size_px: 640
+    tracking_debug_view_pixels_per_meter: 80.0
+    tracking_debug_view_frequency: 10.0
+
+    # Speed tracking gains.
+    linear_gain: 1.0
+    lateral_gain: 0.8
+    heading_gain: 0.8
+    cross_track_angular_gain: 0.5
+    final_yaw_gain: 0.3
+
+    # Motion mode and limits.
+    enable_lateral_motion: true
+    max_linear_speed: 0.25
+    max_lateral_speed: 0.20
+    max_angular_speed: 0.40
+
+    # Deadbands and goal tolerances.
+    align_final_yaw: true
+    linear_deadband: 0.05
+    lateral_deadband: 0.05
+    angular_deadband: 0.05
+    goal_position_tolerance: 0.155
+    goal_yaw_tolerance: 0.255

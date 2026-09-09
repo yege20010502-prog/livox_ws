@@ -1,0 +1,6 @@
+[0.336s] Invoking command in '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /root/deepRoboticsl/deepcontrol/build/dog_control_bridge -- -j8 -l8
+[0.511s] [35m[1mConsolidate compiler generated dependencies of target dog_control_bridge[0m
+[0.769s] gmake[2]: *** [CMakeFiles/dog_control_bridge.dir/build.make:1290: CMakeFiles/dog_control_bridge.dir/depend] Interrupt
+[0.779s] gmake[1]: *** [CMakeFiles/Makefile2:136: CMakeFiles/dog_control_bridge.dir/all] Interrupt
+[0.787s] gmake: *** [Makefile:146: all] Interrupt
+[0.794s] Invoked command in '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge' returned '-2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /root/deepRoboticsl/deepcontrol/build/dog_control_bridge -- -j8 -l8

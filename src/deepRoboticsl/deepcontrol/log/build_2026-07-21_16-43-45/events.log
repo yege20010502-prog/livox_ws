@@ -1,0 +1,477 @@
+[0.000000] (-) TimerEvent: {}
+[0.002482] (dog_control_bridge) JobQueued: {'identifier': 'dog_control_bridge', 'dependencies': OrderedDict()}
+[0.004899] (dog_control_bridge) JobStarted: {'identifier': 'dog_control_bridge'}
+[0.097096] (-) TimerEvent: {}
+[0.204012] (dog_control_bridge) JobProgress: {'identifier': 'dog_control_bridge', 'progress': 'cmake'}
+[0.206385] (-) TimerEvent: {}
+[0.294362] (dog_control_bridge) JobProgress: {'identifier': 'dog_control_bridge', 'progress': 'build'}
+[0.297744] (dog_control_bridge) Command: {'cmd': ['/usr/bin/cmake', '--build', '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge', '--', '-j8', '-l8'], 'cwd': '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('UMS_MOUNTPOINT', '/mnt/ums'), ('GST_V4L2_PREFERRED_FOURCC', 'NV12:YU12:NV16:YUY2'), ('USER', 'root'), ('SSH_CLIENT', '192.168.1.117 37026 22'), ('LC_TIME', 'C.UTF-8'), ('XDG_SESSION_TYPE', 'tty'), ('SHLVL', '1'), ('USB_FUNCS', 'adb'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib'), ('MOTD_SHOWN', 'pam'), ('HOME', '/root'), ('OLDPWD', '/root/deepRoboticsl/deepcontrol/src'), ('SSH_TTY', '/dev/pts/0'), ('GST_INSPECT_NO_COLORS', '1'), ('ROS_PYTHON_VERSION', '3'), ('COGL_DRIVER', 'gles2'), ('PLAYBIN2_PREFERRED_VIDEOSINK', 'xvimagesink'), ('LC_MONETARY', 'C.UTF-8'), ('GST_VIDEO_DECODER_QOS', '0'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/0/bus'), ('DEBUGINFOD_URLS', ''), ('COLCON_PREFIX_PATH', '/root/deepRoboticsl/deepcontrol/install'), ('GST_V4L2SRC_MAX_RESOLUTION', '3840x2160'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'root'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm-256color'), ('GST_GL_API', 'gles2'), ('XDG_SESSION_ID', 'c1'), ('GST_VIDEO_CONVERT_PREFERRED_FORMAT', 'NV12:NV16:I420:YUY2'), ('GST_V4L2SRC_RK_DEVICES', '_mainpath:_selfpath:_bypass:_scale'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('LC_ADDRESS', 'C.UTF-8'), ('XDG_RUNTIME_DIR', '/run/user/0'), ('GST_GL_PLATFORM', 'egl'), ('GST_DEBUG_NO_COLOR', '1'), ('GST_V4L2SRC_DEFAULT_DEVICE', '/dev/video-camera0'), ('ADBD_SHELL', '/bin/bash'), ('LANG', 'C.UTF-8'), ('LC_TELEPHONE', 'C.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GST_V4L2_USE_LIBV4L2', '1'), ('ROS_DOMAIN_ID', '0'), ('UMS_SIZE', '256M'), ('AMENT_PREFIX_PATH', '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge:/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LC_NAME', 'C.UTF-8'), ('UMS_RO', '0'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('UMS_FSTYPE', 'vfat'), ('LC_MEASUREMENT', 'C.UTF-8'), ('LC_IDENTIFICATION', 'C.UTF-8'), ('PWD', '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge'), ('SSH_CONNECTION', '192.168.1.117 37026 192.168.1.119 22'), ('AUTOVIDEOSINK_PREFERRED', 'xvimagesink'), ('ADB_TCP_PORT', '5555'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('LC_NUMERIC', 'C.UTF-8'), ('UMS_MOUNT', '0'), ('LC_PAPER', 'C.UTF-8'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge:/opt/ros/humble'), ('UMS_FILE', '/userdata/ums_shared.img')]), 'shell': False}
+[0.317078] (-) TimerEvent: {}
+[0.419555] (-) TimerEvent: {}
+[0.448706] (dog_control_bridge) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target dog_control_bridge\x1b[0m\n'}
+[0.519738] (-) TimerEvent: {}
+[0.622013] (-) TimerEvent: {}
+[0.724722] (-) TimerEvent: {}
+[0.829792] (-) TimerEvent: {}
+[0.932653] (-) TimerEvent: {}
+[1.035928] (-) TimerEvent: {}
+[1.140426] (-) TimerEvent: {}
+[1.244224] (-) TimerEvent: {}
+[1.347140] (-) TimerEvent: {}
+[1.450604] (-) TimerEvent: {}
+[1.555931] (-) TimerEvent: {}
+[1.660082] (-) TimerEvent: {}
+[1.766315] (-) TimerEvent: {}
+[1.869120] (-) TimerEvent: {}
+[1.971966] (-) TimerEvent: {}
+[2.074905] (-) TimerEvent: {}
+[2.177753] (-) TimerEvent: {}
+[2.281470] (-) TimerEvent: {}
+[2.383947] (-) TimerEvent: {}
+[2.487041] (-) TimerEvent: {}
+[2.593670] (-) TimerEvent: {}
+[2.696479] (-) TimerEvent: {}
+[2.801671] (-) TimerEvent: {}
+[2.904781] (-) TimerEvent: {}
+[3.010696] (-) TimerEvent: {}
+[3.114438] (-) TimerEvent: {}
+[3.218200] (-) TimerEvent: {}
+[3.321032] (-) TimerEvent: {}
+[3.424094] (-) TimerEvent: {}
+[3.531419] (-) TimerEvent: {}
+[3.634780] (-) TimerEvent: {}
+[3.737474] (-) TimerEvent: {}
+[3.840169] (-) TimerEvent: {}
+[3.944634] (-) TimerEvent: {}
+[4.047098] (-) TimerEvent: {}
+[4.149630] (-) TimerEvent: {}
+[4.253840] (-) TimerEvent: {}
+[4.356848] (-) TimerEvent: {}
+[4.459937] (-) TimerEvent: {}
+[4.563430] (-) TimerEvent: {}
+[4.657805] (dog_control_bridge) StdoutLine: {'line': b'[ 50%] \x1b[32mBuilding CXX object CMakeFiles/dog_control_bridge.dir/src/dog_control_bridge.cpp.o\x1b[0m\n'}
+[4.669054] (-) TimerEvent: {}
+[4.771939] (-) TimerEvent: {}
+[4.900106] (-) TimerEvent: {}
+[5.027901] (-) TimerEvent: {}
+[5.157648] (-) TimerEvent: {}
+[5.286086] (-) TimerEvent: {}
+[5.414331] (-) TimerEvent: {}
+[5.543438] (-) TimerEvent: {}
+[5.672181] (-) TimerEvent: {}
+[5.803194] (-) TimerEvent: {}
+[5.932408] (-) TimerEvent: {}
+[6.061577] (-) TimerEvent: {}
+[6.189943] (-) TimerEvent: {}
+[6.320647] (-) TimerEvent: {}
+[6.450088] (-) TimerEvent: {}
+[6.579052] (-) TimerEvent: {}
+[6.707772] (-) TimerEvent: {}
+[6.836519] (-) TimerEvent: {}
+[6.965657] (-) TimerEvent: {}
+[7.094885] (-) TimerEvent: {}
+[7.223775] (-) TimerEvent: {}
+[7.350918] (-) TimerEvent: {}
+[7.481138] (-) TimerEvent: {}
+[7.610499] (-) TimerEvent: {}
+[7.740138] (-) TimerEvent: {}
+[7.869412] (-) TimerEvent: {}
+[7.998397] (-) TimerEvent: {}
+[8.127235] (-) TimerEvent: {}
+[8.256687] (-) TimerEvent: {}
+[8.386073] (-) TimerEvent: {}
+[8.515273] (-) TimerEvent: {}
+[8.644263] (-) TimerEvent: {}
+[8.772859] (-) TimerEvent: {}
+[8.901676] (-) TimerEvent: {}
+[9.030471] (-) TimerEvent: {}
+[9.159501] (-) TimerEvent: {}
+[9.288306] (-) TimerEvent: {}
+[9.416347] (-) TimerEvent: {}
+[9.544445] (-) TimerEvent: {}
+[9.613732] (dog_control_bridge) StderrLine: {'line': b'In file included from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/subscription_base.hpp:32\x1b[m\x1b[K,\n'}
+[9.621580] (dog_control_bridge) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:29\x1b[m\x1b[K,\n'}
+[9.628410] (dog_control_bridge) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20\x1b[m\x1b[K,\n'}
+[9.635057] (dog_control_bridge) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25\x1b[m\x1b[K,\n'}
+[9.642380] (dog_control_bridge) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18\x1b[m\x1b[K,\n'}
+[9.649316] (-) TimerEvent: {}
+[9.651380] (dog_control_bridge) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20\x1b[m\x1b[K,\n'}
+[9.658368] (dog_control_bridge) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37\x1b[m\x1b[K,\n'}
+[9.672386] (dog_control_bridge) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25\x1b[m\x1b[K,\n'}
+[9.680100] (dog_control_bridge) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21\x1b[m\x1b[K,\n'}
+[9.687858] (dog_control_bridge) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155\x1b[m\x1b[K,\n'}
+[9.695128] (dog_control_bridge) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/root/deepRoboticsl/deepcontrol/src/dog_control_bridge.cpp:24\x1b[m\x1b[K:\n'}
+[9.702643] (dog_control_bridge) StderrLine: {'line': b'/opt/ros/humble/include/rclcpp/rclcpp/any_subscription_callback.hpp: In instantiation of \xe2\x80\x98\x1b[01m\x1b[Krclcpp::AnySubscriptionCallback<MessageT, AllocatorT> rclcpp::AnySubscriptionCallback<MessageT, AllocatorT>::set(CallbackT) [with CallbackT = std::_Bind<void (DogControlBridgeNode::*(DogControlBridgeNode*, std::_Placeholder<1>))(std::shared_ptr<geometry_msgs::msg::Twist_<std::allocator<void> > >)>; MessageT = geometry_msgs::msg::Twist_<std::allocator<void> >; AllocatorT = std::allocator<void>]\x1b[m\x1b[K\xe2\x80\x99:\n'}
+[9.710163] (dog_control_bridge) StderrLine: {'line': b'\x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/subscription_factory.hpp:94:32:\x1b[m\x1b[K   required from \xe2\x80\x98\x1b[01m\x1b[Krclcpp::SubscriptionFactory rclcpp::create_subscription_factory(CallbackT&&, const rclcpp::SubscriptionOptionsWithAllocator<AllocatorT>&, typename MessageMemoryStrategyT::SharedPtr, std::shared_ptr<rclcpp::topic_statistics::SubscriptionTopicStatistics<ROSMessageType> >) [with MessageT = geometry_msgs::msg::Twist_<std::allocator<void> >; CallbackT = std::_Bind<void (DogControlBridgeNode::*(DogControlBridgeNode*, std::_Placeholder<1>))(std::shared_ptr<geometry_msgs::msg::Twist_<std::allocator<void> > >)>; AllocatorT = std::allocator<void>; SubscriptionT = rclcpp::Subscription<geometry_msgs::msg::Twist_<std::allocator<void> > >; MessageMemoryStrategyT = rclcpp::message_memory_strategy::MessageMemoryStrategy<geometry_msgs::msg::Twist_<std::allocator<void> >, std::allocator<void> >; ROSMessageType = geometry_msgs::msg::Twist_<std::allocator<void> >; typename MessageMemoryStrategyT::SharedPtr = std::shared_ptr<rclcpp::message_memory_strategy::MessageMemoryStrategy<geometry_msgs::msg::Twist_<std::allocator<void> >, std::allocator<void> > >]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[9.717708] (dog_control_bridge) StderrLine: {'line': b'\x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/create_subscription.hpp:122:63:\x1b[m\x1b[K   required from \xe2\x80\x98\x1b[01m\x1b[Kstd::shared_ptr<ROSMessageT> rclcpp::detail::create_subscription(NodeParametersT&, NodeTopicsT&, const string&, const rclcpp::QoS&, CallbackT&&, const rclcpp::SubscriptionOptionsWithAllocator<AllocatorT>&, typename MessageMemoryStrategyT::SharedPtr) [with MessageT = geometry_msgs::msg::Twist_<std::allocator<void> >; CallbackT = std::_Bind<void (DogControlBridgeNode::*(DogControlBridgeNode*, std::_Placeholder<1>))(std::shared_ptr<geometry_msgs::msg::Twist_<std::allocator<void> > >)>; AllocatorT = std::allocator<void>; SubscriptionT = rclcpp::Subscription<geometry_msgs::msg::Twist_<std::allocator<void> > >; MessageMemoryStrategyT = rclcpp::message_memory_strategy::MessageMemoryStrategy<geometry_msgs::msg::Twist_<std::allocator<void> >, std::allocator<void> >; NodeParametersT = rclcpp::Node; NodeTopicsT = rclcpp::Node; ROSMessageType = geometry_msgs::msg::Twist_<std::allocator<void> >; std::string = std::__cxx11::basic_string<char>; typename MessageMemoryStrategyT::SharedPtr = std::shared_ptr<rclcpp::message_memory_strategy::MessageMemoryStrategy<geometry_msgs::msg::Twist_<std::allocator<void> >, std::allocator<void> > >]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[9.725544] (dog_control_bridge) StderrLine: {'line': b'\x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/create_subscription.hpp:191:76:\x1b[m\x1b[K   required from \xe2\x80\x98\x1b[01m\x1b[Kstd::shared_ptr<ROSMessageT> rclcpp::create_subscription(NodeT&, const string&, const rclcpp::QoS&, CallbackT&&, const rclcpp::SubscriptionOptionsWithAllocator<AllocatorT>&, typename MessageMemoryStrategyT::SharedPtr) [with MessageT = geometry_msgs::msg::Twist_<std::allocator<void> >; CallbackT = std::_Bind<void (DogControlBridgeNode::*(DogControlBridgeNode*, std::_Placeholder<1>))(std::shared_ptr<geometry_msgs::msg::Twist_<std::allocator<void> > >)>; AllocatorT = std::allocator<void>; SubscriptionT = rclcpp::Subscription<geometry_msgs::msg::Twist_<std::allocator<void> > >; MessageMemoryStrategyT = rclcpp::message_memory_strategy::MessageMemoryStrategy<geometry_msgs::msg::Twist_<std::allocator<void> >, std::allocator<void> >; NodeT = rclcpp::Node; std::string = std::__cxx11::basic_string<char>; typename MessageMemoryStrategyT::SharedPtr = std::shared_ptr<rclcpp::message_memory_strategy::MessageMemoryStrategy<geometry_msgs::msg::Twist_<std::allocator<void> >, std::allocator<void> > >]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[9.732808] (dog_control_bridge) StderrLine: {'line': b'\x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/node_impl.hpp:99:47:\x1b[m\x1b[K   required from \xe2\x80\x98\x1b[01m\x1b[Kstd::shared_ptr<ROSMessageT> rclcpp::Node::create_subscription(const string&, const rclcpp::QoS&, CallbackT&&, const rclcpp::SubscriptionOptionsWithAllocator<AllocatorT>&, typename MessageMemoryStrategyT::SharedPtr) [with MessageT = geometry_msgs::msg::Twist_<std::allocator<void> >; CallbackT = std::_Bind<void (DogControlBridgeNode::*(DogControlBridgeNode*, std::_Placeholder<1>))(std::shared_ptr<geometry_msgs::msg::Twist_<std::allocator<void> > >)>; AllocatorT = std::allocator<void>; SubscriptionT = rclcpp::Subscription<geometry_msgs::msg::Twist_<std::allocator<void> > >; MessageMemoryStrategyT = rclcpp::message_memory_strategy::MessageMemoryStrategy<geometry_msgs::msg::Twist_<std::allocator<void> >, std::allocator<void> >; std::string = std::__cxx11::basic_string<char>; typename MessageMemoryStrategyT::SharedPtr = std::shared_ptr<rclcpp::message_memory_strategy::MessageMemoryStrategy<geometry_msgs::msg::Twist_<std::allocator<void> >, std::allocator<void> > >]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[9.739566] (dog_control_bridge) StderrLine: {'line': b'\x1b[01m\x1b[K/root/deepRoboticsl/deepcontrol/src/dog_control_bridge.cpp:484:77:\x1b[m\x1b[K   required from here\n'}
+[9.746407] (dog_control_bridge) StderrLine: {'line': b"\x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/any_subscription_callback.hpp:391:21:\x1b[m\x1b[K \x1b[01;35m\x1b[Kwarning: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Kvoid rclcpp::AnySubscriptionCallback<MessageT, AllocatorT>::set_deprecated(std::function<void(std::shared_ptr<_Yp>)>) [with SetT = geometry_msgs::msg::Twist_<std::allocator<void> >; MessageT = geometry_msgs::msg::Twist_<std::allocator<void> >; AllocatorT = std::allocator<void>]\x1b[m\x1b[K\xe2\x80\x99 is deprecated: use 'void(std::shared_ptr<const MessageT>)' instead [\x1b[01;35m\x1b[K\x1b]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations\x07-Wdeprecated-declarations\x1b]8;;\x07\x1b[m\x1b[K]\n"}
+[9.753270] (-) TimerEvent: {}
+[9.755547] (dog_control_bridge) StderrLine: {'line': b'  391 |       \x1b[01;35m\x1b[Kset_deprecated(static_cast<typename scbth::callback_type>(callback))\x1b[m\x1b[K;\n'}
+[9.762653] (dog_control_bridge) StderrLine: {'line': b'      |       \x1b[01;35m\x1b[K~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[9.770287] (dog_control_bridge) StderrLine: {'line': b'\x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/any_subscription_callback.hpp:408:3:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[Kdeclared here\n'}
+[9.777104] (dog_control_bridge) StderrLine: {'line': b'  408 |   \x1b[01;36m\x1b[Kset_deprecated\x1b[m\x1b[K(std::function<void(std::shared_ptr<SetT>)> callback)\n'}
+[9.784068] (dog_control_bridge) StderrLine: {'line': b'      |   \x1b[01;36m\x1b[K^~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[9.791102] (dog_control_bridge) StderrLine: {'line': b'/opt/ros/humble/include/rclcpp/rclcpp/any_subscription_callback.hpp: In instantiation of \xe2\x80\x98\x1b[01m\x1b[Krclcpp::AnySubscriptionCallback<MessageT, AllocatorT> rclcpp::AnySubscriptionCallback<MessageT, AllocatorT>::set(CallbackT) [with CallbackT = std::_Bind<void (DogControlBridgeNode::*(DogControlBridgeNode*, std::_Placeholder<1>))(std::shared_ptr<std_msgs::msg::String_<std::allocator<void> > >)>; MessageT = std_msgs::msg::String_<std::allocator<void> >; AllocatorT = std::allocator<void>]\x1b[m\x1b[K\xe2\x80\x99:\n'}
+[9.798682] (dog_control_bridge) StderrLine: {'line': b'\x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/subscription_factory.hpp:94:32:\x1b[m\x1b[K   required from \xe2\x80\x98\x1b[01m\x1b[Krclcpp::SubscriptionFactory rclcpp::create_subscription_factory(CallbackT&&, const rclcpp::SubscriptionOptionsWithAllocator<AllocatorT>&, typename MessageMemoryStrategyT::SharedPtr, std::shared_ptr<rclcpp::topic_statistics::SubscriptionTopicStatistics<ROSMessageType> >) [with MessageT = std_msgs::msg::String_<std::allocator<void> >; CallbackT = std::_Bind<void (DogControlBridgeNode::*(DogControlBridgeNode*, std::_Placeholder<1>))(std::shared_ptr<std_msgs::msg::String_<std::allocator<void> > >)>; AllocatorT = std::allocator<void>; SubscriptionT = rclcpp::Subscription<std_msgs::msg::String_<std::allocator<void> > >; MessageMemoryStrategyT = rclcpp::message_memory_strategy::MessageMemoryStrategy<std_msgs::msg::String_<std::allocator<void> >, std::allocator<void> >; ROSMessageType = std_msgs::msg::String_<std::allocator<void> >; typename MessageMemoryStrategyT::SharedPtr = std::shared_ptr<rclcpp::message_memory_strategy::MessageMemoryStrategy<std_msgs::msg::String_<std::allocator<void> >, std::allocator<void> > >]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[9.806358] (dog_control_bridge) StderrLine: {'line': b'\x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/create_subscription.hpp:122:63:\x1b[m\x1b[K   required from \xe2\x80\x98\x1b[01m\x1b[Kstd::shared_ptr<ROSMessageT> rclcpp::detail::create_subscription(NodeParametersT&, NodeTopicsT&, const string&, const rclcpp::QoS&, CallbackT&&, const rclcpp::SubscriptionOptionsWithAllocator<AllocatorT>&, typename MessageMemoryStrategyT::SharedPtr) [with MessageT = std_msgs::msg::String_<std::allocator<void> >; CallbackT = std::_Bind<void (DogControlBridgeNode::*(DogControlBridgeNode*, std::_Placeholder<1>))(std::shared_ptr<std_msgs::msg::String_<std::allocator<void> > >)>; AllocatorT = std::allocator<void>; SubscriptionT = rclcpp::Subscription<std_msgs::msg::String_<std::allocator<void> > >; MessageMemoryStrategyT = rclcpp::message_memory_strategy::MessageMemoryStrategy<std_msgs::msg::String_<std::allocator<void> >, std::allocator<void> >; NodeParametersT = rclcpp::Node; NodeTopicsT = rclcpp::Node; ROSMessageType = std_msgs::msg::String_<std::allocator<void> >; std::string = std::__cxx11::basic_string<char>; typename MessageMemoryStrategyT::SharedPtr = std::shared_ptr<rclcpp::message_memory_strategy::MessageMemoryStrategy<std_msgs::msg::String_<std::allocator<void> >, std::allocator<void> > >]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[9.812822] (dog_control_bridge) StderrLine: {'line': b'\x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/create_subscription.hpp:191:76:\x1b[m\x1b[K   required from \xe2\x80\x98\x1b[01m\x1b[Kstd::shared_ptr<ROSMessageT> rclcpp::create_subscription(NodeT&, const string&, const rclcpp::QoS&, CallbackT&&, const rclcpp::SubscriptionOptionsWithAllocator<AllocatorT>&, typename MessageMemoryStrategyT::SharedPtr) [with MessageT = std_msgs::msg::String_<std::allocator<void> >; CallbackT = std::_Bind<void (DogControlBridgeNode::*(DogControlBridgeNode*, std::_Placeholder<1>))(std::shared_ptr<std_msgs::msg::String_<std::allocator<void> > >)>; AllocatorT = std::allocator<void>; SubscriptionT = rclcpp::Subscription<std_msgs::msg::String_<std::allocator<void> > >; MessageMemoryStrategyT = rclcpp::message_memory_strategy::MessageMemoryStrategy<std_msgs::msg::String_<std::allocator<void> >, std::allocator<void> >; NodeT = rclcpp::Node; std::string = std::__cxx11::basic_string<char>; typename MessageMemoryStrategyT::SharedPtr = std::shared_ptr<rclcpp::message_memory_strategy::MessageMemoryStrategy<std_msgs::msg::String_<std::allocator<void> >, std::allocator<void> > >]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[9.820178] (dog_control_bridge) StderrLine: {'line': b'\x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/node_impl.hpp:99:47:\x1b[m\x1b[K   required from \xe2\x80\x98\x1b[01m\x1b[Kstd::shared_ptr<ROSMessageT> rclcpp::Node::create_subscription(const string&, const rclcpp::QoS&, CallbackT&&, const rclcpp::SubscriptionOptionsWithAllocator<AllocatorT>&, typename MessageMemoryStrategyT::SharedPtr) [with MessageT = std_msgs::msg::String_<std::allocator<void> >; CallbackT = std::_Bind<void (DogControlBridgeNode::*(DogControlBridgeNode*, std::_Placeholder<1>))(std::shared_ptr<std_msgs::msg::String_<std::allocator<void> > >)>; AllocatorT = std::allocator<void>; SubscriptionT = rclcpp::Subscription<std_msgs::msg::String_<std::allocator<void> > >; MessageMemoryStrategyT = rclcpp::message_memory_strategy::MessageMemoryStrategy<std_msgs::msg::String_<std::allocator<void> >, std::allocator<void> >; std::string = std::__cxx11::basic_string<char>; typename MessageMemoryStrategyT::SharedPtr = std::shared_ptr<rclcpp::message_memory_strategy::MessageMemoryStrategy<std_msgs::msg::String_<std::allocator<void> >, std::allocator<void> > >]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[9.827861] (dog_control_bridge) StderrLine: {'line': b'\x1b[01m\x1b[K/root/deepRoboticsl/deepcontrol/src/dog_control_bridge.cpp:489:73:\x1b[m\x1b[K   required from here\n'}
+[9.834317] (dog_control_bridge) StderrLine: {'line': b"\x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/any_subscription_callback.hpp:391:21:\x1b[m\x1b[K \x1b[01;35m\x1b[Kwarning: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Kvoid rclcpp::AnySubscriptionCallback<MessageT, AllocatorT>::set_deprecated(std::function<void(std::shared_ptr<_Yp>)>) [with SetT = std_msgs::msg::String_<std::allocator<void> >; MessageT = std_msgs::msg::String_<std::allocator<void> >; AllocatorT = std::allocator<void>]\x1b[m\x1b[K\xe2\x80\x99 is deprecated: use 'void(std::shared_ptr<const MessageT>)' instead [\x1b[01;35m\x1b[K\x1b]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations\x07-Wdeprecated-declarations\x1b]8;;\x07\x1b[m\x1b[K]\n"}
+[9.841262] (dog_control_bridge) StderrLine: {'line': b'  391 |       \x1b[01;35m\x1b[Kset_deprecated(static_cast<typename scbth::callback_type>(callback))\x1b[m\x1b[K;\n'}
+[9.848087] (dog_control_bridge) StderrLine: {'line': b'      |       \x1b[01;35m\x1b[K~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[9.854670] (-) TimerEvent: {}
+[9.857118] (dog_control_bridge) StderrLine: {'line': b'\x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/any_subscription_callback.hpp:408:3:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[Kdeclared here\n'}
+[9.864447] (dog_control_bridge) StderrLine: {'line': b'  408 |   \x1b[01;36m\x1b[Kset_deprecated\x1b[m\x1b[K(std::function<void(std::shared_ptr<SetT>)> callback)\n'}
+[9.871008] (dog_control_bridge) StderrLine: {'line': b'      |   \x1b[01;36m\x1b[K^~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[9.955021] (-) TimerEvent: {}
+[10.058276] (-) TimerEvent: {}
+[10.186829] (-) TimerEvent: {}
+[10.317249] (-) TimerEvent: {}
+[10.445557] (-) TimerEvent: {}
+[10.573626] (-) TimerEvent: {}
+[10.702072] (-) TimerEvent: {}
+[10.830208] (-) TimerEvent: {}
+[10.958474] (-) TimerEvent: {}
+[11.087485] (-) TimerEvent: {}
+[11.216222] (-) TimerEvent: {}
+[11.344836] (-) TimerEvent: {}
+[11.473824] (-) TimerEvent: {}
+[11.603049] (-) TimerEvent: {}
+[11.732363] (-) TimerEvent: {}
+[11.861844] (-) TimerEvent: {}
+[11.990895] (-) TimerEvent: {}
+[12.120923] (-) TimerEvent: {}
+[12.249802] (-) TimerEvent: {}
+[12.367794] (-) TimerEvent: {}
+[12.470910] (-) TimerEvent: {}
+[12.574160] (-) TimerEvent: {}
+[12.677423] (-) TimerEvent: {}
+[12.780568] (-) TimerEvent: {}
+[12.883862] (-) TimerEvent: {}
+[12.987108] (-) TimerEvent: {}
+[13.090272] (-) TimerEvent: {}
+[13.193626] (-) TimerEvent: {}
+[13.296671] (-) TimerEvent: {}
+[13.400044] (-) TimerEvent: {}
+[13.503268] (-) TimerEvent: {}
+[13.606642] (-) TimerEvent: {}
+[13.709864] (-) TimerEvent: {}
+[13.813010] (-) TimerEvent: {}
+[13.916204] (-) TimerEvent: {}
+[14.019487] (-) TimerEvent: {}
+[14.122637] (-) TimerEvent: {}
+[14.225824] (-) TimerEvent: {}
+[14.328913] (-) TimerEvent: {}
+[14.432257] (-) TimerEvent: {}
+[14.535444] (-) TimerEvent: {}
+[14.638713] (-) TimerEvent: {}
+[14.742149] (-) TimerEvent: {}
+[14.845510] (-) TimerEvent: {}
+[14.949181] (-) TimerEvent: {}
+[15.053191] (-) TimerEvent: {}
+[15.156513] (-) TimerEvent: {}
+[15.259692] (-) TimerEvent: {}
+[15.362775] (-) TimerEvent: {}
+[15.466061] (-) TimerEvent: {}
+[15.569928] (-) TimerEvent: {}
+[15.673575] (-) TimerEvent: {}
+[15.776840] (-) TimerEvent: {}
+[15.880109] (-) TimerEvent: {}
+[15.983312] (-) TimerEvent: {}
+[16.086525] (-) TimerEvent: {}
+[16.189781] (-) TimerEvent: {}
+[16.293025] (-) TimerEvent: {}
+[16.396382] (-) TimerEvent: {}
+[16.499562] (-) TimerEvent: {}
+[16.602844] (-) TimerEvent: {}
+[16.706070] (-) TimerEvent: {}
+[16.809216] (-) TimerEvent: {}
+[16.912369] (-) TimerEvent: {}
+[17.015543] (-) TimerEvent: {}
+[17.118766] (-) TimerEvent: {}
+[17.222017] (-) TimerEvent: {}
+[17.325278] (-) TimerEvent: {}
+[17.428545] (-) TimerEvent: {}
+[17.531817] (-) TimerEvent: {}
+[17.635081] (-) TimerEvent: {}
+[17.738372] (-) TimerEvent: {}
+[17.841676] (-) TimerEvent: {}
+[17.944933] (-) TimerEvent: {}
+[18.048200] (-) TimerEvent: {}
+[18.151465] (-) TimerEvent: {}
+[18.254688] (-) TimerEvent: {}
+[18.357941] (-) TimerEvent: {}
+[18.461212] (-) TimerEvent: {}
+[18.564536] (-) TimerEvent: {}
+[18.667786] (-) TimerEvent: {}
+[18.771041] (-) TimerEvent: {}
+[18.874354] (-) TimerEvent: {}
+[18.977620] (-) TimerEvent: {}
+[19.080888] (-) TimerEvent: {}
+[19.184075] (-) TimerEvent: {}
+[19.287232] (-) TimerEvent: {}
+[19.390560] (-) TimerEvent: {}
+[19.493834] (-) TimerEvent: {}
+[19.597119] (-) TimerEvent: {}
+[19.700365] (-) TimerEvent: {}
+[19.803618] (-) TimerEvent: {}
+[19.906907] (-) TimerEvent: {}
+[20.010202] (-) TimerEvent: {}
+[20.113420] (-) TimerEvent: {}
+[20.216656] (-) TimerEvent: {}
+[20.319849] (-) TimerEvent: {}
+[20.423081] (-) TimerEvent: {}
+[20.526303] (-) TimerEvent: {}
+[20.629441] (-) TimerEvent: {}
+[20.732652] (-) TimerEvent: {}
+[20.835820] (-) TimerEvent: {}
+[20.939051] (-) TimerEvent: {}
+[21.042211] (-) TimerEvent: {}
+[21.145341] (-) TimerEvent: {}
+[21.248519] (-) TimerEvent: {}
+[21.351589] (-) TimerEvent: {}
+[21.454699] (-) TimerEvent: {}
+[21.557881] (-) TimerEvent: {}
+[21.667987] (-) TimerEvent: {}
+[21.771301] (-) TimerEvent: {}
+[21.874617] (-) TimerEvent: {}
+[21.977839] (-) TimerEvent: {}
+[22.081173] (-) TimerEvent: {}
+[22.184317] (-) TimerEvent: {}
+[22.287542] (-) TimerEvent: {}
+[22.641184] (-) TimerEvent: {}
+[22.744487] (-) TimerEvent: {}
+[22.847673] (-) TimerEvent: {}
+[22.950877] (-) TimerEvent: {}
+[23.054145] (-) TimerEvent: {}
+[23.157199] (-) TimerEvent: {}
+[23.260339] (-) TimerEvent: {}
+[23.363397] (-) TimerEvent: {}
+[23.466502] (-) TimerEvent: {}
+[23.569620] (-) TimerEvent: {}
+[23.672689] (-) TimerEvent: {}
+[23.775915] (-) TimerEvent: {}
+[23.879498] (-) TimerEvent: {}
+[23.983032] (-) TimerEvent: {}
+[24.086187] (-) TimerEvent: {}
+[24.189304] (-) TimerEvent: {}
+[24.292583] (-) TimerEvent: {}
+[24.396063] (-) TimerEvent: {}
+[24.498521] (-) TimerEvent: {}
+[24.602082] (-) TimerEvent: {}
+[24.704722] (-) TimerEvent: {}
+[24.806765] (-) TimerEvent: {}
+[24.910407] (-) TimerEvent: {}
+[25.012884] (-) TimerEvent: {}
+[25.115433] (-) TimerEvent: {}
+[25.217864] (-) TimerEvent: {}
+[25.320294] (-) TimerEvent: {}
+[25.423435] (-) TimerEvent: {}
+[25.525732] (-) TimerEvent: {}
+[25.628156] (-) TimerEvent: {}
+[25.730432] (-) TimerEvent: {}
+[25.833023] (-) TimerEvent: {}
+[25.935357] (-) TimerEvent: {}
+[26.037636] (-) TimerEvent: {}
+[26.139885] (-) TimerEvent: {}
+[26.243011] (-) TimerEvent: {}
+[26.346733] (-) TimerEvent: {}
+[26.448851] (-) TimerEvent: {}
+[26.560574] (-) TimerEvent: {}
+[26.662689] (-) TimerEvent: {}
+[26.765295] (-) TimerEvent: {}
+[26.869779] (-) TimerEvent: {}
+[26.972872] (-) TimerEvent: {}
+[27.076434] (-) TimerEvent: {}
+[27.180261] (-) TimerEvent: {}
+[27.282918] (-) TimerEvent: {}
+[27.385580] (-) TimerEvent: {}
+[27.488813] (-) TimerEvent: {}
+[27.593440] (-) TimerEvent: {}
+[27.695419] (-) TimerEvent: {}
+[27.798775] (-) TimerEvent: {}
+[27.901181] (-) TimerEvent: {}
+[28.004214] (-) TimerEvent: {}
+[28.106826] (-) TimerEvent: {}
+[28.209131] (-) TimerEvent: {}
+[28.312356] (-) TimerEvent: {}
+[28.414640] (-) TimerEvent: {}
+[28.516594] (-) TimerEvent: {}
+[28.619585] (-) TimerEvent: {}
+[28.723381] (-) TimerEvent: {}
+[28.827944] (-) TimerEvent: {}
+[28.918034] (dog_control_bridge) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking CXX executable dog_control_bridge\x1b[0m\n'}
+[28.928153] (-) TimerEvent: {}
+[29.030968] (-) TimerEvent: {}
+[29.135515] (-) TimerEvent: {}
+[29.262956] (-) TimerEvent: {}
+[29.390717] (-) TimerEvent: {}
+[29.519366] (-) TimerEvent: {}
+[29.647524] (-) TimerEvent: {}
+[29.775434] (-) TimerEvent: {}
+[29.904749] (-) TimerEvent: {}
+[30.033953] (-) TimerEvent: {}
+[30.163566] (-) TimerEvent: {}
+[30.267603] (-) TimerEvent: {}
+[30.396793] (-) TimerEvent: {}
+[30.525055] (-) TimerEvent: {}
+[30.655994] (-) TimerEvent: {}
+[30.785897] (-) TimerEvent: {}
+[30.915250] (-) TimerEvent: {}
+[31.044458] (-) TimerEvent: {}
+[31.173916] (-) TimerEvent: {}
+[31.303800] (-) TimerEvent: {}
+[31.433445] (-) TimerEvent: {}
+[31.562790] (-) TimerEvent: {}
+[31.692388] (-) TimerEvent: {}
+[31.820023] (-) TimerEvent: {}
+[31.947925] (-) TimerEvent: {}
+[32.076545] (-) TimerEvent: {}
+[32.206874] (-) TimerEvent: {}
+[32.336833] (-) TimerEvent: {}
+[32.465949] (-) TimerEvent: {}
+[32.595955] (-) TimerEvent: {}
+[32.725585] (-) TimerEvent: {}
+[32.854632] (-) TimerEvent: {}
+[32.984945] (-) TimerEvent: {}
+[33.114394] (-) TimerEvent: {}
+[33.243956] (-) TimerEvent: {}
+[33.373173] (-) TimerEvent: {}
+[33.502679] (-) TimerEvent: {}
+[33.631667] (-) TimerEvent: {}
+[33.760369] (-) TimerEvent: {}
+[33.888653] (-) TimerEvent: {}
+[34.017093] (-) TimerEvent: {}
+[34.145025] (-) TimerEvent: {}
+[34.275624] (-) TimerEvent: {}
+[34.405686] (-) TimerEvent: {}
+[34.535142] (-) TimerEvent: {}
+[34.663989] (-) TimerEvent: {}
+[34.791489] (-) TimerEvent: {}
+[34.919263] (-) TimerEvent: {}
+[35.047655] (-) TimerEvent: {}
+[35.176755] (-) TimerEvent: {}
+[35.303785] (-) TimerEvent: {}
+[35.431852] (-) TimerEvent: {}
+[35.562752] (-) TimerEvent: {}
+[35.690771] (-) TimerEvent: {}
+[35.819115] (-) TimerEvent: {}
+[35.949158] (-) TimerEvent: {}
+[36.079152] (-) TimerEvent: {}
+[36.208721] (-) TimerEvent: {}
+[36.336272] (-) TimerEvent: {}
+[36.468704] (-) TimerEvent: {}
+[36.576124] (-) TimerEvent: {}
+[36.678799] (-) TimerEvent: {}
+[36.781617] (-) TimerEvent: {}
+[36.884068] (-) TimerEvent: {}
+[36.986576] (-) TimerEvent: {}
+[37.089070] (-) TimerEvent: {}
+[37.191654] (-) TimerEvent: {}
+[37.294084] (-) TimerEvent: {}
+[37.396518] (-) TimerEvent: {}
+[37.498581] (-) TimerEvent: {}
+[37.600707] (-) TimerEvent: {}
+[37.702976] (-) TimerEvent: {}
+[37.804821] (-) TimerEvent: {}
+[37.906789] (-) TimerEvent: {}
+[38.009363] (-) TimerEvent: {}
+[38.111816] (-) TimerEvent: {}
+[38.214798] (-) TimerEvent: {}
+[38.318104] (-) TimerEvent: {}
+[38.421337] (-) TimerEvent: {}
+[38.524514] (-) TimerEvent: {}
+[38.628002] (-) TimerEvent: {}
+[38.730396] (-) TimerEvent: {}
+[38.832795] (-) TimerEvent: {}
+[38.935038] (-) TimerEvent: {}
+[39.037614] (-) TimerEvent: {}
+[39.139999] (-) TimerEvent: {}
+[39.242431] (-) TimerEvent: {}
+[39.345396] (-) TimerEvent: {}
+[39.448540] (-) TimerEvent: {}
+[39.552524] (-) TimerEvent: {}
+[39.657358] (-) TimerEvent: {}
+[39.760188] (-) TimerEvent: {}
+[39.863798] (-) TimerEvent: {}
+[39.968197] (-) TimerEvent: {}
+[40.072563] (-) TimerEvent: {}
+[40.175502] (-) TimerEvent: {}
+[40.278610] (-) TimerEvent: {}
+[40.382705] (-) TimerEvent: {}
+[40.486872] (-) TimerEvent: {}
+[40.589352] (-) TimerEvent: {}
+[40.691690] (-) TimerEvent: {}
+[40.794772] (-) TimerEvent: {}
+[40.898047] (-) TimerEvent: {}
+[41.000477] (-) TimerEvent: {}
+[41.103016] (-) TimerEvent: {}
+[41.248243] (dog_control_bridge) StdoutLine: {'line': b'[100%] Built target dog_control_bridge\n'}
+[41.255865] (-) TimerEvent: {}
+[41.358135] (-) TimerEvent: {}
+[41.540237] (-) TimerEvent: {}
+[41.547645] (dog_control_bridge) CommandEnded: {'returncode': 0}
+[41.558418] (dog_control_bridge) JobProgress: {'identifier': 'dog_control_bridge', 'progress': 'install'}
+[41.575103] (dog_control_bridge) Command: {'cmd': ['/usr/bin/cmake', '--install', '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge'], 'cwd': '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('UMS_MOUNTPOINT', '/mnt/ums'), ('GST_V4L2_PREFERRED_FOURCC', 'NV12:YU12:NV16:YUY2'), ('USER', 'root'), ('SSH_CLIENT', '192.168.1.117 37026 22'), ('LC_TIME', 'C.UTF-8'), ('XDG_SESSION_TYPE', 'tty'), ('SHLVL', '1'), ('USB_FUNCS', 'adb'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib'), ('MOTD_SHOWN', 'pam'), ('HOME', '/root'), ('OLDPWD', '/root/deepRoboticsl/deepcontrol/src'), ('SSH_TTY', '/dev/pts/0'), ('GST_INSPECT_NO_COLORS', '1'), ('ROS_PYTHON_VERSION', '3'), ('COGL_DRIVER', 'gles2'), ('PLAYBIN2_PREFERRED_VIDEOSINK', 'xvimagesink'), ('LC_MONETARY', 'C.UTF-8'), ('GST_VIDEO_DECODER_QOS', '0'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/0/bus'), ('DEBUGINFOD_URLS', ''), ('COLCON_PREFIX_PATH', '/root/deepRoboticsl/deepcontrol/install'), ('GST_V4L2SRC_MAX_RESOLUTION', '3840x2160'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'root'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm-256color'), ('GST_GL_API', 'gles2'), ('XDG_SESSION_ID', 'c1'), ('GST_VIDEO_CONVERT_PREFERRED_FORMAT', 'NV12:NV16:I420:YUY2'), ('GST_V4L2SRC_RK_DEVICES', '_mainpath:_selfpath:_bypass:_scale'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('LC_ADDRESS', 'C.UTF-8'), ('XDG_RUNTIME_DIR', '/run/user/0'), ('GST_GL_PLATFORM', 'egl'), ('GST_DEBUG_NO_COLOR', '1'), ('GST_V4L2SRC_DEFAULT_DEVICE', '/dev/video-camera0'), ('ADBD_SHELL', '/bin/bash'), ('LANG', 'C.UTF-8'), ('LC_TELEPHONE', 'C.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GST_V4L2_USE_LIBV4L2', '1'), ('ROS_DOMAIN_ID', '0'), ('UMS_SIZE', '256M'), ('AMENT_PREFIX_PATH', '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge:/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LC_NAME', 'C.UTF-8'), ('UMS_RO', '0'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('UMS_FSTYPE', 'vfat'), ('LC_MEASUREMENT', 'C.UTF-8'), ('LC_IDENTIFICATION', 'C.UTF-8'), ('PWD', '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge'), ('SSH_CONNECTION', '192.168.1.117 37026 192.168.1.119 22'), ('AUTOVIDEOSINK_PREFERRED', 'xvimagesink'), ('ADB_TCP_PORT', '5555'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('LC_NUMERIC', 'C.UTF-8'), ('UMS_MOUNT', '0'), ('LC_PAPER', 'C.UTF-8'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge:/opt/ros/humble'), ('UMS_FILE', '/userdata/ums_shared.img')]), 'shell': False}
+[41.592230] (dog_control_bridge) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[41.611094] (dog_control_bridge) StdoutLine: {'line': b'-- Installing: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/lib/dog_control_bridge/dog_control_bridge\n'}
+[41.704714] (-) TimerEvent: {}
+[41.809712] (-) TimerEvent: {}
+[41.913451] (-) TimerEvent: {}
+[42.016060] (-) TimerEvent: {}
+[42.119741] (-) TimerEvent: {}
+[42.223008] (-) TimerEvent: {}
+[42.325279] (-) TimerEvent: {}
+[42.428331] (-) TimerEvent: {}
+[42.532237] (-) TimerEvent: {}
+[42.634847] (-) TimerEvent: {}
+[42.737237] (-) TimerEvent: {}
+[42.839650] (-) TimerEvent: {}
+[42.948448] (-) TimerEvent: {}
+[43.051809] (-) TimerEvent: {}
+[43.154259] (-) TimerEvent: {}
+[43.257041] (-) TimerEvent: {}
+[43.360548] (-) TimerEvent: {}
+[43.463684] (-) TimerEvent: {}
+[43.567382] (-) TimerEvent: {}
+[43.670961] (-) TimerEvent: {}
+[43.775336] (-) TimerEvent: {}
+[43.879477] (-) TimerEvent: {}
+[43.982569] (-) TimerEvent: {}
+[44.073941] (dog_control_bridge) StdoutLine: {'line': b'-- Set runtime path of "/root/deepRoboticsl/deepcontrol/install/dog_control_bridge/lib/dog_control_bridge/dog_control_bridge" to ""\n'}
+[44.083671] (-) TimerEvent: {}
+[44.170833] (dog_control_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/ament_index/resource_index/package_run_dependencies/dog_control_bridge\n'}
+[44.183511] (dog_control_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/ament_index/resource_index/parent_prefix_path/dog_control_bridge\n'}
+[44.194419] (-) TimerEvent: {}
+[44.201174] (dog_control_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/environment/ament_prefix_path.sh\n'}
+[44.211708] (dog_control_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/environment/ament_prefix_path.dsv\n'}
+[44.223730] (dog_control_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/environment/path.sh\n'}
+[44.237356] (dog_control_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/environment/path.dsv\n'}
+[44.255430] (dog_control_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/local_setup.bash\n'}
+[44.347031] (-) TimerEvent: {}
+[44.349526] (dog_control_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/local_setup.sh\n'}
+[44.365496] (dog_control_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/local_setup.zsh\n'}
+[44.372285] (dog_control_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/local_setup.dsv\n'}
+[44.380343] (dog_control_bridge) StdoutLine: {'line': b'-- Installing: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/package.dsv\n'}
+[44.397787] (dog_control_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/ament_index/resource_index/packages/dog_control_bridge\n'}
+[44.490719] (-) TimerEvent: {}
+[44.508865] (dog_control_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/cmake/dog_control_bridgeConfig.cmake\n'}
+[44.615426] (-) TimerEvent: {}
+[44.619788] (dog_control_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/cmake/dog_control_bridgeConfig-version.cmake\n'}
+[44.718812] (-) TimerEvent: {}
+[44.724429] (dog_control_bridge) StdoutLine: {'line': b'-- Up-to-date: /root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/package.xml\n'}
+[44.834773] (-) TimerEvent: {}
+[44.837870] (dog_control_bridge) CommandEnded: {'returncode': 0}
+[44.935337] (-) TimerEvent: {}
+[45.041166] (-) TimerEvent: {}
+[45.222955] (-) TimerEvent: {}
+[45.339976] (-) TimerEvent: {}
+[45.524762] (-) TimerEvent: {}
+[45.630964] (-) TimerEvent: {}
+[45.712452] (dog_control_bridge) JobEnded: {'identifier': 'dog_control_bridge', 'rc': 0}
+[45.809048] (-) TimerEvent: {}
+[45.812811] (-) EventReactorShutdown: {}

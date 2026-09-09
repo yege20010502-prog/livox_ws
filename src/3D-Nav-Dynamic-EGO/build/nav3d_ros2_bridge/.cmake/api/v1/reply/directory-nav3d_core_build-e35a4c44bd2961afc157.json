@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "nav3d_core_build",
+		"source" : "/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/core"
+	}
+}

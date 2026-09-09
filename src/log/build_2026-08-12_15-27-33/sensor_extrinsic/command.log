@@ -1,0 +1,2 @@
+Invoking command in '/root/nav/livox_ws/src/build/sensor_extrinsic': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /root/nav/livox_ws/src/sensor_extrinsic -DCMAKE_INSTALL_PREFIX=/root/nav/livox_ws/src/install/sensor_extrinsic
+Invoked command in '/root/nav/livox_ws/src/build/sensor_extrinsic' returned '1': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /root/nav/livox_ws/src/sensor_extrinsic -DCMAKE_INSTALL_PREFIX=/root/nav/livox_ws/src/install/sensor_extrinsic

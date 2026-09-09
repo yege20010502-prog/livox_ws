@@ -1,0 +1,42 @@
+[0.334s] Invoking command in '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge -- -j8 -l8
+[0.645s] [35m[1mConsolidate compiler generated dependencies of target nav3d_core[0m
+[9.900s] [ 73%] Built target nav3d_core
+[9.946s] [35m[1mConsolidate compiler generated dependencies of target nav3d_pcl_tools[0m
+[15.292s] [ 80%] Built target nav3d_pcl_tools
+[15.334s] [35m[1mConsolidate compiler generated dependencies of target nav3d_octomap_trajectory_demo[0m
+[15.344s] [35m[1mConsolidate compiler generated dependencies of target nav3d_standalone_demo[0m
+[15.355s] [35m[1mConsolidate compiler generated dependencies of target nav3d_bridge_node[0m
+[17.635s] [ 86%] Built target nav3d_standalone_demo
+[17.752s] [ 93%] Built target nav3d_octomap_trajectory_demo
+[21.280s] [100%] Built target nav3d_bridge_node
+[23.979s] Invoked command in '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge -- -j8 -l8
+[24.015s] Invoking command in '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge
+[24.046s] -- Install configuration: ""
+[24.054s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/nav3d_octomap_msgs_library_path.sh
+[24.149s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/nav3d_octomap_msgs_library_path.dsv
+[24.158s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib/nav3d_ros2_bridge/nav3d_bridge_node
+[24.253s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib/nav3d_ros2_bridge/nav3d_cmd_vel_pose_sim.py
+[24.262s] -- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib/nav3d_ros2_bridge/nav3d_local_replan_smoke.py
+[24.365s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/launch
+[24.379s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/launch/nav3d_bridge.launch.py
+[24.387s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/launch/nav3d_local_replan_smoke.launch.py
+[24.395s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/rviz
+[24.405s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/rviz/nav3d.rviz
+[24.417s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/config
+[24.429s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/config/nav3d_bridge.yaml
+[24.441s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/ament_index/resource_index/package_run_dependencies/nav3d_ros2_bridge
+[24.459s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/ament_index/resource_index/parent_prefix_path/nav3d_ros2_bridge
+[24.552s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/ament_prefix_path.sh
+[24.645s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/ament_prefix_path.dsv
+[24.737s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/path.sh
+[24.748s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/path.dsv
+[24.839s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/local_setup.bash
+[24.935s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/local_setup.sh
+[25.029s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/local_setup.zsh
+[25.123s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/local_setup.dsv
+[25.218s] -- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/package.dsv
+[25.313s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/ament_index/resource_index/packages/nav3d_ros2_bridge
+[25.332s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/cmake/nav3d_ros2_bridgeConfig.cmake
+[25.427s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/cmake/nav3d_ros2_bridgeConfig-version.cmake
+[25.519s] -- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/package.xml
+[25.612s] Invoked command in '/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge

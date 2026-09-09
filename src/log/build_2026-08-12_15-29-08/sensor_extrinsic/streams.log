@@ -1,0 +1,20 @@
+[0.018s] Invoking command in '/root/nav/livox_ws/src/build/sensor_extrinsic': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /root/nav/livox_ws/src/sensor_extrinsic -DCMAKE_INSTALL_PREFIX=/root/nav/livox_ws/src/install/sensor_extrinsic
+[0.035s] -- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.618s] -- Found ament_lint_auto: 0.12.14 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[1.423s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[1.430s] -- Configured cppcheck include dirs: 
+[1.524s] -- Configured cppcheck exclude dirs and/or files: 
+[1.544s] -- Added test 'lint_cmake' to check CMake code style
+[1.556s] -- Added test 'uncrustify' to check C / C++ code style
+[1.732s] -- Configured uncrustify additional arguments: 
+[1.751s] -- Added test 'xmllint' to check XML markup files
+[1.758s] [31mCMake Error at /opt/ros/humble/share/ament_cmake_target_dependencies/cmake/ament_target_dependencies.cmake:77 (message):
+[1.764s]   ament_target_dependencies() the passed package name 'rclcpp' was not found
+[1.771s]   before
+[1.778s] Call Stack (most recent call first):
+[1.785s]   CMakeLists.txt:28 (ament_target_dependencies)
+[1.793s] 
+[1.800s] [0m
+[1.808s] -- Configuring incomplete, errors occurred!
+[1.816s] See also "/root/nav/livox_ws/src/build/sensor_extrinsic/CMakeFiles/CMakeOutput.log".
+[1.825s] Invoked command in '/root/nav/livox_ws/src/build/sensor_extrinsic' returned '1': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /root/nav/livox_ws/src/sensor_extrinsic -DCMAKE_INSTALL_PREFIX=/root/nav/livox_ws/src/install/sensor_extrinsic

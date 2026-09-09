@@ -1,0 +1,86 @@
+[0.167s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--packages-select', 'dog_control_bridge']
+[0.169s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=8, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=['dog_control_bridge'], packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7fa3e63790>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7fa3e63310>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7fa3e63310>>)
+[0.365s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.367s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.369s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.370s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.372s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.374s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.375s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/root/deepRoboticsl/deepcontrol'
+[0.377s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.380s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.382s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.385s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.387s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.389s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.391s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.392s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.393s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.429s] DEBUG:colcon.colcon_core.package_identification:Package '.' with type 'ros.ament_cmake' and name 'dog_control_bridge'
+[0.431s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.433s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.435s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.437s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.438s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.471s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.473s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.478s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 1 installed packages in /root/deepRoboticsl/deepcontrol/install
+[0.482s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 329 installed packages in /opt/ros/humble
+[0.491s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.594s] Level 5:colcon.colcon_core.verb:set package 'dog_control_bridge' build argument 'cmake_args' from command line to 'None'
+[0.597s] Level 5:colcon.colcon_core.verb:set package 'dog_control_bridge' build argument 'cmake_target' from command line to 'None'
+[0.598s] Level 5:colcon.colcon_core.verb:set package 'dog_control_bridge' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.600s] Level 5:colcon.colcon_core.verb:set package 'dog_control_bridge' build argument 'cmake_clean_cache' from command line to 'False'
+[0.602s] Level 5:colcon.colcon_core.verb:set package 'dog_control_bridge' build argument 'cmake_clean_first' from command line to 'False'
+[0.603s] Level 5:colcon.colcon_core.verb:set package 'dog_control_bridge' build argument 'cmake_force_configure' from command line to 'False'
+[0.605s] Level 5:colcon.colcon_core.verb:set package 'dog_control_bridge' build argument 'ament_cmake_args' from command line to 'None'
+[0.606s] Level 5:colcon.colcon_core.verb:set package 'dog_control_bridge' build argument 'catkin_cmake_args' from command line to 'None'
+[0.608s] Level 5:colcon.colcon_core.verb:set package 'dog_control_bridge' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.609s] DEBUG:colcon.colcon_core.verb:Building package 'dog_control_bridge' with the following arguments: {'ament_cmake_args': None, 'build_base': '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge', 'merge_install': False, 'path': '/root/deepRoboticsl/deepcontrol', 'symlink_install': False, 'test_result_base': None}
+[0.611s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.614s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.616s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/root/deepRoboticsl/deepcontrol' with build type 'ament_cmake'
+[0.618s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/root/deepRoboticsl/deepcontrol'
+[0.632s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.635s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.637s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.966s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /root/deepRoboticsl/deepcontrol/build/dog_control_bridge -- -j8 -l8
+[13.151s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(dog_control_bridge)
+[13.184s] Level 1:colcon.colcon_core.environment:checking '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge' for CMake module files
+[13.186s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/root/deepRoboticsl/deepcontrol/build/dog_control_bridge' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /root/deepRoboticsl/deepcontrol/build/dog_control_bridge -- -j8 -l8
+[13.193s] Level 1:colcon.colcon_core.environment:checking '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge' for CMake config files
+[13.195s] Level 1:colcon.colcon_core.shell:create_environment_hook('dog_control_bridge', 'cmake_prefix_path')
+[13.198s] INFO:colcon.colcon_core.shell:Creating environment hook '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/hook/cmake_prefix_path.ps1'
+[13.291s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/hook/cmake_prefix_path.dsv'
+[13.383s] INFO:colcon.colcon_core.shell:Creating environment hook '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/hook/cmake_prefix_path.sh'
+[13.489s] Level 1:colcon.colcon_core.environment:checking '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge/lib'
+[13.495s] Level 1:colcon.colcon_core.environment:checking '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge/bin'
+[13.499s] Level 1:colcon.colcon_core.environment:checking '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge/lib/pkgconfig/dog_control_bridge.pc'
+[13.502s] Level 1:colcon.colcon_core.environment:checking '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge/lib/python3.10/site-packages'
+[13.505s] Level 1:colcon.colcon_core.environment:checking '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge/bin'
+[13.508s] INFO:colcon.colcon_core.shell:Creating package script '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/package.ps1'
+[13.608s] INFO:colcon.colcon_core.shell:Creating package descriptor '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/package.dsv'
+[13.699s] INFO:colcon.colcon_core.shell:Creating package script '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/package.sh'
+[13.793s] INFO:colcon.colcon_core.shell:Creating package script '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/package.bash'
+[13.890s] INFO:colcon.colcon_core.shell:Creating package script '/root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/dog_control_bridge/package.zsh'
+[13.997s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/root/deepRoboticsl/deepcontrol/install/dog_control_bridge/share/colcon-core/packages/dog_control_bridge)
+[14.103s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[14.187s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[14.190s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '2'
+[14.191s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[14.221s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.notify_send': Could not find 'notify-send'
+[14.223s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[14.226s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[14.228s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[14.236s] DEBUG:colcon.colcon_notification.desktop_notification.notify2:Failed to initialize notify2: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.Notifications was not provided by any .service files
+[14.238s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[14.241s] INFO:colcon.colcon_core.shell:Creating prefix script '/root/deepRoboticsl/deepcontrol/install/local_setup.ps1'
+[14.334s] INFO:colcon.colcon_core.shell:Creating prefix util module '/root/deepRoboticsl/deepcontrol/install/_local_setup_util_ps1.py'
+[14.430s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/root/deepRoboticsl/deepcontrol/install/setup.ps1'
+[14.539s] INFO:colcon.colcon_core.shell:Creating prefix script '/root/deepRoboticsl/deepcontrol/install/local_setup.sh'
+[14.640s] INFO:colcon.colcon_core.shell:Creating prefix util module '/root/deepRoboticsl/deepcontrol/install/_local_setup_util_sh.py'
+[14.741s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/root/deepRoboticsl/deepcontrol/install/setup.sh'
+[14.833s] INFO:colcon.colcon_core.shell:Creating prefix script '/root/deepRoboticsl/deepcontrol/install/local_setup.bash'
+[14.924s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/root/deepRoboticsl/deepcontrol/install/setup.bash'
+[15.022s] INFO:colcon.colcon_core.shell:Creating prefix script '/root/deepRoboticsl/deepcontrol/install/local_setup.zsh'
+[15.122s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/root/deepRoboticsl/deepcontrol/install/setup.zsh'

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libnav3d_pcl_tools.a CMakeFiles/nav3d_pcl_tools.dir/pcl_pcd_loader.cpp.o
+/usr/bin/ranlib libnav3d_pcl_tools.a

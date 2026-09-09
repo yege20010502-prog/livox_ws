@@ -1,0 +1,2 @@
+prepend-non-duplicate;LD_LIBRARY_PATH;/opt/ros/humble/lib
+prepend-non-duplicate;PYTHONPATH;/opt/ros/humble/local/lib/python3.10/dist-packages

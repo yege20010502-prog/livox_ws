@@ -1,0 +1,3 @@
+gmake[2]: *** [CMakeFiles/dog_control_bridge.dir/build.make:1290: CMakeFiles/dog_control_bridge.dir/depend] Interrupt
+gmake[1]: *** [CMakeFiles/Makefile2:136: CMakeFiles/dog_control_bridge.dir/all] Interrupt
+gmake: *** [Makefile:146: all] Interrupt

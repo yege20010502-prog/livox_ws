@@ -1,0 +1,33 @@
+[ 73%] Built target nav3d_core
+[ 80%] Built target nav3d_pcl_tools
+[ 86%] Built target nav3d_standalone_demo
+[ 93%] Built target nav3d_bridge_node
+[100%] Built target nav3d_octomap_trajectory_demo
+-- Install configuration: ""
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/nav3d_octomap_msgs_library_path.sh
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/nav3d_octomap_msgs_library_path.dsv
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib/nav3d_ros2_bridge/nav3d_bridge_node
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib/nav3d_ros2_bridge/nav3d_cmd_vel_pose_sim.py
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib/nav3d_ros2_bridge/nav3d_local_replan_smoke.py
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/launch
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/launch/nav3d_bridge.launch.py
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/launch/nav3d_local_replan_smoke.launch.py
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/rviz
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/rviz/nav3d.rviz
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/config
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/config/nav3d_bridge.yaml
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/ament_index/resource_index/package_run_dependencies/nav3d_ros2_bridge
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/ament_index/resource_index/parent_prefix_path/nav3d_ros2_bridge
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/ament_prefix_path.sh
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/ament_prefix_path.dsv
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/path.sh
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/path.dsv
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/local_setup.bash
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/local_setup.sh
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/local_setup.zsh
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/local_setup.dsv
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/package.dsv
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/ament_index/resource_index/packages/nav3d_ros2_bridge
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/cmake/nav3d_ros2_bridgeConfig.cmake
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/cmake/nav3d_ros2_bridgeConfig-version.cmake
+-- Up-to-date: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/package.xml

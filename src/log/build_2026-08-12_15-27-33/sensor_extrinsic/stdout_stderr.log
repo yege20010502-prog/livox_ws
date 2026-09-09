@@ -1,0 +1,5 @@
+-- Configuring incomplete, errors occurred!
+[31mCMake Error at CMakeLists.txt:29:
+  Parse error.  Function missing ending ")".  End of file reached.
+
+[0m

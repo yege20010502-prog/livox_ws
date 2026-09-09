@@ -1,0 +1,32 @@
+# ROS 2 build products
+/build/
+/install/
+/log/
+
+# Nested upstream Git histories
+**/.git.upstream/
+
+# ROS bags and test recordings
+/rosbag2_*/
+/lite3_single_floor_test/
+*.db3
+*.mcap
+*.bag
+
+# Large generated maps
+/maps/**/*.pcd
+/maps/**/*.zip
+*.pcd
+
+# Crash dumps
+core
+core.*
+vgcore.*
+
+# Python/editor
+__pycache__/
+*.py[cod]
+.vscode/
+.idea/
+*.swp
+*~

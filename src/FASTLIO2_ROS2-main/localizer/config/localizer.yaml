@@ -1,0 +1,28 @@
+cloud_topic: /fastlio2/body_cloud
+odom_topic: /fastlio2/lio_odom
+
+map_frame: map
+local_frame: odom
+
+update_hz: 1.0
+
+# Stabilize the dynamic map -> odom correction from scan matching.
+# The first successful relocalization is accepted directly; later corrections
+# are planar, dead-banded, low-pass filtered, and large one-frame jumps rejected.
+transform_filter_alpha: 0.20
+translation_deadband: 0.02
+yaw_deadband: 0.015
+max_translation_jump: 0.25
+max_yaw_jump: 0.25
+
+input_cloud_type: PointXYZ
+
+rough_scan_resolution: 0.30
+rough_map_resolution: 0.30
+rough_max_iteration: 15
+rough_score_thresh: 0.30
+
+refine_scan_resolution: 0.15
+refine_map_resolution: 0.15
+refine_max_iteration: 20
+refine_score_thresh: 0.15

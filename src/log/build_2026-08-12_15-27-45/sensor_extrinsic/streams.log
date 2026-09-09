@@ -1,0 +1,33 @@
+[0.023s] Invoking command in '/root/nav/livox_ws/src/build/sensor_extrinsic': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /root/nav/livox_ws/src/sensor_extrinsic -DCMAKE_INSTALL_PREFIX=/root/nav/livox_ws/src/install/sensor_extrinsic
+[0.507s] -- The C compiler identification is GNU 11.4.0
+[0.951s] -- The CXX compiler identification is GNU 11.4.0
+[1.096s] -- Detecting C compiler ABI info
+[3.499s] -- Detecting C compiler ABI info - done
+[3.554s] -- Check for working C compiler: /usr/bin/cc - skipped
+[3.572s] -- Detecting C compile features
+[3.581s] -- Detecting C compile features - done
+[3.708s] -- Detecting CXX compiler ABI info
+[6.097s] -- Detecting CXX compiler ABI info - done
+[6.146s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[6.154s] -- Detecting CXX compile features
+[6.165s] -- Detecting CXX compile features - done
+[6.285s] -- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)
+[6.637s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[7.105s] -- Found ament_lint_auto: 0.12.14 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[7.658s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[7.667s] -- Configured cppcheck include dirs: 
+[7.675s] -- Configured cppcheck exclude dirs and/or files: 
+[7.685s] -- Added test 'lint_cmake' to check CMake code style
+[7.692s] -- Added test 'uncrustify' to check C / C++ code style
+[7.703s] -- Configured uncrustify additional arguments: 
+[7.803s] -- Added test 'xmllint' to check XML markup files
+[7.907s] [31mCMake Error at /opt/ros/humble/share/ament_cmake_target_dependencies/cmake/ament_target_dependencies.cmake:77 (message):
+[8.007s]   ament_target_dependencies() the passed package name 'rclcpp' was not found
+[8.015s]   before
+[8.023s] Call Stack (most recent call first):
+[8.030s]   CMakeLists.txt:28 (ament_target_dependencies)
+[8.035s] 
+[8.043s] [0m
+[8.052s] -- Configuring incomplete, errors occurred!
+[8.062s] See also "/root/nav/livox_ws/src/build/sensor_extrinsic/CMakeFiles/CMakeOutput.log".
+[8.069s] Invoked command in '/root/nav/livox_ws/src/build/sensor_extrinsic' returned '1': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /root/nav/livox_ws/src/sensor_extrinsic -DCMAKE_INSTALL_PREFIX=/root/nav/livox_ws/src/install/sensor_extrinsic

@@ -1,0 +1,115 @@
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)
+-- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+-- Found geometry_msgs: 4.9.0 (/opt/ros/humble/share/geometry_msgs/cmake)
+-- Found rosidl_generator_c: 3.1.8 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+-- Found rosidl_adapter: 3.1.8 (/opt/ros/humble/share/rosidl_adapter/cmake)
+-- Found rosidl_generator_cpp: 3.1.8 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found nav_msgs: 4.9.0 (/opt/ros/humble/share/nav_msgs/cmake)
+-- Found nav2_msgs: 1.1.20 (/opt/ros/humble/share/nav2_msgs/cmake)
+-- Found rclcpp: 16.0.17 (/opt/ros/humble/share/rclcpp/cmake)
+-- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+-- Found rmw_fastrtps_cpp: 6.2.10 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+-- Found OpenSSL: /usr/lib/aarch64-linux-gnu/libcrypto.so (found version "3.0.2")  
+-- Found FastRTPS: /opt/ros/humble/include  
+-- Using RMW implementation 'rmw_fastrtps_cpp' as default
+-- Looking for C++ include pthread.h
+-- Looking for C++ include pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Found rclcpp_action: 16.0.17 (/opt/ros/humble/share/rclcpp_action/cmake)
+-- Found sensor_msgs: 4.9.0 (/opt/ros/humble/share/sensor_msgs/cmake)
+-- Found tf2: 0.25.18 (/opt/ros/humble/share/tf2/cmake)
+-- Found tf2_geometry_msgs: 0.25.20 (/opt/ros/humble/share/tf2_geometry_msgs/cmake)
+-- Found eigen3_cmake_module: 0.1.1 (/opt/ros/humble/share/eigen3_cmake_module/cmake)
+-- Found Eigen3: TRUE (found version "3.4.0") 
+-- Ensuring Eigen3 include directory is part of orocos-kdl CMake target
+-- Found visualization_msgs: 4.9.0 (/opt/ros/humble/share/visualization_msgs/cmake)
+-- Checking for module 'libusb-1.0'
+--   Found libusb-1.0, version 1.0.25
+-- Found libusb: /usr/lib/aarch64-linux-gnu/libusb-1.0.so  
+-- OpenNI found (version: 1.5.4.0, include: /usr/include/ni, lib: /usr/lib/libOpenNI.so;libusb::libusb)
+-- OpenNI2 found (version: 2.2.0.33, include: /usr/include/openni2, lib: /usr/lib/aarch64-linux-gnu/libOpenNI2.so;libusb::libusb)
+-- Checking for module 'eigen3'
+--   Found eigen3, version 3.4.0
+-- Found Eigen: /usr/include/eigen3 (Required is at least version "3.1") 
+-- Eigen found (include: /usr/include/eigen3, version: 3.4.0)
+-- Eigen found (include: /usr/include/eigen3, version: 3.4.0)
+-- Found PCL_OCTREE: /usr/lib/aarch64-linux-gnu/libpcl_octree.so  
+-- Found PCL_IO: /usr/lib/aarch64-linux-gnu/libpcl_io.so  
+-- Found PCL_COMMON: /usr/lib/aarch64-linux-gnu/libpcl_common.so  
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/build/nav3d_ros2_bridge
+[  6%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/map_core/src/map_composite.cpp.o[0m
+[  6%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/map_core/src/point_cloud_preprocessor.cpp.o[0m
+[ 16%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/map_core/src/octomap_manager.cpp.o[0m
+[ 26%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/map_core/src/voxel_grid_map.cpp.o[0m
+[ 26%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/map_core/src/map_2d_projection.cpp.o[0m
+[ 26%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/map_core/src/local_grid.cpp.o[0m
+[ 26%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/map_core/src/map_builder.cpp.o[0m
+[ 26%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/map_core/src/pcd_loader.cpp.o[0m
+[ 30%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/planner_core/src/path_searching/astar_3d.cpp.o[0m
+[ 33%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/planner_core/src/path_searching/jps_3d.cpp.o[0m
+[ 36%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/planner_core/src/ego_planner_core.cpp.o[0m
+[ 43%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/planner_core/src/bspline/bspline_optimizer.cpp.o[0m
+[ 43%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/planner_core/src/replan_fsm.cpp.o[0m
+[ 46%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/planner_core/src/bspline/uniform_bspline.cpp.o[0m
+[ 50%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/collision_engine/src/inflation_layer.cpp.o[0m
+[ 53%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/collision_engine/src/sphere_checker.cpp.o[0m
+[ 60%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/collision_engine/src/trajectory_checker.cpp.o[0m
+[ 60%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/collision_engine/src/trajectory_feasibility_checker.cpp.o[0m
+[ 63%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/controller_core/src/motion_model.cpp.o[0m
+[ 66%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/controller_core/src/safety_monitor.cpp.o[0m
+[ 70%] [32mBuilding CXX object nav3d_core_build/CMakeFiles/nav3d_core.dir/controller_core/src/trajectory_tracker.cpp.o[0m
+[ 73%] [32m[1mLinking CXX static library libnav3d_core.a[0m
+[ 73%] Built target nav3d_core
+[ 76%] [32mBuilding CXX object nav3d_tools_build/CMakeFiles/nav3d_pcl_tools.dir/pcl_pcd_loader.cpp.o[0m
+[ 80%] [32m[1mLinking CXX static library libnav3d_pcl_tools.a[0m
+[ 80%] Built target nav3d_pcl_tools
+[ 86%] [32mBuilding CXX object CMakeFiles/nav3d_bridge_node.dir/src/nav3d_bridge_node.cpp.o[0m
+[ 86%] [32mBuilding CXX object nav3d_tools_build/CMakeFiles/nav3d_octomap_trajectory_demo.dir/octomap_trajectory_demo.cpp.o[0m
+[ 90%] [32mBuilding CXX object nav3d_tools_build/CMakeFiles/nav3d_standalone_demo.dir/standalone_demo.cpp.o[0m
+[ 93%] [32m[1mLinking CXX executable nav3d_standalone_demo[0m
+[ 93%] Built target nav3d_standalone_demo
+[ 96%] [32m[1mLinking CXX executable nav3d_octomap_trajectory_demo[0m
+[ 96%] Built target nav3d_octomap_trajectory_demo
+[100%] [32m[1mLinking CXX executable nav3d_bridge_node[0m
+[100%] Built target nav3d_bridge_node
+-- Install configuration: ""
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/nav3d_octomap_msgs_library_path.sh
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/nav3d_octomap_msgs_library_path.dsv
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib/nav3d_ros2_bridge/nav3d_bridge_node
+-- Set runtime path of "/root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib/nav3d_ros2_bridge/nav3d_bridge_node" to "/opt/ros/humble/lib:/opt/ros/humble/lib/aarch64-linux-gnu"
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib/nav3d_ros2_bridge/nav3d_cmd_vel_pose_sim.py
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/lib/nav3d_ros2_bridge/nav3d_local_replan_smoke.py
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/launch
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/launch/nav3d_bridge.launch.py
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/launch/nav3d_local_replan_smoke.launch.py
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/rviz
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/rviz/nav3d.rviz
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/config
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/config/nav3d_bridge.yaml
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/ament_index/resource_index/package_run_dependencies/nav3d_ros2_bridge
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/ament_index/resource_index/parent_prefix_path/nav3d_ros2_bridge
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/ament_prefix_path.sh
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/ament_prefix_path.dsv
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/path.sh
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/environment/path.dsv
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/local_setup.bash
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/local_setup.sh
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/local_setup.zsh
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/local_setup.dsv
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/package.dsv
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/ament_index/resource_index/packages/nav3d_ros2_bridge
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/cmake/nav3d_ros2_bridgeConfig.cmake
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/cmake/nav3d_ros2_bridgeConfig-version.cmake
+-- Installing: /root/nav/livox_ws/src/3D-Nav-Dynamic-EGO/install/nav3d_ros2_bridge/share/nav3d_ros2_bridge/package.xml

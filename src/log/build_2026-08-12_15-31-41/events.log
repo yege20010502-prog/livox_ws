@@ -1,0 +1,247 @@
+[0.000000] (-) TimerEvent: {}
+[0.003286] (-) JobUnselected: {'identifier': 'bspline_opt'}
+[0.005652] (-) JobUnselected: {'identifier': 'fast_lio'}
+[0.007465] (-) JobUnselected: {'identifier': 'fastlio2'}
+[0.009228] (-) JobUnselected: {'identifier': 'go2_description'}
+[0.011471] (-) JobUnselected: {'identifier': 'hba'}
+[0.014243] (-) JobUnselected: {'identifier': 'interface'}
+[0.022391] (-) JobUnselected: {'identifier': 'livox_ros_driver2'}
+[0.024245] (-) JobUnselected: {'identifier': 'local_sensing_node'}
+[0.026536] (-) JobUnselected: {'identifier': 'localizer'}
+[0.029380] (-) JobUnselected: {'identifier': 'map_generator'}
+[0.113879] (-) TimerEvent: {}
+[0.117825] (-) JobUnselected: {'identifier': 'mockamap'}
+[0.120962] (-) JobUnselected: {'identifier': 'nav3d_octomap_ego_nav'}
+[0.125640] (-) JobUnselected: {'identifier': 'odom_visualization'}
+[0.127800] (-) JobUnselected: {'identifier': 'path_searching'}
+[0.212282] (-) JobUnselected: {'identifier': 'pcd2pgm'}
+[0.214311] (-) TimerEvent: {}
+[0.302277] (-) JobUnselected: {'identifier': 'pgo'}
+[0.308542] (-) JobUnselected: {'identifier': 'plan_env'}
+[0.310510] (-) JobUnselected: {'identifier': 'pose_utils'}
+[0.314480] (-) TimerEvent: {}
+[0.316765] (-) JobUnselected: {'identifier': 'scan_planner'}
+[0.318407] (-) JobUnselected: {'identifier': 'scan_planner_msgs'}
+[0.320037] (-) JobUnselected: {'identifier': 'topic_bridge'}
+[0.321717] (-) JobUnselected: {'identifier': 'traj_utils'}
+[0.323693] (-) JobUnselected: {'identifier': 'trajectory_tracker'}
+[0.325541] (-) JobUnselected: {'identifier': 'waypoint_generator'}
+[0.327198] (sensor_extrinsic) JobQueued: {'identifier': 'sensor_extrinsic', 'dependencies': OrderedDict()}
+[0.328813] (sensor_extrinsic) JobStarted: {'identifier': 'sensor_extrinsic'}
+[0.330662] (sensor_extrinsic) JobProgress: {'identifier': 'sensor_extrinsic', 'progress': 'cmake'}
+[0.332220] (sensor_extrinsic) Command: {'cmd': ['/usr/bin/cmake', '/root/nav/livox_ws/src/sensor_extrinsic', '-DCMAKE_INSTALL_PREFIX=/root/nav/livox_ws/src/install/sensor_extrinsic'], 'cwd': '/root/nav/livox_ws/src/build/sensor_extrinsic', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('UMS_MOUNTPOINT', '/mnt/ums'), ('GST_V4L2_PREFERRED_FOURCC', 'NV12:YU12:NV16:YUY2'), ('USER', 'root'), ('SSH_CLIENT', '172.31.205.215 61691 22'), ('XDG_SESSION_TYPE', 'tty'), ('GIT_ASKPASS', '/root/.vscode-server/cli/servers/Stable-c2d1b13fdc4a77628e5f3bb70173351c8f2fbad1/server/extensions/git/dist/askpass.sh'), ('SHLVL', '1'), ('USB_FUNCS', 'adb'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib'), ('BROWSER', '/root/.vscode-server/cli/servers/Stable-c2d1b13fdc4a77628e5f3bb70173351c8f2fbad1/server/bin/helpers/browser.sh'), ('MOTD_SHOWN', 'pam'), ('HOME', '/root'), ('OLDPWD', '/root/nav/livox_ws/src/sensor_extrinsic/src'), ('TERM_PROGRAM_VERSION', '1.132.1'), ('VSCODE_IPC_HOOK_CLI', '/run/user/0/vscode-ipc-3c89ae51-09d0-4520-9df7-0965eb57fb26.sock'), ('GST_INSPECT_NO_COLORS', '1'), ('ROS_PYTHON_VERSION', '3'), ('COGL_DRIVER', 'gles2'), ('PLAYBIN2_PREFERRED_VIDEOSINK', 'xvimagesink'), ('VSCODE_GIT_ASKPASS_MAIN', '/root/.vscode-server/cli/servers/Stable-c2d1b13fdc4a77628e5f3bb70173351c8f2fbad1/server/extensions/git/dist/askpass-main.js'), ('VSCODE_GIT_ASKPASS_NODE', '/root/.vscode-server/cli/servers/Stable-c2d1b13fdc4a77628e5f3bb70173351c8f2fbad1/server/node'), ('GST_VIDEO_DECODER_QOS', '0'), ('LC_CTYPE', 'C.UTF-8'), ('VSCODE_PYTHON_AUTOACTIVATE_GUARD', '1'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/0/bus'), ('COLORTERM', 'truecolor'), ('DEBUGINFOD_URLS', ''), ('GST_V4L2SRC_MAX_RESOLUTION', '3840x2160'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'root'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm-256color'), ('GST_GL_API', 'gles2'), ('XDG_SESSION_ID', 'c1'), ('GST_VIDEO_CONVERT_PREFERRED_FORMAT', 'NV12:NV16:I420:YUY2'), ('GST_V4L2SRC_RK_DEVICES', '_mainpath:_selfpath:_bypass:_scale'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/root/.vscode-server/data/User/globalStorage/github.copilot-chat/debugCommand:/root/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli:/root/.vscode-server/cli/servers/Stable-c2d1b13fdc4a77628e5f3bb70173351c8f2fbad1/server/bin/remote-cli:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/0'), ('GST_GL_PLATFORM', 'egl'), ('GST_DEBUG_NO_COLOR', '1'), ('GST_V4L2SRC_DEFAULT_DEVICE', '/dev/video-camera0'), ('ADBD_SHELL', '/bin/bash'), ('LANG', 'en_US.UTF-8'), ('RMW_IMPLEMENTATION', 'rmw_fastrtps_cpp'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('VSCODE_GIT_IPC_HANDLE', '/run/user/0/vscode-git-38b6cffe71.sock'), ('TERM_PROGRAM', 'vscode'), ('GST_V4L2_USE_LIBV4L2', '1'), ('ROS_DOMAIN_ID', '0'), ('UMS_SIZE', '256M'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('SHELL', '/bin/bash'), ('UMS_RO', '0'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('UMS_FSTYPE', 'vfat'), ('VSCODE_GIT_ASKPASS_EXTRA_ARGS', ''), ('PWD', '/root/nav/livox_ws/src/build/sensor_extrinsic'), ('COPILOT_DEBUG_NONCE', 'd4cc6dbc2e21a286281e821db5df5cb0'), ('SSH_CONNECTION', '172.31.205.215 61691 172.31.205.142 22'), ('AUTOVIDEOSINK_PREFERRED', 'xvimagesink'), ('ADB_TCP_PORT', '5555'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('UMS_MOUNT', '0'), ('COLCON', '1'), ('UMS_FILE', '/userdata/ums_shared.img'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[0.354429] (sensor_extrinsic) StdoutLine: {'line': b'-- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)\n'}
+[0.414879] (-) TimerEvent: {}
+[0.518349] (-) TimerEvent: {}
+[0.621917] (-) TimerEvent: {}
+[0.752960] (-) TimerEvent: {}
+[0.885979] (sensor_extrinsic) StdoutLine: {'line': b'-- Found rclcpp: 16.0.17 (/opt/ros/humble/share/rclcpp/cmake)\n'}
+[0.962475] (-) TimerEvent: {}
+[0.965700] (sensor_extrinsic) StdoutLine: {'line': b'-- Found rosidl_generator_c: 3.1.8 (/opt/ros/humble/share/rosidl_generator_c/cmake)\n'}
+[0.972780] (sensor_extrinsic) StdoutLine: {'line': b'-- Found rosidl_adapter: 3.1.8 (/opt/ros/humble/share/rosidl_adapter/cmake)\n'}
+[0.979281] (sensor_extrinsic) StdoutLine: {'line': b'-- Found rosidl_generator_cpp: 3.1.8 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)\n'}
+[0.993382] (sensor_extrinsic) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[1.010850] (sensor_extrinsic) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[1.055449] (sensor_extrinsic) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)\n'}
+[1.062805] (-) TimerEvent: {}
+[1.064856] (sensor_extrinsic) StdoutLine: {'line': b'-- Found rmw_fastrtps_cpp: 6.2.10 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)\n'}
+[1.163214] (-) TimerEvent: {}
+[1.168264] (sensor_extrinsic) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[1.244100] (sensor_extrinsic) StdoutLine: {'line': b'-- Found nav_msgs: 4.9.0 (/opt/ros/humble/share/nav_msgs/cmake)\n'}
+[1.263331] (-) TimerEvent: {}
+[1.311252] (sensor_extrinsic) StdoutLine: {'line': b'-- Found ament_lint_auto: 0.12.14 (/opt/ros/humble/share/ament_lint_auto/cmake)\n'}
+[1.363636] (-) TimerEvent: {}
+[1.466521] (-) TimerEvent: {}
+[1.581984] (-) TimerEvent: {}
+[1.711084] (-) TimerEvent: {}
+[1.893236] (-) TimerEvent: {}
+[1.995911] (-) TimerEvent: {}
+[2.182841] (-) TimerEvent: {}
+[2.186134] (sensor_extrinsic) StdoutLine: {'line': b"-- Added test 'cppcheck' to perform static code analysis on C / C++ code\n"}
+[2.192069] (sensor_extrinsic) StdoutLine: {'line': b'-- Configured cppcheck include dirs: \n'}
+[2.199180] (sensor_extrinsic) StdoutLine: {'line': b'-- Configured cppcheck exclude dirs and/or files: \n'}
+[2.294686] (-) TimerEvent: {}
+[2.299604] (sensor_extrinsic) StdoutLine: {'line': b"-- Added test 'lint_cmake' to check CMake code style\n"}
+[2.390251] (sensor_extrinsic) StdoutLine: {'line': b"-- Added test 'uncrustify' to check C / C++ code style\n"}
+[2.398412] (-) TimerEvent: {}
+[2.483291] (sensor_extrinsic) StdoutLine: {'line': b'-- Configured uncrustify additional arguments: \n'}
+[2.572704] (-) TimerEvent: {}
+[2.574871] (sensor_extrinsic) StdoutLine: {'line': b"-- Added test 'xmllint' to check XML markup files\n"}
+[2.582150] (sensor_extrinsic) StdoutLine: {'line': b'-- Configuring done\n'}
+[2.673051] (-) TimerEvent: {}
+[2.776366] (-) TimerEvent: {}
+[2.785627] (sensor_extrinsic) StdoutLine: {'line': b'-- Generating done\n'}
+[2.876792] (-) TimerEvent: {}
+[3.000357] (sensor_extrinsic) StdoutLine: {'line': b'-- Build files have been written to: /root/nav/livox_ws/src/build/sensor_extrinsic\n'}
+[3.008832] (-) TimerEvent: {}
+[3.056881] (sensor_extrinsic) CommandEnded: {'returncode': 0}
+[3.071093] (sensor_extrinsic) JobProgress: {'identifier': 'sensor_extrinsic', 'progress': 'build'}
+[3.072817] (sensor_extrinsic) Command: {'cmd': ['/usr/bin/cmake', '--build', '/root/nav/livox_ws/src/build/sensor_extrinsic', '--', '-j8', '-l8'], 'cwd': '/root/nav/livox_ws/src/build/sensor_extrinsic', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('UMS_MOUNTPOINT', '/mnt/ums'), ('GST_V4L2_PREFERRED_FOURCC', 'NV12:YU12:NV16:YUY2'), ('USER', 'root'), ('SSH_CLIENT', '172.31.205.215 61691 22'), ('XDG_SESSION_TYPE', 'tty'), ('GIT_ASKPASS', '/root/.vscode-server/cli/servers/Stable-c2d1b13fdc4a77628e5f3bb70173351c8f2fbad1/server/extensions/git/dist/askpass.sh'), ('SHLVL', '1'), ('USB_FUNCS', 'adb'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib'), ('BROWSER', '/root/.vscode-server/cli/servers/Stable-c2d1b13fdc4a77628e5f3bb70173351c8f2fbad1/server/bin/helpers/browser.sh'), ('MOTD_SHOWN', 'pam'), ('HOME', '/root'), ('OLDPWD', '/root/nav/livox_ws/src/sensor_extrinsic/src'), ('TERM_PROGRAM_VERSION', '1.132.1'), ('VSCODE_IPC_HOOK_CLI', '/run/user/0/vscode-ipc-3c89ae51-09d0-4520-9df7-0965eb57fb26.sock'), ('GST_INSPECT_NO_COLORS', '1'), ('ROS_PYTHON_VERSION', '3'), ('COGL_DRIVER', 'gles2'), ('PLAYBIN2_PREFERRED_VIDEOSINK', 'xvimagesink'), ('VSCODE_GIT_ASKPASS_MAIN', '/root/.vscode-server/cli/servers/Stable-c2d1b13fdc4a77628e5f3bb70173351c8f2fbad1/server/extensions/git/dist/askpass-main.js'), ('VSCODE_GIT_ASKPASS_NODE', '/root/.vscode-server/cli/servers/Stable-c2d1b13fdc4a77628e5f3bb70173351c8f2fbad1/server/node'), ('GST_VIDEO_DECODER_QOS', '0'), ('LC_CTYPE', 'C.UTF-8'), ('VSCODE_PYTHON_AUTOACTIVATE_GUARD', '1'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/0/bus'), ('COLORTERM', 'truecolor'), ('DEBUGINFOD_URLS', ''), ('GST_V4L2SRC_MAX_RESOLUTION', '3840x2160'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'root'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm-256color'), ('GST_GL_API', 'gles2'), ('XDG_SESSION_ID', 'c1'), ('GST_VIDEO_CONVERT_PREFERRED_FORMAT', 'NV12:NV16:I420:YUY2'), ('GST_V4L2SRC_RK_DEVICES', '_mainpath:_selfpath:_bypass:_scale'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/root/.vscode-server/data/User/globalStorage/github.copilot-chat/debugCommand:/root/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli:/root/.vscode-server/cli/servers/Stable-c2d1b13fdc4a77628e5f3bb70173351c8f2fbad1/server/bin/remote-cli:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/0'), ('GST_GL_PLATFORM', 'egl'), ('GST_DEBUG_NO_COLOR', '1'), ('GST_V4L2SRC_DEFAULT_DEVICE', '/dev/video-camera0'), ('ADBD_SHELL', '/bin/bash'), ('LANG', 'en_US.UTF-8'), ('RMW_IMPLEMENTATION', 'rmw_fastrtps_cpp'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('VSCODE_GIT_IPC_HANDLE', '/run/user/0/vscode-git-38b6cffe71.sock'), ('TERM_PROGRAM', 'vscode'), ('GST_V4L2_USE_LIBV4L2', '1'), ('ROS_DOMAIN_ID', '0'), ('UMS_SIZE', '256M'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('SHELL', '/bin/bash'), ('UMS_RO', '0'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('UMS_FSTYPE', 'vfat'), ('VSCODE_GIT_ASKPASS_EXTRA_ARGS', ''), ('PWD', '/root/nav/livox_ws/src/build/sensor_extrinsic'), ('COPILOT_DEBUG_NONCE', 'd4cc6dbc2e21a286281e821db5df5cb0'), ('SSH_CONNECTION', '172.31.205.215 61691 172.31.205.142 22'), ('AUTOVIDEOSINK_PREFERRED', 'xvimagesink'), ('ADB_TCP_PORT', '5555'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('UMS_MOUNT', '0'), ('COLCON', '1'), ('UMS_FILE', '/userdata/ums_shared.img'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[3.109140] (-) TimerEvent: {}
+[3.210524] (sensor_extrinsic) StdoutLine: {'line': b'[ 50%] \x1b[32mBuilding CXX object CMakeFiles/lidar_extrinsic_publisher.dir/src/lidar_extrinsic_publisher.cpp.o\x1b[0m\n'}
+[3.217566] (-) TimerEvent: {}
+[3.320184] (-) TimerEvent: {}
+[3.423980] (-) TimerEvent: {}
+[3.527620] (-) TimerEvent: {}
+[3.632136] (-) TimerEvent: {}
+[3.738325] (-) TimerEvent: {}
+[3.843802] (-) TimerEvent: {}
+[3.948511] (-) TimerEvent: {}
+[4.052524] (-) TimerEvent: {}
+[4.157027] (-) TimerEvent: {}
+[4.260285] (-) TimerEvent: {}
+[4.363723] (-) TimerEvent: {}
+[4.466886] (-) TimerEvent: {}
+[4.570339] (-) TimerEvent: {}
+[4.699211] (-) TimerEvent: {}
+[4.802569] (-) TimerEvent: {}
+[4.930532] (-) TimerEvent: {}
+[5.059760] (-) TimerEvent: {}
+[5.162737] (-) TimerEvent: {}
+[5.265665] (-) TimerEvent: {}
+[5.396427] (-) TimerEvent: {}
+[5.526797] (-) TimerEvent: {}
+[5.655272] (-) TimerEvent: {}
+[5.784981] (-) TimerEvent: {}
+[5.913978] (-) TimerEvent: {}
+[6.043606] (-) TimerEvent: {}
+[6.172720] (-) TimerEvent: {}
+[6.301997] (-) TimerEvent: {}
+[6.430460] (-) TimerEvent: {}
+[6.560553] (-) TimerEvent: {}
+[6.688512] (-) TimerEvent: {}
+[6.818356] (-) TimerEvent: {}
+[6.946114] (-) TimerEvent: {}
+[7.075874] (-) TimerEvent: {}
+[7.205423] (-) TimerEvent: {}
+[7.335389] (-) TimerEvent: {}
+[7.463925] (-) TimerEvent: {}
+[7.566657] (-) TimerEvent: {}
+[7.669716] (-) TimerEvent: {}
+[7.797915] (-) TimerEvent: {}
+[7.927685] (-) TimerEvent: {}
+[8.057228] (-) TimerEvent: {}
+[8.160327] (-) TimerEvent: {}
+[8.288056] (-) TimerEvent: {}
+[8.416674] (-) TimerEvent: {}
+[8.544803] (-) TimerEvent: {}
+[8.674008] (-) TimerEvent: {}
+[8.803383] (-) TimerEvent: {}
+[8.932920] (-) TimerEvent: {}
+[9.061796] (-) TimerEvent: {}
+[9.193145] (-) TimerEvent: {}
+[9.320264] (-) TimerEvent: {}
+[9.450095] (-) TimerEvent: {}
+[9.552703] (-) TimerEvent: {}
+[9.682483] (-) TimerEvent: {}
+[9.813756] (-) TimerEvent: {}
+[9.916630] (-) TimerEvent: {}
+[10.019661] (-) TimerEvent: {}
+[10.122785] (-) TimerEvent: {}
+[10.251551] (-) TimerEvent: {}
+[10.380983] (-) TimerEvent: {}
+[10.508980] (-) TimerEvent: {}
+[10.638033] (-) TimerEvent: {}
+[10.768085] (-) TimerEvent: {}
+[10.898302] (-) TimerEvent: {}
+[11.028097] (-) TimerEvent: {}
+[11.131394] (-) TimerEvent: {}
+[11.259040] (-) TimerEvent: {}
+[11.386592] (-) TimerEvent: {}
+[11.489340] (-) TimerEvent: {}
+[11.592540] (-) TimerEvent: {}
+[11.695777] (-) TimerEvent: {}
+[11.799548] (-) TimerEvent: {}
+[11.902163] (-) TimerEvent: {}
+[12.005101] (-) TimerEvent: {}
+[12.059102] (sensor_extrinsic) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking CXX executable lidar_extrinsic_publisher\x1b[0m\n'}
+[12.105458] (-) TimerEvent: {}
+[12.208419] (-) TimerEvent: {}
+[12.311863] (-) TimerEvent: {}
+[12.415722] (-) TimerEvent: {}
+[12.519180] (-) TimerEvent: {}
+[12.622305] (-) TimerEvent: {}
+[12.725723] (-) TimerEvent: {}
+[12.828562] (-) TimerEvent: {}
+[12.931254] (-) TimerEvent: {}
+[13.034030] (-) TimerEvent: {}
+[13.136981] (-) TimerEvent: {}
+[13.241628] (-) TimerEvent: {}
+[13.345581] (-) TimerEvent: {}
+[13.444662] (sensor_extrinsic) StdoutLine: {'line': b'[100%] Built target lidar_extrinsic_publisher\n'}
+[13.451984] (-) TimerEvent: {}
+[13.554910] (-) TimerEvent: {}
+[13.743397] (sensor_extrinsic) CommandEnded: {'returncode': 0}
+[13.751600] (-) TimerEvent: {}
+[13.753563] (sensor_extrinsic) JobProgress: {'identifier': 'sensor_extrinsic', 'progress': 'install'}
+[13.762926] (sensor_extrinsic) Command: {'cmd': ['/usr/bin/cmake', '--install', '/root/nav/livox_ws/src/build/sensor_extrinsic'], 'cwd': '/root/nav/livox_ws/src/build/sensor_extrinsic', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('UMS_MOUNTPOINT', '/mnt/ums'), ('GST_V4L2_PREFERRED_FOURCC', 'NV12:YU12:NV16:YUY2'), ('USER', 'root'), ('SSH_CLIENT', '172.31.205.215 61691 22'), ('XDG_SESSION_TYPE', 'tty'), ('GIT_ASKPASS', '/root/.vscode-server/cli/servers/Stable-c2d1b13fdc4a77628e5f3bb70173351c8f2fbad1/server/extensions/git/dist/askpass.sh'), ('SHLVL', '1'), ('USB_FUNCS', 'adb'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib'), ('BROWSER', '/root/.vscode-server/cli/servers/Stable-c2d1b13fdc4a77628e5f3bb70173351c8f2fbad1/server/bin/helpers/browser.sh'), ('MOTD_SHOWN', 'pam'), ('HOME', '/root'), ('OLDPWD', '/root/nav/livox_ws/src/sensor_extrinsic/src'), ('TERM_PROGRAM_VERSION', '1.132.1'), ('VSCODE_IPC_HOOK_CLI', '/run/user/0/vscode-ipc-3c89ae51-09d0-4520-9df7-0965eb57fb26.sock'), ('GST_INSPECT_NO_COLORS', '1'), ('ROS_PYTHON_VERSION', '3'), ('COGL_DRIVER', 'gles2'), ('PLAYBIN2_PREFERRED_VIDEOSINK', 'xvimagesink'), ('VSCODE_GIT_ASKPASS_MAIN', '/root/.vscode-server/cli/servers/Stable-c2d1b13fdc4a77628e5f3bb70173351c8f2fbad1/server/extensions/git/dist/askpass-main.js'), ('VSCODE_GIT_ASKPASS_NODE', '/root/.vscode-server/cli/servers/Stable-c2d1b13fdc4a77628e5f3bb70173351c8f2fbad1/server/node'), ('GST_VIDEO_DECODER_QOS', '0'), ('LC_CTYPE', 'C.UTF-8'), ('VSCODE_PYTHON_AUTOACTIVATE_GUARD', '1'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/0/bus'), ('COLORTERM', 'truecolor'), ('DEBUGINFOD_URLS', ''), ('GST_V4L2SRC_MAX_RESOLUTION', '3840x2160'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'root'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm-256color'), ('GST_GL_API', 'gles2'), ('XDG_SESSION_ID', 'c1'), ('GST_VIDEO_CONVERT_PREFERRED_FORMAT', 'NV12:NV16:I420:YUY2'), ('GST_V4L2SRC_RK_DEVICES', '_mainpath:_selfpath:_bypass:_scale'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/root/.vscode-server/data/User/globalStorage/github.copilot-chat/debugCommand:/root/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli:/root/.vscode-server/cli/servers/Stable-c2d1b13fdc4a77628e5f3bb70173351c8f2fbad1/server/bin/remote-cli:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/0'), ('GST_GL_PLATFORM', 'egl'), ('GST_DEBUG_NO_COLOR', '1'), ('GST_V4L2SRC_DEFAULT_DEVICE', '/dev/video-camera0'), ('ADBD_SHELL', '/bin/bash'), ('LANG', 'en_US.UTF-8'), ('RMW_IMPLEMENTATION', 'rmw_fastrtps_cpp'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('VSCODE_GIT_IPC_HANDLE', '/run/user/0/vscode-git-38b6cffe71.sock'), ('TERM_PROGRAM', 'vscode'), ('GST_V4L2_USE_LIBV4L2', '1'), ('ROS_DOMAIN_ID', '0'), ('UMS_SIZE', '256M'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('SHELL', '/bin/bash'), ('UMS_RO', '0'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('UMS_FSTYPE', 'vfat'), ('VSCODE_GIT_ASKPASS_EXTRA_ARGS', ''), ('PWD', '/root/nav/livox_ws/src/build/sensor_extrinsic'), ('COPILOT_DEBUG_NONCE', 'd4cc6dbc2e21a286281e821db5df5cb0'), ('SSH_CONNECTION', '172.31.205.215 61691 172.31.205.142 22'), ('AUTOVIDEOSINK_PREFERRED', 'xvimagesink'), ('ADB_TCP_PORT', '5555'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('UMS_MOUNT', '0'), ('COLCON', '1'), ('UMS_FILE', '/userdata/ums_shared.img'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[13.789445] (sensor_extrinsic) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[13.800213] (sensor_extrinsic) StdoutLine: {'line': b'-- Installing: /root/nav/livox_ws/src/install/sensor_extrinsic/share/ament_index/resource_index/package_run_dependencies/sensor_extrinsic\n'}
+[13.810462] (sensor_extrinsic) StdoutLine: {'line': b'-- Installing: /root/nav/livox_ws/src/install/sensor_extrinsic/share/ament_index/resource_index/parent_prefix_path/sensor_extrinsic\n'}
+[13.823365] (sensor_extrinsic) StdoutLine: {'line': b'-- Installing: /root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/environment/ament_prefix_path.sh\n'}
+[13.833484] (sensor_extrinsic) StdoutLine: {'line': b'-- Installing: /root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/environment/ament_prefix_path.dsv\n'}
+[13.844959] (sensor_extrinsic) StdoutLine: {'line': b'-- Installing: /root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/environment/path.sh\n'}
+[13.853696] (-) TimerEvent: {}
+[13.857214] (sensor_extrinsic) StdoutLine: {'line': b'-- Installing: /root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/environment/path.dsv\n'}
+[13.866153] (sensor_extrinsic) StdoutLine: {'line': b'-- Installing: /root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/local_setup.bash\n'}
+[13.876575] (sensor_extrinsic) StdoutLine: {'line': b'-- Installing: /root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/local_setup.sh\n'}
+[13.889345] (sensor_extrinsic) StdoutLine: {'line': b'-- Installing: /root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/local_setup.zsh\n'}
+[13.899063] (sensor_extrinsic) StdoutLine: {'line': b'-- Installing: /root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/local_setup.dsv\n'}
+[13.909822] (sensor_extrinsic) StdoutLine: {'line': b'-- Installing: /root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/package.dsv\n'}
+[13.930842] (sensor_extrinsic) StdoutLine: {'line': b'-- Installing: /root/nav/livox_ws/src/install/sensor_extrinsic/share/ament_index/resource_index/packages/sensor_extrinsic\n'}
+[13.940349] (sensor_extrinsic) StdoutLine: {'line': b'-- Installing: /root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/cmake/sensor_extrinsicConfig.cmake\n'}
+[13.949870] (sensor_extrinsic) StdoutLine: {'line': b'-- Installing: /root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/cmake/sensor_extrinsicConfig-version.cmake\n'}
+[13.961763] (-) TimerEvent: {}
+[13.967606] (sensor_extrinsic) StdoutLine: {'line': b'-- Installing: /root/nav/livox_ws/src/install/sensor_extrinsic/share/sensor_extrinsic/package.xml\n'}
+[13.978938] (sensor_extrinsic) StdoutLine: {'line': b'-- Installing: /root/nav/livox_ws/src/install/sensor_extrinsic/lib/sensor_extrinsic/lidar_extrinsic_publisher\n'}
+[14.062003] (-) TimerEvent: {}
+[14.165247] (-) TimerEvent: {}
+[14.300854] (-) TimerEvent: {}
+[14.471248] (-) TimerEvent: {}
+[14.640461] (-) TimerEvent: {}
+[14.807700] (-) TimerEvent: {}
+[14.977777] (-) TimerEvent: {}
+[15.148359] (-) TimerEvent: {}
+[15.314479] (-) TimerEvent: {}
+[15.486369] (-) TimerEvent: {}
+[15.653563] (-) TimerEvent: {}
+[15.825253] (-) TimerEvent: {}
+[15.994978] (-) TimerEvent: {}
+[16.160891] (-) TimerEvent: {}
+[16.331805] (-) TimerEvent: {}
+[16.501365] (-) TimerEvent: {}
+[16.667711] (-) TimerEvent: {}
+[16.835080] (-) TimerEvent: {}
+[17.002022] (-) TimerEvent: {}
+[17.173081] (-) TimerEvent: {}
+[17.339531] (-) TimerEvent: {}
+[17.509800] (-) TimerEvent: {}
+[17.675408] (-) TimerEvent: {}
+[17.842253] (-) TimerEvent: {}
+[18.011451] (-) TimerEvent: {}
+[18.178884] (-) TimerEvent: {}
+[18.350337] (-) TimerEvent: {}
+[18.518311] (-) TimerEvent: {}
+[18.685546] (-) TimerEvent: {}
+[18.856547] (-) TimerEvent: {}
+[19.025880] (-) TimerEvent: {}
+[19.192094] (-) TimerEvent: {}
+[19.358536] (-) TimerEvent: {}
+[19.528263] (-) TimerEvent: {}
+[19.630942] (-) TimerEvent: {}
+[19.645076] (sensor_extrinsic) StdoutLine: {'line': b'-- Set runtime path of "/root/nav/livox_ws/src/install/sensor_extrinsic/lib/sensor_extrinsic/lidar_extrinsic_publisher" to ""\n'}
+[19.666188] (sensor_extrinsic) CommandEnded: {'returncode': 0}
+[19.731821] (-) TimerEvent: {}
+[19.838801] (-) TimerEvent: {}
+[19.943196] (-) TimerEvent: {}
+[20.131513] (-) TimerEvent: {}
+[20.240451] (-) TimerEvent: {}
+[20.349182] (-) TimerEvent: {}
+[20.469533] (-) TimerEvent: {}
+[20.651087] (-) TimerEvent: {}
+[20.767506] (-) TimerEvent: {}
+[20.871807] (-) TimerEvent: {}
+[21.048931] (-) TimerEvent: {}
+[21.127382] (sensor_extrinsic) JobEnded: {'identifier': 'sensor_extrinsic', 'rc': 0}
+[21.218292] (-) TimerEvent: {}
+[21.220142] (-) EventReactorShutdown: {}
