@@ -262,8 +262,8 @@ localizer 当前不接收 RViz `/initialpose`，必须调用 `/relocalize`。
 ```bash
 ros2 service call /relocalize interface/srv/Relocalize \
 "{pcd_path: '/root/nav/livox_ws/maps/map9802/map_edited.pcd', \
-x: 1.616, y: 2.533, z: 0.0, \
-yaw: 3.000, pitch: 0.0, roll: 0.0}"
+x: 0.0, y: 0.0, z: 0.0, \
+yaw: 0.0, pitch: 0.0, roll: 0.0}"
 ```
 
 该初值只适用于当时的机器狗物理位置和当次 FAST-LIO `odom`。FAST-LIO 重启或机器狗搬动后不保证有效。
