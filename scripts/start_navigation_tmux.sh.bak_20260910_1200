@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+SESSION="lite3_nav"
+WS="/root/nav/livox_ws"
+MAP_YAML="${WS}/maps/map9802/nav2/map.yaml"
+PCD_MAP="${WS}/maps/map9802/map_edited.pcd"
+OUTPUT_CMD="/cmd_vel"
+USE_RVIZ=0
+
+usage() {
+  cat <<'EOF'
+用法：./scripts/start_navigation_tmux.sh [--dry-run] [--rviz] [--session NAME]
+  --dry-run       输出到 /scan_safe_cmd_vel，不连接真实底盘
+  --rviz          额外启动 RViz（要求 DISPLAY 可用）
+  --session NAME  指定 tmux 会话名称
+停止全部程序：在 tmux 内按 Ctrl-b，再按 d。
+EOF
+}
+
+while (($#)); do
+  case "$1" in
+    --dry-run) OUTPUT_CMD="/scan_safe_cmd_vel" ;;
+    --rviz) USE_RVIZ=1 ;;
+    --session) [[ $# -ge 2 ]] || exit 2; SESSION="$2"; shift ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "未知参数：$1" >&2; usage; exit 2 ;;
+  esac
+  shift
+done
+
+command -v tmux >/dev/null || { echo "请先安装：apt update && apt install -y tmux" >&2; exit 1; }
+[[ -f /opt/ros/humble/setup.bash ]] || { echo "缺少 ROS 2 Humble 环境" >&2; exit 1; }
+[[ -f "${WS}/install/setup.bash" ]] || { echo "工作空间尚未编译" >&2; exit 1; }
+[[ -f "$MAP_YAML" ]] || { echo "缺少二维地图：$MAP_YAML" >&2; exit 1; }
+[[ -f "$PCD_MAP" ]] || { echo "缺少点云地图：$PCD_MAP" >&2; exit 1; }
+
+if tmux has-session -t "$SESSION" 2>/dev/null; then
+  echo "会话已存在：tmux attach -t $SESSION" >&2
+  exit 1
+fi
+
+cleanup() {
+  trap - EXIT INT TERM
+  if tmux has-session -t "$SESSION" 2>/dev/null; then
+    echo "正在停止全部程序……"
+    tmux list-panes -a -t "$SESSION" -F '#{pane_id}' 2>/dev/null |
+      while IFS= read -r pane; do tmux send-keys -t "$pane" C-c 2>/dev/null || true; done
+    sleep 2
+    tmux kill-session -t "$SESSION" 2>/dev/null || true
+  fi
+}
+trap cleanup EXIT INT TERM
+
+ROS_ENV="source ${WS}/scripts/ros_env.bash"
+run_pane() {
+  local pane="$1" title="$2" command="$3" full
+  full="${ROS_ENV}; echo '===== ${title} ====='; ${command}; rc=\$?; echo '[${title}] 退出码：'\$rc; exec bash"
+  tmux select-pane -t "${SESSION}:navigation.${pane}" -T "$title"
+  tmux send-keys -t "${SESSION}:navigation.${pane}" "bash -lc $(printf '%q' "$full")" C-m
+}
+
+tmux new-session -d -s "$SESSION" -n navigation -c "$WS"
+for _ in {1..7}; do
+  tmux split-window -t "${SESSION}:navigation" -c "$WS"
+  tmux select-layout -t "${SESSION}:navigation" tiled >/dev/null
+done
+tmux set-option -t "$SESSION" pane-border-status top
+tmux set-option -t "$SESSION" mouse on
+tmux set-option -t "$SESSION" remain-on-exit on
+tmux set-option -t "$SESSION" history-limit 50000
+
+CONTROL=$(cat <<EOF
+clear
+printf '%s\n' \
+ '===== Lite3 导航控制台 =====' \
+ '所有节点在其它窗格运行；安全门默认关闭。' \
+ '1. 等待雷达、LIO和定位稳定。' \
+ '2. 按实际位置重定位（以下0只是格式示例）：' \
+ "ros2 service call /relocalize interface/srv/Relocalize \"{pcd_path: '${PCD_MAP}', x: 0.0, y: 0.0, z: 0.0, yaw: 0.0, pitch: 0.0, roll: 0.0}\"" \
+ '3. 验证：ros2 service call /relocalize_check interface/srv/IsValid "{code: 0}"' \
+ '4. 验证：ros2 run tf2_ros tf2_echo map base_link' \
+ '5. RViz发送近距离目标并确认路径。' \
+ '6. 使能：ros2 topic pub --once /scan_navigation_enable std_msgs/msg/Bool "{data: true}"' \
+ '7. 停机：ros2 topic pub --once /scan_navigation_enable std_msgs/msg/Bool "{data: false}"' \
+ "安全门输出：${OUTPUT_CMD}" \
+ '停止全部：按 Ctrl-b，再按 d。'
+exec bash
+EOF
+)
+
+run_pane 0 "控制台" "$CONTROL"
+run_pane 1 "Livox MID360" "ros2 launch livox_ros_driver2 msg_MID360_launch.py"
+run_pane 2 "静态TF" "sleep 2; ros2 launch fastlio2 lite3_tf.launch.py"
+run_pane 3 "FAST-LIO2" "sleep 3; ros2 run fastlio2 lio_node --ros-args -p config_path:=${WS}/install/fastlio2/share/fastlio2/config/lio.yaml"
+run_pane 4 "Localizer" "sleep 6; ros2 run localizer localizer_node --ros-args -p config_path:=${WS}/install/localizer/share/localizer/config/localizer.yaml"
+run_pane 5 "Nav2+SCAN" "sleep 8; ros2 launch lite3_nav2_bringup nav2_scan.launch.py map:=${MAP_YAML} output_cmd_vel:=${OUTPUT_CMD}"
+run_pane 6 "机器狗底盘" "sleep 10; ros2 run dog_control_bridge dog_control_bridge"
+run_pane 7 "状态监控" "sleep 12; watch -n 2 \"ros2 node list | grep -E 'lio_node|localizer|map_server|planner_server|scan_|dog_control' | sort; echo; ros2 topic echo /scan_navigation_ready --once 2>/dev/null\""
+
+if ((USE_RVIZ)); then
+  if [[ -z "${DISPLAY:-}" ]]; then
+    echo "未设置 DISPLAY，跳过 RViz" >&2
+  else
+    tmux new-window -t "$SESSION" -n rviz -c "$WS"
+    RVIZ_CMD="${ROS_ENV}; rviz2; rc=\$?; echo '[RViz] 退出码：'\$rc; exec bash"
+    tmux send-keys -t "${SESSION}:rviz.0" "bash -lc $(printf '%q' "$RVIZ_CMD")" C-m
+  fi
+fi
+
+tmux select-window -t "${SESSION}:navigation"
+tmux select-pane -t "${SESSION}:navigation.0"
+echo "进入 tmux 前台会话：$SESSION；安全门输出：$OUTPUT_CMD"
+echo "停止全部程序：按 Ctrl-b，再按 d。"
+tmux attach-session -t "$SESSION"

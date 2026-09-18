@@ -458,11 +458,17 @@ public:
         : Node("dog_control_bridge_node"),
           m_udp_client(43897, "192.168.1.120", 43893) {
 
-        m_cmd_timeout = this->declare_parameter<double>("cmd_timeout", 1.00);
+        const auto cmd_vel_topic =
+            this->declare_parameter<std::string>("cmd_vel_topic", "/cmd_vel");
+        m_invert_yaw = this->declare_parameter<bool>("invert_yaw", false);
+        m_cmd_timeout = this->declare_parameter<double>("cmd_timeout", 0.30);
+        m_max_vx = this->declare_parameter<double>("max_vx", 0.15);
+        m_max_vy = this->declare_parameter<double>("max_vy", 0.10);
+        m_max_yaw = this->declare_parameter<double>("max_yaw", 0.25);
         m_last_cmd_time = std::chrono::steady_clock::now();
         
         m_cmd_vel_sub = this->create_subscription<geometry_msgs::msg::Twist>(
-            "/cmd_vel",
+            cmd_vel_topic,
             rclcpp::QoS(10),
             std::bind(&DogControlBridgeNode::cmdVelCallback, this, std::placeholders::_1));
         
@@ -487,11 +493,11 @@ public:
         RCLCPP_INFO(this->get_logger(), "云深处机器狗控制桥接节点已启动");
         RCLCPP_INFO(this->get_logger(), "机器人IP: 192.168.1.120");
         RCLCPP_INFO(this->get_logger(), "控制端口: 43893 | 监听端口: 43897");
-        RCLCPP_INFO(this->get_logger(), "监听话题: /cmd_vel (速度控制)");
+        RCLCPP_INFO(this->get_logger(), "监听话题: %s (速度控制)", cmd_vel_topic.c_str());
         RCLCPP_INFO(
             this->get_logger(),
-            "原始速度直通，角速度反向，指令断流 %.2fs 后停车",
-            m_cmd_timeout);
+            "限速 vx=%.2f vy=%.2f yaw=%.2f, yaw反向=%s, 超时=%.2fs",
+            m_max_vx, m_max_vy, m_max_yaw, m_invert_yaw ? "true" : "false", m_cmd_timeout);
         RCLCPP_INFO(this->get_logger(), "监听话题: /dog_control/command (指令控制)");
         RCLCPP_INFO(this->get_logger(), "发布话题: /dog_control/state (状态信息)");
         RCLCPP_INFO(this->get_logger(), "========================================");
@@ -511,17 +517,32 @@ private:
             yaw = 0.0f;
         }
 
-        yaw = -yaw;
+        vx = std::clamp(vx, -static_cast<float>(m_max_vx), static_cast<float>(m_max_vx));
+        vy = std::clamp(vy, -static_cast<float>(m_max_vy), static_cast<float>(m_max_vy));
+        yaw = std::clamp(yaw, -static_cast<float>(m_max_yaw), static_cast<float>(m_max_yaw));
+        if (m_invert_yaw) {
+            yaw = -yaw;
+        }
 
         bool has_move = (std::abs(vx) > 0.01 || std::abs(vy) > 0.01 || std::abs(yaw) > 0.01);
+        bool should_send_stop = false;
         {
             std::lock_guard<std::mutex> lock(m_cmd_mutex);
             m_last_cmd_time = std::chrono::steady_clock::now();
-            m_command_active = has_move;
+            if (has_move) {
+                m_command_active = true;
+                m_zero_sent = false;
+            } else {
+                should_send_stop = m_command_active || !m_zero_sent;
+                m_command_active = false;
+                m_zero_sent = true;
+            }
         }
 
         if (!has_move) {
-            m_udp_client.sendStop();
+            if (should_send_stop) {
+                m_udp_client.sendStop();
+            }
             return;
         }
         
@@ -536,6 +557,7 @@ private:
                 std::chrono::steady_clock::now() - m_last_cmd_time).count();
             if (m_command_active && elapsed > m_cmd_timeout) {
                 m_command_active = false;
+                m_zero_sent = true;
                 timed_out = true;
             }
         }
@@ -585,8 +607,13 @@ private:
     rclcpp::TimerBase::SharedPtr m_timer;
     rclcpp::TimerBase::SharedPtr m_watchdog_timer;
 
+    bool m_invert_yaw{false};
     bool m_command_active{false};
-    double m_cmd_timeout{1.00};
+    bool m_zero_sent{false};
+    double m_cmd_timeout{0.30};
+    double m_max_vx{0.15};
+    double m_max_vy{0.10};
+    double m_max_yaw{0.25};
     std::chrono::steady_clock::time_point m_last_cmd_time;
     std::mutex m_cmd_mutex;
     
@@ -605,5 +632,3 @@ int main(int argc, char** argv) {
     rclcpp::shutdown();
     return 0;
 }
-
-

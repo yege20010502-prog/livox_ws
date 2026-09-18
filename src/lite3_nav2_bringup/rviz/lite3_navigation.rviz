@@ -1,0 +1,283 @@
+﻿Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Global Options1
+        - /Navigation Map1
+        - /Global Costmap1
+        - /Robot Odometry1
+        - /Initial Path1
+      Splitter Ratio: 0.55
+    Tree Height: 760
+  - Class: rviz_common/Selection
+    Name: Selection
+  - Class: rviz_common/Tool Properties
+    Name: Tool Properties
+  - Class: rviz_common/Views
+    Name: Views
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Grid
+      Enabled: true
+      Alpha: 0.35
+      Cell Size: 1
+      Color: 100; 100; 100
+      Plane: XY
+      Plane Cell Count: 40
+      Reference Frame: map
+    - Class: rviz_default_plugins/Map
+      Name: Navigation Map
+      Enabled: true
+      Alpha: 0.75
+      Color Scheme: map
+      Draw Behind: true
+      Topic:
+        Value: /map
+        Reliability Policy: Reliable
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Depth: 5
+      Update Topic:
+        Value: /map_updates
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 5
+    - Class: rviz_default_plugins/Map
+      Name: Global Costmap
+      Enabled: true
+      Alpha: 0.45
+      Color Scheme: costmap
+      Draw Behind: false
+      Topic:
+        Value: /global_costmap/costmap
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 5
+      Update Topic:
+        Value: /global_costmap/costmap_updates
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 5
+    - Class: rviz_default_plugins/PointCloud2
+      Name: Local Obstacle Cloud
+      Enabled: true
+      Topic:
+        Value: /fastlio2/body_cloud
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 5
+      Style: Flat Squares
+      Size (m): 0.025
+      Size (Pixels): 2
+      Alpha: 0.75
+      Position Transformer: XYZ
+      Color Transformer: AxisColor
+      Axis: Z
+      Autocompute Value Bounds: true
+      Decay Time: 0.3
+    - Class: rviz_default_plugins/PointCloud2
+      Name: LIO World Cloud
+      Enabled: false
+      Topic:
+        Value: /fastlio2/world_cloud
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 2
+      Style: Points
+      Size (Pixels): 1
+      Alpha: 0.35
+      Position Transformer: XYZ
+      Color Transformer: AxisColor
+      Axis: Z
+      Autocompute Value Bounds: true
+      Decay Time: 2
+    - Class: rviz_default_plugins/Odometry
+      Name: Robot Odometry
+      Enabled: true
+      Topic:
+        Value: /scan/body_odom
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 10
+      Shape:
+        Value: Arrow
+        Color: 255; 85; 0
+        Alpha: 1
+        Shaft Length: 0.55
+        Shaft Radius: 0.05
+        Head Length: 0.18
+        Head Radius: 0.10
+      Keep: 1
+      Position Tolerance: 0.05
+      Angle Tolerance: 0.05
+    - Class: rviz_default_plugins/Path
+      Name: Initial Path
+      Enabled: true
+      Topic:
+        Value: /initial_path
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 5
+      Line Style: Lines
+      Line Width: 0.06
+      Color: 25; 255; 0
+      Alpha: 1
+      Buffer Length: 1
+      Pose Style: None
+    - Class: rviz_default_plugins/PointCloud2
+      Name: SCAN Occupancy
+      Enabled: true
+      Topic:
+        Value: /grid_map/occupancy
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 2
+      Style: Boxes
+      Size (m): 0.10
+      Alpha: 0.30
+      Position Transformer: XYZ
+      Color Transformer: FlatColor
+      Color: 0; 220; 80
+      Decay Time: 0
+    - Class: rviz_default_plugins/PointCloud2
+      Name: SCAN Inflated Occupancy
+      Enabled: false
+      Topic:
+        Value: /grid_map/occupancy_inflate
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 2
+      Style: Boxes
+      Size (m): 0.10
+      Alpha: 0.25
+      Position Transformer: XYZ
+      Color Transformer: FlatColor
+      Color: 255; 80; 20
+      Decay Time: 0
+    - Class: rviz_default_plugins/Marker
+      Name: SCAN Goal
+      Enabled: true
+      Topic:
+        Value: /goal_point
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 10
+    - Class: rviz_default_plugins/Marker
+      Name: SCAN Initial Trajectory
+      Enabled: true
+      Topic:
+        Value: /init_list
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 10
+    - Class: rviz_default_plugins/Marker
+      Name: SCAN Optimal Trajectory
+      Enabled: true
+      Topic:
+        Value: /optimal_list
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 10
+    - Class: rviz_default_plugins/Marker
+      Name: SCAN AStar Trajectory
+      Enabled: false
+      Topic:
+        Value: /a_star_list
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 10
+    - Class: rviz_default_plugins/TF
+      Name: TF
+      Enabled: true
+      Frame Timeout: 15
+      Marker Scale: 0.4
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Frames:
+        All Enabled: false
+        map:
+          Value: true
+        odom:
+          Value: true
+        base_link:
+          Value: true
+        imu_link:
+          Value: false
+        livox_frame:
+          Value: false
+    - Class: rviz_default_plugins/Axes
+      Name: Map Origin
+      Enabled: true
+      Reference Frame: map
+      Length: 0.7
+      Radius: 0.04
+  Enabled: true
+  Global Options:
+    Background Color: 38; 38; 38
+    Fixed Frame: map
+    Frame Rate: 20
+  Name: root
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/FocusCamera
+    - Class: rviz_default_plugins/Measure
+    - Class: rviz_default_plugins/SetInitialPose
+      Topic:
+        Value: /initialpose
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 5
+    - Class: rviz_default_plugins/SetGoal
+      Topic:
+        Value: /goal_pose
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 5
+    - Class: rviz_default_plugins/PublishPoint
+      Topic:
+        Value: /clicked_point
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Depth: 5
+  Views:
+    Current:
+      Class: rviz_default_plugins/TopDownOrtho
+      Name: Navigation Top View
+      Angle: 0
+      Scale: 35
+      X: 0
+      Y: 0
+    Saved: ~
+Window Geometry:
+  Width: 1600
+  Height: 950
+  Displays:
+    collapsed: false
+  Selection:
+    collapsed: true
+  Tool Properties:
+    collapsed: true
+  Views:
+    collapsed: false

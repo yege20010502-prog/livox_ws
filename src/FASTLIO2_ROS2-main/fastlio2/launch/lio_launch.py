@@ -1,8 +1,9 @@
 import launch
 import launch_ros.actions
-from launch.actions import IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import PathJoinSubstitution
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
 
 
@@ -23,6 +24,11 @@ def generate_launch_description():
 
     return launch.LaunchDescription(
         [
+            DeclareLaunchArgument(
+                "rviz",
+                default_value="false",
+                description="Start RViz on the RK3588 board (disabled by default).",
+            ),
             launch_ros.actions.Node(
                 package="fastlio2",
                 namespace="fastlio2",
@@ -41,6 +47,7 @@ def generate_launch_description():
                 name="rviz2",
                 output="screen",
                 arguments=["-d", rviz_cfg.perform(launch.LaunchContext())],
+                condition=IfCondition(LaunchConfiguration("rviz")),
             ),
         ]
     )

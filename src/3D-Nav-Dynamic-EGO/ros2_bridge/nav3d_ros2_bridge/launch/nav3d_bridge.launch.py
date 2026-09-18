@@ -60,7 +60,7 @@ def generate_launch_description():
             DeclareLaunchArgument("planning_mode", default_value="3d"),
             DeclareLaunchArgument(
                 "planning_traversability",
-                default_value="uav",
+                default_value="ground",
                 description="uav uses free-space 3D planning; ground requires supported ground cells.",
             ),
             DeclareLaunchArgument("search_algorithm", default_value="astar"),

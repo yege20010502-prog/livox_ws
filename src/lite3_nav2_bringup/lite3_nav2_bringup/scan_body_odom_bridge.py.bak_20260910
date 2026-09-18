@@ -28,7 +28,7 @@ class ScanBodyOdomBridge(Node):
         try:
             tf = self.tf_buffer.lookup_transform(
                 odom_frame, base_frame, rclpy.time.Time(),
-                timeout=Duration(seconds=0.0))
+                timeout=Duration(seconds=0.05))
         except TransformException as exc:
             now_ns = self.get_clock().now().nanoseconds
             if now_ns - self.last_warning_ns > 2_000_000_000:

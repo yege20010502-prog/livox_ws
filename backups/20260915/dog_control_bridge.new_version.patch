@@ -1,0 +1,135 @@
+diff --git a/src/deepRoboticsl/deepcontrol/src/dog_control_bridge.cpp b/src/deepRoboticsl/deepcontrol/src/dog_control_bridge.cpp
+index 928120e..5576e18 100644
+--- a/src/deepRoboticsl/deepcontrol/src/dog_control_bridge.cpp
++++ b/src/deepRoboticsl/deepcontrol/src/dog_control_bridge.cpp
+@@ -1,3 +1,4 @@
++#include <algorithm>
+ #include <iostream>
+ #include <string>
+ #include <thread>
+@@ -456,9 +457,18 @@ public:
+     explicit DogControlBridgeNode() 
+         : Node("dog_control_bridge_node"),
+           m_udp_client(43897, "192.168.1.120", 43893) {
++
++        const auto cmd_vel_topic =
++            this->declare_parameter<std::string>("cmd_vel_topic", "/cmd_vel");
++        m_invert_yaw = this->declare_parameter<bool>("invert_yaw", false);
++        m_cmd_timeout = this->declare_parameter<double>("cmd_timeout", 0.30);
++        m_max_vx = this->declare_parameter<double>("max_vx", 0.15);
++        m_max_vy = this->declare_parameter<double>("max_vy", 0.10);
++        m_max_yaw = this->declare_parameter<double>("max_yaw", 0.25);
++        m_last_cmd_time = std::chrono::steady_clock::now();
+         
+         m_cmd_vel_sub = this->create_subscription<geometry_msgs::msg::Twist>(
+-            "/cmd_vel", 
++            cmd_vel_topic,
+             rclcpp::QoS(10),
+             std::bind(&DogControlBridgeNode::cmdVelCallback, this, std::placeholders::_1));
+         
+@@ -475,12 +485,19 @@ public:
+         m_timer = this->create_wall_timer(
+             std::chrono::milliseconds(2000),
+             std::bind(&DogControlBridgeNode::publishState, this));
++        m_watchdog_timer = this->create_wall_timer(
++            std::chrono::milliseconds(50),
++            std::bind(&DogControlBridgeNode::watchdogTick, this));
+         
+         RCLCPP_INFO(this->get_logger(), "========================================");
+         RCLCPP_INFO(this->get_logger(), "云深处机器狗控制桥接节点已启动");
+         RCLCPP_INFO(this->get_logger(), "机器人IP: 192.168.1.120");
+         RCLCPP_INFO(this->get_logger(), "控制端口: 43893 | 监听端口: 43897");
+-        RCLCPP_INFO(this->get_logger(), "监听话题: /cmd_vel (速度控制)");
++        RCLCPP_INFO(this->get_logger(), "监听话题: %s (速度控制)", cmd_vel_topic.c_str());
++        RCLCPP_INFO(
++            this->get_logger(),
++            "限速 vx=%.2f vy=%.2f yaw=%.2f, yaw反向=%s, 超时=%.2fs",
++            m_max_vx, m_max_vy, m_max_yaw, m_invert_yaw ? "true" : "false", m_cmd_timeout);
+         RCLCPP_INFO(this->get_logger(), "监听话题: /dog_control/command (指令控制)");
+         RCLCPP_INFO(this->get_logger(), "发布话题: /dog_control/state (状态信息)");
+         RCLCPP_INFO(this->get_logger(), "========================================");
+@@ -492,16 +509,63 @@ private:
+         float vx = static_cast<float>(msg->linear.x);
+         float vy = static_cast<float>(msg->linear.y);
+         float yaw = static_cast<float>(msg->angular.z);
+-         yaw = -yaw;  // 添加这一行
++
++        if (!std::isfinite(vx) || !std::isfinite(vy) || !std::isfinite(yaw)) {
++            RCLCPP_ERROR(this->get_logger(), "拒绝包含 NaN/Inf 的 /cmd_vel，并立即停车");
++            vx = 0.0f;
++            vy = 0.0f;
++            yaw = 0.0f;
++        }
++
++        vx = std::clamp(vx, -static_cast<float>(m_max_vx), static_cast<float>(m_max_vx));
++        vy = std::clamp(vy, -static_cast<float>(m_max_vy), static_cast<float>(m_max_vy));
++        yaw = std::clamp(yaw, -static_cast<float>(m_max_yaw), static_cast<float>(m_max_yaw));
++        if (m_invert_yaw) {
++            yaw = -yaw;
++        }
++
+         bool has_move = (std::abs(vx) > 0.01 || std::abs(vy) > 0.01 || std::abs(yaw) > 0.01);
+-        
++        bool should_send_stop = false;
++        {
++            std::lock_guard<std::mutex> lock(m_cmd_mutex);
++            m_last_cmd_time = std::chrono::steady_clock::now();
++            if (has_move) {
++                m_command_active = true;
++                m_zero_sent = false;
++            } else {
++                should_send_stop = m_command_active || !m_zero_sent;
++                m_command_active = false;
++                m_zero_sent = true;
++            }
++        }
++
+         if (!has_move) {
+-            m_udp_client.sendStop();
++            if (should_send_stop) {
++                m_udp_client.sendStop();
++            }
+             return;
+         }
+         
+         m_udp_client.sendMove(vx, vy, yaw);
+     }
++
++    void watchdogTick() {
++        bool timed_out = false;
++        {
++            std::lock_guard<std::mutex> lock(m_cmd_mutex);
++            const double elapsed = std::chrono::duration<double>(
++                std::chrono::steady_clock::now() - m_last_cmd_time).count();
++            if (m_command_active && elapsed > m_cmd_timeout) {
++                m_command_active = false;
++                m_zero_sent = true;
++                timed_out = true;
++            }
++        }
++        if (timed_out) {
++            RCLCPP_ERROR(this->get_logger(), "/cmd_vel 超时，强制停车");
++            m_udp_client.sendStop();
++        }
++    }
+     
+     void commandCallback(const std_msgs::msg::String::SharedPtr msg) {
+         std::string cmd = msg->data;
+@@ -541,6 +605,17 @@ private:
+     rclcpp::Subscription<std_msgs::msg::String>::SharedPtr m_command_sub;
+     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr m_state_pub;
+     rclcpp::TimerBase::SharedPtr m_timer;
++    rclcpp::TimerBase::SharedPtr m_watchdog_timer;
++
++    bool m_invert_yaw{false};
++    bool m_command_active{false};
++    bool m_zero_sent{false};
++    double m_cmd_timeout{0.30};
++    double m_max_vx{0.15};
++    double m_max_vy{0.10};
++    double m_max_yaw{0.25};
++    std::chrono::steady_clock::time_point m_last_cmd_time;
++    std::mutex m_cmd_mutex;
+     
+     RobotUDPClient m_udp_client;
+ };

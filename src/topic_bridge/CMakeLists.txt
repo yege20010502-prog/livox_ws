@@ -10,18 +10,24 @@ find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
 
-add_executable(all_bridges src/all_bridges.cpp)
-target_include_directories(all_bridges PRIVATE include)
-ament_target_dependencies(all_bridges
+add_executable(nav_data_bridge src/nav_data_bridge.cpp)
+target_include_directories(nav_data_bridge PRIVATE include)
+ament_target_dependencies(nav_data_bridge
   rclcpp
   geometry_msgs
   nav_msgs
   sensor_msgs
+  std_msgs
+  tf2
+  tf2_ros
 )
 
 install(TARGETS
-  all_bridges
+  nav_data_bridge
   DESTINATION lib/${PROJECT_NAME}
 )
 

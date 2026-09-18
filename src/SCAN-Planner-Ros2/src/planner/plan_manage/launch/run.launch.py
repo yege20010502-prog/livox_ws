@@ -56,7 +56,9 @@ def _setup(context):
         cloud = "/LIO/clouds_lidar"
         depth = "/camera/aligned_depth_to_color/image_raw"
         cloud_is_world = False
-        need_extrinsic = True
+        # The sensor-pose bridge publishes map -> imu_link, matching the frame
+        # of /fastlio2/body_cloud. Do not apply a second static extrinsic.
+        need_extrinsic = False
         intrinsics = {
             "grid_map.cx": 317.19183349609375,
             "grid_map.cy": 256.4806823730469,
@@ -144,6 +146,7 @@ def _setup(context):
                 parameters=[controllers_yaml, common],
                 remappings=[
                     ("body_pose", body_pose),
+                    # SCAN publishes /cmd_vel directly on the real robot.
                     ("cmd_vel", "/cmd_vel" if is_real else "/quad_0/cmd_vel"),
                 ],
             )

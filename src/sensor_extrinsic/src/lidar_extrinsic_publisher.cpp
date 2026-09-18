@@ -1,84 +1,84 @@
-// lidar_extrinsic_publisher.cpp
-// 发布 MID360 激光雷达相对于机器人的静态外参（安装位置）
-// 发布到 /LIO/odom_imu 话题，解决 [GridMap] no sensor_pose received 警告
-//
-// 编译：放在 SCAN-Planner 的某个包中，或单独建一个包
-// 用法：在启动 SCAN-Planner 之前运行此节点
-
 #include <chrono>
 #include <memory>
+#include <stdexcept>
+#include <string>
 
-#include "rclcpp/rclcpp.hpp"
-#include "nav_msgs/msg/odometry.hpp"
-#include "geometry_msgs/msg/pose_with_covariance.hpp"
-#include "geometry_msgs/msg/twist_with_covariance.hpp"
+#include <nav_msgs/msg/odometry.hpp>
+#include <rclcpp/rclcpp.hpp>
+#include <tf2/exceptions.h>
+#include <tf2_ros/buffer.h>
+#include <tf2_ros/transform_listener.h>
 
+// SCAN needs the live global pose of the frame in which its input point cloud
+// is expressed. FAST-LIO publishes /fastlio2/body_cloud in imu_link, so this
+// node publishes map -> imu_link as nav_msgs/Odometry. The static mounting
+// transforms remain in TF and are never published as a fake global pose.
 class LidarExtrinsicPublisher : public rclcpp::Node
 {
 public:
-    LidarExtrinsicPublisher() : Node("lidar_extrinsic_publisher")
-    {
-        // 发布到 /LIO/odom_imu，因为 run.launch.py 中 sensor_pose 映射到了这里
-        publisher_ = this->create_publisher<nav_msgs::msg::Odometry>("/LIO/odom_imu", 10);
-        
-        // 10Hz 定时发布，与 sensor 数据频率匹配
-        timer_ = this->create_wall_timer(
-            std::chrono::milliseconds(100),
-            std::bind(&LidarExtrinsicPublisher::publishExtrinsic, this));
-        
-        RCLCPP_INFO(this->get_logger(), "激光雷达外参发布节点已启动");
-        RCLCPP_INFO(this->get_logger(), "发布话题: /LIO/odom_imu");
-        RCLCPP_INFO(this->get_logger(), "请根据实际安装位置调整 x/y/z/rpy 参数");
+  LidarExtrinsicPublisher()
+  : Node("scan_sensor_pose_publisher"),
+    tf_buffer_(this->get_clock()),
+    tf_listener_(tf_buffer_)
+  {
+    global_frame_ = declare_parameter<std::string>("global_frame", "map");
+    sensor_frame_ = declare_parameter<std::string>("sensor_frame", "imu_link");
+    output_topic_ = declare_parameter<std::string>("output_topic", "/LIO/odom_imu");
+    publish_rate_ = declare_parameter<double>("publish_rate", 20.0);
+
+    if (publish_rate_ <= 0.0) {
+      throw std::invalid_argument("publish_rate must be positive");
     }
+
+    publisher_ = create_publisher<nav_msgs::msg::Odometry>(output_topic_, 10);
+    timer_ = create_wall_timer(
+      std::chrono::duration_cast<std::chrono::nanoseconds>(
+        std::chrono::duration<double>(1.0 / publish_rate_)),
+      [this]() { publishSensorPose(); });
+
+    RCLCPP_INFO(
+      get_logger(), "Publishing live %s -> %s pose on %s",
+      global_frame_.c_str(), sensor_frame_.c_str(), output_topic_.c_str());
+  }
 
 private:
-    void publishExtrinsic()
-    {
-        auto msg = nav_msgs::msg::Odometry();
-        
-        // 时间戳
-        msg.header.stamp = this->now();
-        msg.header.frame_id = "body";      // 机器人本体坐标系
-        msg.child_frame_id = "lidar";       // 激光雷达坐标系
-        
-        // ★★★ 请根据实际安装位置修改以下参数 ★★★
-        // MID360 在机器狗背部的安装位置（示例值，单位：米）
-        msg.pose.pose.position.x = 0.0;
-        msg.pose.pose.position.y = 0.0;
-        msg.pose.pose.position.z = 0.25;   // 假设装在背部，高度约 25cm
-        
-        // 姿态四元数（这里假设激光雷达朝前安装，无旋转）
-        // 如果激光雷达有安装角度，请修改此处
-        msg.pose.pose.orientation.x = 0.0;
-        msg.pose.pose.orientation.y = 0.0;
-        msg.pose.pose.orientation.z = 0.0;
-        msg.pose.pose.orientation.w = 1.0;
-        
-        // 协方差（全零，静态外参无不确定性）
-        for (int i = 0; i < 36; i++) {
-            msg.pose.covariance[i] = 0.0;
-        }
-        
-        // 速度为零（这是静态外参）
-        msg.twist.twist.linear.x = 0.0;
-        msg.twist.twist.linear.y = 0.0;
-        msg.twist.twist.linear.z = 0.0;
-        msg.twist.twist.angular.x = 0.0;
-        msg.twist.twist.angular.y = 0.0;
-        msg.twist.twist.angular.z = 0.0;
-        
-        publisher_->publish(msg);
+  void publishSensorPose()
+  {
+    try {
+      const auto transform = tf_buffer_.lookupTransform(
+        global_frame_, sensor_frame_, tf2::TimePointZero);
+
+      nav_msgs::msg::Odometry msg;
+      msg.header = transform.header;
+      msg.header.frame_id = global_frame_;
+      msg.child_frame_id = sensor_frame_;
+      msg.pose.pose.position.x = transform.transform.translation.x;
+      msg.pose.pose.position.y = transform.transform.translation.y;
+      msg.pose.pose.position.z = transform.transform.translation.z;
+      msg.pose.pose.orientation = transform.transform.rotation;
+      publisher_->publish(msg);
+    } catch (const tf2::TransformException & ex) {
+      RCLCPP_WARN_THROTTLE(
+        get_logger(), *get_clock(), 2000,
+        "Waiting for %s -> %s: %s",
+        global_frame_.c_str(), sensor_frame_.c_str(), ex.what());
     }
-    
-    rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr publisher_;
-    rclcpp::TimerBase::SharedPtr timer_;
+  }
+
+  std::string global_frame_;
+  std::string sensor_frame_;
+  std::string output_topic_;
+  double publish_rate_{20.0};
+  tf2_ros::Buffer tf_buffer_;
+  tf2_ros::TransformListener tf_listener_;
+  rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr publisher_;
+  rclcpp::TimerBase::SharedPtr timer_;
 };
 
-int main(int argc, char** argv)
+int main(int argc, char ** argv)
 {
-    rclcpp::init(argc, argv);
-    auto node = std::make_shared<LidarExtrinsicPublisher>();
-    rclcpp::spin(node);
-    rclcpp::shutdown();
-    return 0;
+  rclcpp::init(argc, argv);
+  rclcpp::spin(std::make_shared<LidarExtrinsicPublisher>());
+  rclcpp::shutdown();
+  return 0;
 }

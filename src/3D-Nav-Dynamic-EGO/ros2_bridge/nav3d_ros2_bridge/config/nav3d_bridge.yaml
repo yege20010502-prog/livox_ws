@@ -4,7 +4,7 @@ nav3d_bridge_node:
 
     planning.mode: 3d
     planning.search_algorithm: astar
-    planning.traversability: uav
+    planning.traversability: ground
     planning.use_octomap_map: false
     planning.inflation_radius: 0.0
     planning.ground_strict_direct_support: false
@@ -52,7 +52,9 @@ nav3d_bridge_node:
     safety.local_use_raw_astar: true
     safety.local_astar_max_iterations: 20000
 
-    controller.enabled: true
+    # Nav3D only generates the global path. SCAN is the sole trajectory
+    # tracker, so the Nav3D controller must not compete on /cmd_vel.
+    controller.enabled: false
     controller.control_dt: 0.1
     controller.lookahead_time: 0.4
     controller.max_speed: 1.0

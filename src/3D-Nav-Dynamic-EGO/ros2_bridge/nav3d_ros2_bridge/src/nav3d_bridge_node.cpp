@@ -911,7 +911,9 @@ public:
       "/octomap",
       latched_visualization_qos);
 #endif
-    cmd_vel_pub_ = create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
+    // Keep the optional Nav3D controller isolated from the hardware command
+    // topic. The real robot is controlled only by SCAN through topic_bridge.
+    cmd_vel_pub_ = create_publisher<geometry_msgs::msg::Twist>("/nav3d/cmd_vel", 10);
     tf_buffer_ = std::make_unique<tf2_ros::Buffer>(get_clock());
     tf_listener_ = std::make_unique<tf2_ros::TransformListener>(*tf_buffer_);
 
