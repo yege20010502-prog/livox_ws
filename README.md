@@ -1,6 +1,6 @@
 # Lite3 + MID360：Nav3D / SCAN 导航进度与操作
 
-本 README 记录截至 **2026-09-22** 的实机定位、地图和导航排查。当前目标是在已知地图上完成固定出发区的多点导航。**当前 map918 在实际可通行区域含可疑的连续高处占据点，尚未验收多点实机运行；不要把 `valid=True` 当作可发目标的唯一条件。**
+本 README 记录截至 **2026-09-28** 的实机定位、地图和导航排查。当前目标是在新建地图上先完成稳定的单点导航，再实现带目标四元数的预置点位和多点导航。**当前 map918 在实际可通行区域含可疑的连续高处占据点，尚未验收多点实机运行；不要把 `valid=True` 当作可发目标的唯一条件。新地图尚未采集，采集完成前不覆盖旧地图。**
 
 ## 当前运行链路
 
@@ -183,6 +183,54 @@ chmod 700 "$TMUX_TMPDIR"
 1. **先过定位验收**：墙体重合、TF 持续更新，固定出发区自动重定位能重复成功。
 2. **再过单点验收**：近距离空旷目标，检查 Nav3D 路径高度、SCAN 跟踪、底盘方向和真实到点误差。
 3. **最后做多点任务层**：按序发送 A→B→C。当前 Nav3D 关闭自身控制器，因此其 `NavigateToPose` action 在**规划并发布路径后**即可返回成功，不能用这个结果判断狗已到点；应以实时 `map → base_link` 到点距离、停稳状态及超时判定后再发下一点。
+
+预置点位将按地图分别保存完整位姿 `x/y/z + qx/qy/qz/qw`。到达目标位置后，局部控制器还要根据四元数对应的 yaw 完成终点转向，位置误差和朝向误差都满足阈值后才算到点。后续 Web 控制台将提供点位保存、单点导航、多点排序、任务取消、紧急停车和定位/规划状态显示；Web 层调用统一的 ROS 2 点位任务节点，不直接生成底盘速度。
+
+## 2026-09-28 全局与局部规划状态
+
+- Nav3D 当前临时使用便于实机排查的回退配置：`planning.published_path_clearance_enabled: false`，并将 `planning.ground_wall_avoidance_weight` 设为 `0.0`。这会恢复净空后校验加入前的路径发布行为，目的是先确认全局路径和 SCAN 的基本链路；新地图完成后必须重新检查真实机身净空。
+- SCAN 的 `fsm.max_replan_fail_count` 已从 `1000` 调整为 `5`。局部 A* 连续失败时会更快进入停车流程，避免长时间刷错和重复尝试。
+- SCAN 的 A* 错误日志已增加返回码、碰撞段起终点、两端占用状态和估计 yaw。下一次出现 `A-star error` 时，应保留整行日志，用它区分端点落在膨胀障碍、局部地图越界和搜索空间不连通。
+- `bspline_opt` 与 `scan_planner` 已重新编译，安装配置中已核实 `max_replan_fail_count: 5`。这些修改尚未在新地图上完成实机闭环验收。
+
+## GitHub 代码保存与上传
+
+GitHub 仓库为 `yege20010502-prog/livox_ws`，当前分支为 `main`。板卡使用已有 SSH 密钥，通过电脑代理的 GitHub SSH 443 端口推送；当前仓库已经保存对应配置，正常情况下不需要用户名、密码或 Token。
+
+查看修改并选择文件：
+
+```bash
+cd /root/nav/livox_ws
+git status
+git diff
+git add README.md scripts src
+git diff --cached
+```
+
+确认暂存内容后提交并上传：
+
+```bash
+git commit -m "说明本次修改内容"
+git push
+```
+
+不要直接执行 `git add .`。工作空间中保留了地图、备份、日志及部分嵌套编译产物，直接全量暂存容易上传大文件或无关文件。地图 PCD 已由根目录 `.gitignore` 排除；提交前仍应检查 `git status` 和 `git diff --cached`。
+
+当前 SSH 代理地址为 `192.168.1.179:10090`。运行代理的电脑 IP 改变后，在板卡执行：
+
+```bash
+cd /root/nav/livox_ws
+git config core.sshCommand \
+  "ssh -o HostKeyAlias=github.com -o 'ProxyCommand=nc -X connect -x 新IP:10090 %h %p' -p 443"
+git push
+```
+
+若代理端口也改变，同时替换 `10090`。电脑代理软件必须允许局域网连接。可用下面命令查看最近提交和远端地址：
+
+```bash
+git log --oneline -5
+git remote -v
+```
 
 现有详细启动说明见 [docs/NAV3D_SCAN_STARTUP_GUIDE.md](docs/NAV3D_SCAN_STARTUP_GUIDE.md)。该旧说明以 `map9802` 为示例，实际使用 `map918` 时不要照抄其中的地图路径或 `0,0,0` 初值。
 
