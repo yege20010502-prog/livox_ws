@@ -185,3 +185,5 @@ chmod 700 "$TMUX_TMPDIR"
 3. **最后做多点任务层**：按序发送 A→B→C。当前 Nav3D 关闭自身控制器，因此其 `NavigateToPose` action 在**规划并发布路径后**即可返回成功，不能用这个结果判断狗已到点；应以实时 `map → base_link` 到点距离、停稳状态及超时判定后再发下一点。
 
 现有详细启动说明见 [docs/NAV3D_SCAN_STARTUP_GUIDE.md](docs/NAV3D_SCAN_STARTUP_GUIDE.md)。该旧说明以 `map9802` 为示例，实际使用 `map918` 时不要照抄其中的地图路径或 `0,0,0` 初值。
+
+历史参考：[旧版 Nav2 操作手册](docs/legacy_nav2_guide.md)（旧链路记录，当前操作以本页为准）。
