@@ -60,8 +60,8 @@ Visualization Manager:
       Axis: Z
       Channel Name: intensity
       Class: rviz_default_plugins/PointCloud2
-      Color: 255; 255; 255
-      Color Transformer: Intensity
+      Color: 255; 0; 0
+      Color Transformer: FlatColor
       Decay Time: 0
       Enabled: true
       Invert Rainbow: false
@@ -80,8 +80,8 @@ Visualization Manager:
         Durability Policy: Volatile
         Filter size: 10
         History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /fastlio2/body_cloud
+        Reliability Policy: Best Effort
+        Value: /fastlio2/world_cloud_viz
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
@@ -111,11 +111,11 @@ Visualization Manager:
       Style: Points
       Topic:
         Depth: 5
-        Durability Policy: Volatile
+        Durability Policy: Transient Local
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /localizer/map_cloud
+        Value: /map_cloud
       Use Fixed Frame: true
       Use rainbow: true
       Value: true

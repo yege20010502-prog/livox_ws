@@ -16,8 +16,9 @@ endif()
 
 add_compile_definitions(SOPHUS_USE_BASIC_LOGGING)
 
-add_definitions(-DMP_EN)
-add_definitions(-DMP_PROC_NUM=2)
+# Keep point-to-map KD-tree queries serial.  This ikd-tree implementation also
+# owns a background rebuild thread; parallel Search calls have been observed
+# to leave one recursive query stuck while the remaining OpenMP workers wait.
 
 # find dependencies
 find_package(ament_cmake REQUIRED)

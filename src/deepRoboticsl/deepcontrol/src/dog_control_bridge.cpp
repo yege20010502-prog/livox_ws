@@ -24,6 +24,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <geometry_msgs/msg/twist.hpp>
+#include <nav_msgs/msg/path.hpp>
 #include <std_msgs/msg/string.hpp>
 
 /**
@@ -99,15 +100,6 @@ public:
     }
     
     void sendMove(float vx, float vy, float yaw) {
-        RobotState state = getCurrentState();
-        
-        // 如果机器狗是趴下状态，自动起立
-        if (state.basic_state == 1) {
-            std::cout << "[自动起立] 检测到趴下状态，尝试起立..." << std::endl;
-            sendStandUp();
-            std::this_thread::sleep_for(std::chrono::milliseconds(1500));
-        }
-        
         float max_speed = 1.0f;
         vx = std::max(-max_speed, std::min(max_speed, vx));
         vy = std::max(-max_speed, std::min(max_speed, vy));
@@ -139,7 +131,6 @@ public:
     void sendStandUp() {
         sendSimple(0x21010202, 0, 0, false);
         std::cout << "[指令] 起立" << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
     
     void sendLieDown() {
@@ -408,6 +399,7 @@ private:
         
         m_current_state.is_moving = (std::abs(m_current_state.vel_x) > 0.01 || 
                                      std::abs(m_current_state.vel_y) > 0.01);
+        m_current_state.state_updated = true;
         
         // 状态变化时打印（只在变化时输出）
         static int last_basic = -1;
@@ -459,12 +451,32 @@ public:
           m_udp_client(43897, "192.168.1.120", 43893) {
 
         m_cmd_timeout = this->declare_parameter<double>("cmd_timeout", 1.00);
+        m_vx_scale = this->declare_parameter<double>("vx_scale", 4.2);
+        m_vy_scale = this->declare_parameter<double>("vy_scale", 6.2);
+        m_yaw_scale = this->declare_parameter<double>("yaw_scale", 2.5);
+        // Conservative limits for the first real-world navigation tests.
+        m_max_vx = this->declare_parameter<double>("max_vx", 0.6);
+        m_max_vy = this->declare_parameter<double>("max_vy", 0.3);
+        m_max_yaw = this->declare_parameter<double>("max_yaw", 0.5);
+        if (!std::isfinite(m_vx_scale) || m_vx_scale <= 0.0 ||
+            !std::isfinite(m_vy_scale) || m_vy_scale <= 0.0 ||
+            !std::isfinite(m_yaw_scale) || m_yaw_scale <= 0.0 ||
+            !std::isfinite(m_max_vx) || m_max_vx <= 0.0 || m_max_vx > 1.0 ||
+            !std::isfinite(m_max_vy) || m_max_vy <= 0.0 || m_max_vy > 1.0 ||
+            !std::isfinite(m_max_yaw) || m_max_yaw <= 0.0 || m_max_yaw > 1.0) {
+            throw std::invalid_argument("Speed scales must be positive and limits must be in (0, 1]");
+        }
         m_last_cmd_time = std::chrono::steady_clock::now();
         
         m_cmd_vel_sub = this->create_subscription<geometry_msgs::msg::Twist>(
             "/cmd_vel",
             rclcpp::QoS(10),
             std::bind(&DogControlBridgeNode::cmdVelCallback, this, std::placeholders::_1));
+
+        m_path_sub = this->create_subscription<nav_msgs::msg::Path>(
+            "/initial_path",
+            rclcpp::QoS(10),
+            std::bind(&DogControlBridgeNode::pathCallback, this, std::placeholders::_1));
         
         m_command_sub = this->create_subscription<std_msgs::msg::String>(
             "/dog_control/command", 
@@ -488,6 +500,7 @@ public:
         RCLCPP_INFO(this->get_logger(), "机器人IP: 192.168.1.120");
         RCLCPP_INFO(this->get_logger(), "控制端口: 43893 | 监听端口: 43897");
         RCLCPP_INFO(this->get_logger(), "监听话题: /cmd_vel (速度控制)");
+        RCLCPP_INFO(this->get_logger(), "监听话题: /initial_path (趴下时仅提前起立)");
         RCLCPP_INFO(
             this->get_logger(),
             "原始速度直通，角速度反向，指令断流 %.2fs 后停车",
@@ -499,10 +512,42 @@ public:
     }
 
 private:
+    void pathCallback(const nav_msgs::msg::Path::SharedPtr msg) {
+        if (!msg || msg->poses.empty()) {
+            return;
+        }
+
+        const RobotState state = m_udp_client.getCurrentState();
+        if (!state.state_updated || state.basic_state != 1) {
+            return;
+        }
+
+        const auto now = std::chrono::steady_clock::now();
+        bool request_stand = false;
+        {
+            std::lock_guard<std::mutex> lock(m_cmd_mutex);
+            // A path is navigation intent, but never a velocity command.  It
+            // may only wake the robot from lying down so SCAN can plan using
+            // the standing body height.  Walking still requires fresh,
+            // non-zero /cmd_vel and all existing watchdog checks.
+            if (std::chrono::duration<double>(now - m_last_stand_request).count() > 1.0) {
+                m_last_stand_request = now;
+                m_waiting_for_stand = true;
+                request_stand = true;
+            }
+        }
+        if (request_stand) {
+            RCLCPP_INFO(
+                this->get_logger(),
+                "收到非空导航路径且机器狗趴下，仅提前执行起立；等待速度后再行走");
+            m_udp_client.sendStandUp();
+        }
+    }
+
     void cmdVelCallback(const geometry_msgs::msg::Twist::SharedPtr msg) {
-        float vx = static_cast<float>(msg->linear.x);
-        float vy = static_cast<float>(msg->linear.y);
-        float yaw = static_cast<float>(msg->angular.z);
+        float vx = static_cast<float>(msg->linear.x * m_vx_scale);
+        float vy = static_cast<float>(msg->linear.y * m_vy_scale);
+        float yaw = static_cast<float>(msg->angular.z * m_yaw_scale);
 
         if (!std::isfinite(vx) || !std::isfinite(vy) || !std::isfinite(yaw)) {
             RCLCPP_ERROR(this->get_logger(), "拒绝包含 NaN/Inf 的 /cmd_vel，并立即停车");
@@ -511,21 +556,48 @@ private:
             yaw = 0.0f;
         }
 
-        yaw = -yaw;
+        vx = std::clamp(vx, -static_cast<float>(m_max_vx), static_cast<float>(m_max_vx));
+        vy = std::clamp(vy, -static_cast<float>(m_max_vy), static_cast<float>(m_max_vy));
+        yaw = -std::clamp(yaw, -static_cast<float>(m_max_yaw), static_cast<float>(m_max_yaw));
 
         bool has_move = (std::abs(vx) > 0.01 || std::abs(vy) > 0.01 || std::abs(yaw) > 0.01);
-        {
-            std::lock_guard<std::mutex> lock(m_cmd_mutex);
-            m_last_cmd_time = std::chrono::steady_clock::now();
-            m_command_active = has_move;
-        }
-
         if (!has_move) {
-            m_udp_client.sendStop();
+            bool was_active = false;
+            {
+                std::lock_guard<std::mutex> lock(m_cmd_mutex);
+                was_active = m_command_active;
+                m_command_active = false;
+                m_waiting_for_stand = false;
+                m_pending_vx = 0.0f;
+                m_pending_vy = 0.0f;
+                m_pending_yaw = 0.0f;
+                // A zero command is the acknowledgement that the previous
+                // trajectory has ended.  Only then may a fault latch clear.
+                m_motion_inhibited = false;
+            }
+            // SCAN may publish zero continuously while idle.  Repeating zero
+            // UDP commands would override the hand controller, so stop only
+            // when an autonomous command was previously active.
+            if (was_active) {
+                m_udp_client.sendStop();
+                RCLCPP_INFO(this->get_logger(), "导航速度归零，底盘停车并归还遥控器控制");
+            }
             return;
         }
-        
-        m_udp_client.sendMove(vx, vy, yaw);
+
+        {
+            std::lock_guard<std::mutex> lock(m_cmd_mutex);
+            if (m_motion_inhibited) {
+                return;
+            }
+            m_last_cmd_time = std::chrono::steady_clock::now();
+            m_command_active = true;
+            m_pending_vx = vx;
+            m_pending_vy = vy;
+            m_pending_yaw = yaw;
+        }
+
+        processPendingMotion();
     }
 
     void watchdogTick() {
@@ -536,12 +608,100 @@ private:
                 std::chrono::steady_clock::now() - m_last_cmd_time).count();
             if (m_command_active && elapsed > m_cmd_timeout) {
                 m_command_active = false;
+                m_waiting_for_stand = false;
+                m_pending_vx = 0.0f;
+                m_pending_vy = 0.0f;
+                m_pending_yaw = 0.0f;
                 timed_out = true;
             }
         }
         if (timed_out) {
             RCLCPP_ERROR(this->get_logger(), "/cmd_vel 超时，强制停车");
             m_udp_client.sendStop();
+            return;
+        }
+
+        processPendingMotion();
+    }
+
+    void processPendingMotion() {
+        float vx = 0.0f;
+        float vy = 0.0f;
+        float yaw = 0.0f;
+        {
+            std::lock_guard<std::mutex> lock(m_cmd_mutex);
+            if (!m_command_active) {
+                return;
+            }
+            vx = m_pending_vx;
+            vy = m_pending_vy;
+            yaw = m_pending_yaw;
+        }
+
+        const RobotState state = m_udp_client.getCurrentState();
+        if (!state.state_updated || state.basic_state == 999) {
+            RCLCPP_WARN_THROTTLE(
+                this->get_logger(), *this->get_clock(), 2000,
+                "收到导航速度，但尚未取得底盘状态；暂不下发运动");
+            return;
+        }
+
+        if (state.basic_state == 6) {
+            {
+                std::lock_guard<std::mutex> lock(m_cmd_mutex);
+                if (m_waiting_for_stand) {
+                    RCLCPP_INFO(this->get_logger(), "检测到机器狗已站立，开始执行导航速度");
+                }
+                m_waiting_for_stand = false;
+            }
+            m_udp_client.sendMove(vx, vy, yaw);
+            return;
+        }
+
+        if (state.basic_state == 1) {
+            const auto now = std::chrono::steady_clock::now();
+            bool request_stand = false;
+            {
+                std::lock_guard<std::mutex> lock(m_cmd_mutex);
+                if (!m_waiting_for_stand ||
+                    std::chrono::duration<double>(now - m_last_stand_request).count() > 1.0) {
+                    m_waiting_for_stand = true;
+                    m_last_stand_request = now;
+                    request_stand = true;
+                }
+            }
+            if (request_stand) {
+                RCLCPP_INFO(this->get_logger(), "检测到导航需要运动且机器狗趴下，先执行起立");
+                m_udp_client.sendStandUp();
+            }
+            return;
+        }
+
+        // States 4/5 are standing transitions.  Do not send velocity and do
+        // not switch gait/mode; state 6 is sufficient for walking.
+        if (state.basic_state == 4 || state.basic_state == 5 || state.basic_state == 24) {
+            std::lock_guard<std::mutex> lock(m_cmd_mutex);
+            m_waiting_for_stand = true;
+            return;
+        }
+
+        bool newly_inhibited = false;
+        {
+            std::lock_guard<std::mutex> lock(m_cmd_mutex);
+            newly_inhibited = !m_motion_inhibited;
+            m_motion_inhibited = true;
+            m_command_active = false;
+            m_waiting_for_stand = false;
+            m_pending_vx = 0.0f;
+            m_pending_vy = 0.0f;
+            m_pending_yaw = 0.0f;
+        }
+        if (newly_inhibited) {
+            m_udp_client.sendStop();
+            RCLCPP_ERROR(
+                this->get_logger(),
+                "底盘异常状态 basic=%d：停车并锁止旧导航速度，收到零速后才允许新任务",
+                state.basic_state);
         }
     }
     
@@ -554,6 +714,7 @@ private:
         } 
         else if (cmd == "lie" || cmd == "liedown") {
             RCLCPP_INFO(this->get_logger(), "执行: 趴下");
+            cancelAutonomousMotion();
             m_udp_client.sendLieDown();
         }
         else if (cmd == "balance" || cmd == "balancestand") {
@@ -562,6 +723,7 @@ private:
         }
         else if (cmd == "stop") {
             RCLCPP_INFO(this->get_logger(), "执行: 停止");
+            cancelAutonomousMotion();
             m_udp_client.sendStop();
         }
         else if (cmd == "state" || cmd == "status") {
@@ -578,16 +740,38 @@ private:
         msg.data = m_udp_client.getStateString();
         m_state_pub->publish(msg);
     }
+
+    void cancelAutonomousMotion() {
+        std::lock_guard<std::mutex> lock(m_cmd_mutex);
+        m_command_active = false;
+        m_waiting_for_stand = false;
+        m_pending_vx = 0.0f;
+        m_pending_vy = 0.0f;
+        m_pending_yaw = 0.0f;
+    }
     
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr m_cmd_vel_sub;
+    rclcpp::Subscription<nav_msgs::msg::Path>::SharedPtr m_path_sub;
     rclcpp::Subscription<std_msgs::msg::String>::SharedPtr m_command_sub;
     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr m_state_pub;
     rclcpp::TimerBase::SharedPtr m_timer;
     rclcpp::TimerBase::SharedPtr m_watchdog_timer;
 
     bool m_command_active{false};
+    bool m_waiting_for_stand{false};
+    bool m_motion_inhibited{false};
+    float m_pending_vx{0.0f};
+    float m_pending_vy{0.0f};
+    float m_pending_yaw{0.0f};
     double m_cmd_timeout{1.00};
+    double m_vx_scale{4.2};
+    double m_vy_scale{6.2};
+    double m_yaw_scale{2.5};
+    double m_max_vx{0.6};
+    double m_max_vy{0.3};
+    double m_max_yaw{0.5};
     std::chrono::steady_clock::time_point m_last_cmd_time;
+    std::chrono::steady_clock::time_point m_last_stand_request{};
     std::mutex m_cmd_mutex;
     
     RobotUDPClient m_udp_client;
@@ -605,5 +789,3 @@ int main(int argc, char** argv) {
     rclcpp::shutdown();
     return 0;
 }
-
-

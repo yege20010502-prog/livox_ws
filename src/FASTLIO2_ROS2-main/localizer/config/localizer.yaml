@@ -7,13 +7,20 @@ local_frame: odom
 update_hz: 1.0
 
 # Stabilize the dynamic map -> odom correction from scan matching.
-# The first successful relocalization is accepted directly; later corrections
-# are planar, dead-banded, low-pass filtered, and large one-frame jumps rejected.
+# Initial ICP must stay near the RViz guess and agree for several frames.
+# Later corrections are planar, dead-banded, low-pass filtered, and large
+# one-frame jumps are rejected.
 transform_filter_alpha: 0.20
 translation_deadband: 0.02
 yaw_deadband: 0.015
 max_translation_jump: 0.25
 max_yaw_jump: 0.25
+# RViz clicking is approximate; allow ICP a wider correction only before the
+# first accepted pose. Runtime corrections remain limited to 0.25 m above.
+max_initial_translation_jump: 1.20
+initial_consistency_count: 3
+initial_consistency_translation: 0.20
+initial_consistency_yaw: 0.08
 
 input_cloud_type: PointXYZ
 

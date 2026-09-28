@@ -123,7 +123,10 @@ struct GroundSearchOptions {
   int snap_radius_cells = 12;
   int support_xy_radius_cells = 1;
   int support_depth_cells = 1;
+  int max_vertical_deviation_cells = 1;
   double robot_radius = 0.25;
+  double wall_avoidance_radius = 0.8;
+  double wall_avoidance_weight = 3.0;
   bool allow_diagonal = true;
   bool strict_direct_ground_support = false;
 };
@@ -415,6 +418,40 @@ bool canMoveGround(
   return true;
 }
 
+double groundWallPenalty(
+  const nav3d::map::IMap& map,
+  const GroundIndex& idx,
+  const GroundSearchOptions& options)
+{
+  if (options.wall_avoidance_radius <= 0.0 || options.wall_avoidance_weight <= 0.0) {
+    return 0.0;
+  }
+  const double resolution = map.getResolution();
+  const int radius_cells = static_cast<int>(std::ceil(options.wall_avoidance_radius / resolution));
+  // Search at and above the body layer; the support voxels below are floor,
+  // not walls. Return the largest nearby penalty so a narrow passage is still
+  // traversable, but a wider route is preferred when one exists.
+  double penalty = 0.0;
+  for (int dx = -radius_cells; dx <= radius_cells; ++dx) {
+    for (int dy = -radius_cells; dy <= radius_cells; ++dy) {
+      const double distance = resolution * std::hypot(dx, dy);
+      if (distance >= options.wall_avoidance_radius) {
+        continue;
+      }
+      for (int dz = 0; dz <= radius_cells; ++dz) {
+        const auto candidate = groundIndexToWorld(
+          {idx.x + dx, idx.y + dy, idx.z + dz}, resolution);
+        if (map.isInBounds(candidate) && map.isOccupied(candidate)) {
+          const double proximity = 1.0 - distance / options.wall_avoidance_radius;
+          penalty = std::max(penalty, options.wall_avoidance_weight * proximity * proximity);
+          break;
+        }
+      }
+    }
+  }
+  return penalty;
+}
+
 std::vector<GroundIndex> reconstructGroundPath(
   const std::unordered_map<GroundIndex, GroundIndex, GroundIndexHash>& came_from,
   GroundIndex current)
@@ -448,6 +485,7 @@ GroundSearchResult searchGroundSupportedPath(
   std::priority_queue<GroundQueueNode, std::vector<GroundQueueNode>, GroundQueueNodeCompare> open_set;
   std::unordered_map<GroundIndex, double, GroundIndexHash> g_score;
   std::unordered_map<GroundIndex, GroundIndex, GroundIndexHash> came_from;
+  std::unordered_map<GroundIndex, double, GroundIndexHash> wall_penalties;
   std::unordered_set<GroundIndex, GroundIndexHash> closed_set;
 
   g_score[start_idx] = 0.0;
@@ -489,11 +527,19 @@ GroundSearchResult searchGroundSupportedPath(
         current.idx.y + direction.y,
         current.idx.z + direction.z,
       };
+      if (std::abs(neighbor.z - start_idx.z) > options.max_vertical_deviation_cells) {
+        continue;
+      }
       if (closed_set.find(neighbor) != closed_set.end() ||
           !canMoveGround(map, current.idx, direction, options)) {
         continue;
       }
-      const double tentative_g = current.g + groundIndexDistance(current.idx, neighbor);
+      const auto cached_penalty = wall_penalties.find(neighbor);
+      const double wall_penalty = cached_penalty != wall_penalties.end()
+        ? cached_penalty->second
+        : wall_penalties.emplace(neighbor, groundWallPenalty(map, neighbor, options)).first->second;
+      const double tentative_g = current.g +
+        groundIndexDistance(current.idx, neighbor) * (1.0 + wall_penalty);
       const auto existing = g_score.find(neighbor);
       if (existing == g_score.end() || tentative_g < existing->second) {
         came_from[neighbor] = current.idx;
@@ -928,10 +974,17 @@ public:
       declare_parameter<double>("map.occupancy_grid_min_z", occupancy_grid_min_z_);
     occupancy_grid_max_z_ =
       declare_parameter<double>("map.occupancy_grid_max_z", occupancy_grid_max_z_);
+    visualization_ground_height_band_ = declare_parameter<double>(
+      "visualization.ground_height_band", visualization_ground_height_band_);
     if (!std::isfinite(occupancy_grid_min_z_) || !std::isfinite(occupancy_grid_max_z_) ||
         occupancy_grid_max_z_ < occupancy_grid_min_z_) {
       throw std::invalid_argument(
         "map.occupancy_grid_min_z/max_z must be finite and max_z must be >= min_z");
+    }
+    if (!std::isfinite(visualization_ground_height_band_) ||
+        visualization_ground_height_band_ < 0.0) {
+      throw std::invalid_argument(
+        "visualization.ground_height_band must be finite and non-negative");
     }
 
     map_build_config_ = readMapBuildConfig();
@@ -1296,8 +1349,24 @@ private:
       declare_parameter<int>(
         "planning.ground_support_depth_cells",
         ground_search_options_.support_depth_cells);
+    ground_search_options_.max_vertical_deviation_cells =
+      declare_parameter<int>(
+        "planning.ground_max_vertical_deviation_cells",
+        ground_search_options_.max_vertical_deviation_cells);
     ground_search_options_.robot_radius =
       declare_parameter<double>("planning.ground_robot_radius", ground_search_options_.robot_radius);
+    ground_search_options_.wall_avoidance_radius = declare_parameter<double>(
+      "planning.ground_wall_avoidance_radius", ground_search_options_.wall_avoidance_radius);
+    ground_search_options_.wall_avoidance_weight = declare_parameter<double>(
+      "planning.ground_wall_avoidance_weight", ground_search_options_.wall_avoidance_weight);
+    ground_clearance_radius_ =
+      declare_parameter<double>("planning.ground_clearance_radius", ground_clearance_radius_);
+    ground_clearance_min_z_ =
+      declare_parameter<double>("planning.ground_clearance_min_z", ground_clearance_min_z_);
+    ground_clearance_max_z_ =
+      declare_parameter<double>("planning.ground_clearance_max_z", ground_clearance_max_z_);
+    published_path_clearance_enabled_ = declare_parameter<bool>(
+      "planning.published_path_clearance_enabled", published_path_clearance_enabled_);
     ground_search_options_.strict_direct_ground_support =
       declare_parameter<bool>(
         "planning.ground_strict_direct_support",
@@ -1359,9 +1428,24 @@ private:
     if (ground_search_options_.support_depth_cells <= 0) {
       throw std::invalid_argument("planning.ground_support_depth_cells must be positive");
     }
+    if (ground_search_options_.max_vertical_deviation_cells < 0) {
+      throw std::invalid_argument(
+        "planning.ground_max_vertical_deviation_cells must be non-negative");
+    }
     if (!std::isfinite(ground_search_options_.robot_radius) ||
         ground_search_options_.robot_radius < 0.0) {
       throw std::invalid_argument("planning.ground_robot_radius must be non-negative and finite");
+    }
+    if (!std::isfinite(ground_search_options_.wall_avoidance_radius) ||
+        ground_search_options_.wall_avoidance_radius < 0.0 ||
+        !std::isfinite(ground_search_options_.wall_avoidance_weight) ||
+        ground_search_options_.wall_avoidance_weight < 0.0) {
+      throw std::invalid_argument("planning.ground_wall_avoidance_* must be non-negative and finite");
+    }
+    if (!std::isfinite(ground_clearance_radius_) || ground_clearance_radius_ < 0.0 ||
+        !std::isfinite(ground_clearance_min_z_) || !std::isfinite(ground_clearance_max_z_) ||
+        ground_clearance_max_z_ < ground_clearance_min_z_) {
+      throw std::invalid_argument("invalid planning.ground_clearance_* parameters");
     }
     if (config.optimizer.interval <= 0.0) {
       throw std::invalid_argument("optimizer.interval must be positive");
@@ -1525,27 +1609,65 @@ private:
     array.markers.push_back(cleanup);
 
     const double resolution = map_->getResolution();
-    std::vector<geometry_msgs::msg::Point> points;
-    points.reserve(map_->occupiedCells().size());
+    // Estimate the local floor independently for each XY voxel column.  This
+    // keeps ramps and mildly uneven ground in the ground color while making
+    // walls, furniture and other clearly elevated returns easy to distinguish.
+    std::unordered_map<std::uint64_t, int> column_min_z;
+    column_min_z.reserve(map_->occupiedCells().size());
+    const auto column_key = [](int x, int y) {
+      return (static_cast<std::uint64_t>(static_cast<std::uint32_t>(x)) << 32U) |
+             static_cast<std::uint32_t>(y);
+    };
+    for (const auto& cell : map_->occupiedCells()) {
+      const auto key = column_key(cell.x, cell.y);
+      const auto found = column_min_z.find(key);
+      if (found == column_min_z.end()) {
+        column_min_z.emplace(key, cell.z);
+      } else {
+        found->second = std::min(found->second, cell.z);
+      }
+    }
+
+    std::vector<geometry_msgs::msg::Point> ground_points;
+    std::vector<geometry_msgs::msg::Point> elevated_points;
+    ground_points.reserve(map_->occupiedCells().size());
+    elevated_points.reserve(map_->occupiedCells().size() / 4U);
     for (const auto& cell : map_->occupiedCells()) {
       const auto corner = map_->gridToWorld(cell);
       geometry_msgs::msg::Point point;
       point.x = corner.x + resolution * 0.5;
       point.y = corner.y + resolution * 0.5;
       point.z = corner.z + resolution * 0.5;
-      points.push_back(point);
+      const int floor_z = column_min_z.at(column_key(cell.x, cell.y));
+      const double height_above_floor =
+        static_cast<double>(cell.z - floor_z) * resolution;
+      if (height_above_floor <= visualization_ground_height_band_) {
+        ground_points.push_back(point);
+      } else {
+        elevated_points.push_back(point);
+      }
     }
 
     array.markers.push_back(makeVoxelCubeList(
       header,
-      "nav3d_planning_occupied_voxels",
+      "nav3d_ground_voxels",
       0,
       resolution,
-      points,
-      0.1F,
-      0.85F,
-      0.25F,
-      0.78F));
+      ground_points,
+      0.15F,
+      0.78F,
+      0.30F,
+      0.68F));
+    array.markers.push_back(makeVoxelCubeList(
+      header,
+      "nav3d_elevated_obstacle_voxels",
+      1,
+      resolution,
+      elevated_points,
+      1.0F,
+      0.28F,
+      0.05F,
+      0.92F));
 
     if (local_grid_) {
       const double local_resolution = local_grid_->getResolution();
@@ -1566,7 +1688,7 @@ private:
         array.markers.push_back(makeVoxelCubeList(
           header,
           "nav3d_local_occupied_voxels",
-          1,
+          2,
           local_resolution,
           local_points,
           0.0F,
@@ -2067,7 +2189,11 @@ private:
       return;
     }
 
-    response->plan = sampleTrajectoryPath(result.trajectory);
+    auto candidate = sampleTrajectoryPath(result.trajectory);
+    if (!validatePublishedPath(candidate, "service_plan")) {
+      return;
+    }
+    response->plan = std::move(candidate);
     std::ostringstream status;
     status << "service_plan_success poses=" << response->plan.poses.size()
            << " attempts=" << result.attempts
@@ -2101,15 +2227,25 @@ private:
 
   void planToGoal(const nav3d::common::Point3D& goal, const std::string& status_prefix)
   {
-    publishEndpointMarker(goal, "nav3d_goal", *goal_marker_pub_, 0.95F, 0.2F, 0.12F);
     // W-A (v3.8): plan from the live current_position_ when available so a
     // mid-flight /nav3d/goal click does not re-issue the path from a stale
     // start_ (the original origin). Without this, when the robot has moved
     // past obstacles the planner re-plans through cells that now hold local
     // obstacle voxels, producing slow/no-path replans. action API at L2165
     // already does this; only the topic-driven onGoal path was wrong.
-    const auto plan_start = current_position_.value_or(start_);
-    const auto result = planWithActiveMap(plan_start, goal);
+    auto plan_start = current_position_.value_or(start_);
+    auto plan_goal = goal;
+    if (groundTraversabilityEnabled() &&
+        ground_search_options_.mode == nav3d::planner::PlanningMode::Mode2D) {
+      // Resolve both endpoints onto one supported body layer.  RViz ground
+      // goals arrive with z=0 and independent 3-D snapping can otherwise put
+      // start and goal on different layers, or let the route climb a wall.
+      plan_start = resolveClickedPoint(plan_start, "start");
+      plan_goal.z = plan_start.z;
+      plan_goal = resolveClickedPoint(plan_goal, "goal_layer");
+    }
+    publishEndpointMarker(plan_goal, "nav3d_goal", *goal_marker_pub_, 0.95F, 0.2F, 0.12F);
+    const auto result = planWithActiveMap(plan_start, plan_goal);
     if (!result.success) {
       tracking_active_ = false;
       active_trajectory_.reset();
@@ -2128,10 +2264,16 @@ private:
       return;
     }
 
+    if (!publishTrajectory(result, status_prefix)) {
+      tracking_active_ = false;
+      active_trajectory_.reset();
+      active_goal_.reset();
+      publishZeroCommand("plan_path_clearance_rejected");
+      return;
+    }
     active_trajectory_ = result.trajectory;
     active_goal_ = result.planned_goal;
     tracking_active_ = controller_enabled_;
-    publishTrajectory(result);
     std::ostringstream status;
     status << status_prefix << "_success poses=" << last_published_pose_count_
            << " attempts=" << result.attempts
@@ -2208,10 +2350,17 @@ private:
     }
 
     if (plan.success) {
+      if (!publishTrajectory(plan, "navigate")) {
+        tracking_active_ = false;
+        active_trajectory_.reset();
+        active_goal_.reset();
+        publishZeroCommand("navigate_path_clearance_rejected");
+        goal_handle->abort(result);
+        return;
+      }
       active_goal_ = plan.planned_goal;
       active_trajectory_ = plan.trajectory;
       tracking_active_ = controller_enabled_;
-      publishTrajectory(plan);
       if (controller_enabled_) {
         setPendingNavigateGoal(
           goal_handle,
@@ -2414,9 +2563,23 @@ private:
     const nav3d::common::Point3D& current_position)
   {
     pruneExpiredLocalObservations();
-    return makePlanningMap([&](const nav3d::map::IMap& planning_map) {
+    return makeCollisionPlanningMap([&](const nav3d::map::IMap& collision_map) {
+      if (groundTraversabilityEnabled()) {
+        // base_link can lie inside the floor voxel (especially while the dog
+        // is lying down).  The ground planner, however, plans at the nearest
+        // supported body cell.  Evaluate safety from that same projected
+        // position so a valid ground trajectory is not immediately treated
+        // as "robot currently inside an obstacle".
+        const auto projected_position = resolveGroundEndpoint(collision_map, current_position);
+        GroundTraversabilityMap traversability_map(collision_map, ground_search_options_);
+        return safety_monitor_->evaluate(
+          traversability_map,
+          projected_position,
+          *active_trajectory_,
+          *active_goal_);
+      }
       return safety_monitor_->evaluate(
-        planning_map,
+        collision_map,
         current_position,
         *active_trajectory_,
         *active_goal_);
@@ -2668,20 +2831,23 @@ private:
                 stitched_plan.planned_goal = final_goal;
                 stitched_plan.trajectory = *stitched;
                 stitched_plan.collision = stitched_collision;
-                active_trajectory_ = stitched_plan.trajectory;
-                active_goal_ = final_goal;
-                tracking_active_ = controller_enabled_;
-                publishTrajectory(stitched_plan);
-                std::ostringstream status;
-                status << "safety_replan_success_local_astar_stitched poses="
-                       << last_published_pose_count_
-                       << " attempts=" << local.attempts
-                       << " astar_iter=" << astar_iter
-                       << " lookahead=" << safety_local_replan_lookahead_distance_
-                       << " resume_time=" << lookahead_goal->time;
-                publishStatus(status.str());
-                RCLCPP_INFO(get_logger(), "%s", status.str().c_str());
-                return;
+                if (!publishTrajectory(stitched_plan, "safety_replan_local")) {
+                  publishStatus("safety_replan_local_path_clearance_rejected falling_back_to_global");
+                } else {
+                  active_trajectory_ = stitched_plan.trajectory;
+                  active_goal_ = final_goal;
+                  tracking_active_ = controller_enabled_;
+                  std::ostringstream status;
+                  status << "safety_replan_success_local_astar_stitched poses="
+                         << last_published_pose_count_
+                         << " attempts=" << local.attempts
+                         << " astar_iter=" << astar_iter
+                         << " lookahead=" << safety_local_replan_lookahead_distance_
+                         << " resume_time=" << lookahead_goal->time;
+                  publishStatus(status.str());
+                  RCLCPP_INFO(get_logger(), "%s", status.str().c_str());
+                  return;
+                }
               }
               std::ostringstream collision_debug;
               collision_debug << "safety_replan_local_stitch_collision falling_back_to_global";
@@ -2709,12 +2875,11 @@ private:
 
     // Global fallback: original behavior, replan all the way to final goal.
     const auto result = planWithActiveMap(current_position, final_goal);
-    if (result.success) {
+    if (result.success && publishTrajectory(result, "safety_replan_global")) {
       active_trajectory_ = result.trajectory;
       active_goal_ = result.planned_goal;
       updatePendingNavigatePlannedGoal(result.planned_goal);
       tracking_active_ = controller_enabled_;
-      publishTrajectory(result);
       std::ostringstream status;
       status << "safety_replan_success poses=" << last_published_pose_count_
              << " attempts=" << result.attempts
@@ -2813,7 +2978,167 @@ private:
       path.poses.push_back(toPoseStamped(trajectory.evaluate(t), path.header));
     }
     path.poses.push_back(toPoseStamped(trajectory.evaluate(duration), path.header));
+    if (groundTraversabilityEnabled() && !path.poses.empty()) {
+      // Ground robots execute XY motion.  The sparse PGO cloud can make the
+      // internal supported-voxel search change layers around holes/walls;
+      // never expose that planner-only Z variation to SCAN or RViz.
+      const double ground_body_z = path.poses.front().pose.position.z;
+      for (auto& pose : path.poses) {
+        pose.pose.position.z = ground_body_z;
+      }
+    }
     return path;
+  }
+
+  // Check the *published* (ground-flattened) path, not just the planner's
+  // original 3-D spline. SCAN follows this Path and may otherwise drive
+  // through a voxel that became occupied after flattening its Z coordinate.
+  bool validatePublishedPath(const nav_msgs::msg::Path& path, const std::string& context)
+  {
+    if (!published_path_clearance_enabled_) {
+      return !path.poses.empty();
+    }
+    pruneExpiredLocalObservations();
+    const double max_step = std::max(0.01, activeGlobalPlanningMap().getResolution() * 0.5);
+    std::optional<nav3d::common::Point3D> collision;
+    std::size_t collision_segment = 0;
+    std::string collision_reason;
+    const bool valid = makePlanningMap([&](const nav3d::map::IMap& planning_map) {
+      if (path.poses.empty()) {
+        return false;
+      }
+      std::optional<nav3d::common::Point3D> egress_origin;
+      double egress_best_clearance = 0.0;
+      bool first_sample = true;
+      const auto check_sample = [&](const nav3d::common::Point3D& sample, std::size_t segment) {
+        const bool is_first_sample = first_sample;
+        first_sample = false;
+        if (!planning_map.isFree(sample)) {
+          collision = sample;
+          collision_segment = segment;
+          collision_reason = "path_center";
+          return false;
+        }
+        const double obstacle_distance = publishedBodyObstacleDistance(planning_map, sample);
+        if (obstacle_distance >= ground_clearance_radius_ - 1e-9) {
+          egress_origin.reset();
+          return true;
+        }
+        if (is_first_sample) {
+          // The dog can already be standing inside an inflated map obstacle.
+          // Permit only a short departure that never approaches any obstacle.
+          egress_origin = sample;
+          egress_best_clearance = obstacle_distance;
+          return true;
+        }
+        if (egress_origin.has_value() &&
+            std::hypot(sample.x - egress_origin->x, sample.y - egress_origin->y) <= 0.5 &&
+            obstacle_distance + 0.015 >= egress_best_clearance) {
+          egress_best_clearance = std::max(egress_best_clearance, obstacle_distance);
+          return true;
+        }
+        collision = sample;
+        collision_segment = segment;
+        collision_reason = egress_origin.has_value() ? "start_egress_not_improving" : "body_envelope";
+        return false;
+      };
+      std::optional<nav3d::common::Point3D> previous;
+      for (std::size_t i = 0; i < path.poses.size(); ++i) {
+        const auto& position = path.poses[i].pose.position;
+        const nav3d::common::Point3D point{position.x, position.y, position.z};
+        if (!std::isfinite(point.x) || !std::isfinite(point.y) || !std::isfinite(point.z)) {
+          collision = point;
+          collision_segment = i;
+          return false;
+        }
+        if (previous.has_value()) {
+          const double length = nav3d::common::distance(*previous, point);
+          const int steps = std::max(1, static_cast<int>(std::ceil(length / max_step)));
+          for (int step = 1; step <= steps; ++step) {
+            const double fraction = static_cast<double>(step) / static_cast<double>(steps);
+            const nav3d::common::Point3D sample{
+              previous->x + (point.x - previous->x) * fraction,
+              previous->y + (point.y - previous->y) * fraction,
+              previous->z + (point.z - previous->z) * fraction,
+            };
+            if (!check_sample(sample, i)) {
+              return false;
+            }
+          }
+        } else {
+          if (!check_sample(point, i)) {
+            return false;
+          }
+        }
+        previous = point;
+      }
+      if (egress_origin.has_value()) {
+        collision = previous;
+        collision_segment = path.poses.size() - 1;
+        collision_reason = "start_egress_not_cleared";
+        return false;
+      }
+      return true;
+    });
+    if (!valid) {
+      std::ostringstream status;
+      status << context << "_path_clearance_rejected segment=" << collision_segment;
+      if (!collision_reason.empty()) {
+        status << " reason=" << collision_reason;
+      }
+      if (collision.has_value()) {
+        status << " xyz=" << collision->x << "," << collision->y << "," << collision->z;
+      } else {
+        status << " empty_path=true";
+      }
+      publishStatus(status.str());
+      RCLCPP_ERROR(get_logger(), "%s", status.str().c_str());
+    }
+    return valid;
+  }
+
+  double publishedBodyObstacleDistance(
+    const nav3d::map::IMap& planning_map,
+    const nav3d::common::Point3D& point) const
+  {
+    if (!groundTraversabilityEnabled()) {
+      return std::numeric_limits<double>::infinity();
+    }
+    // The published ground path is flattened and SCAN applies its own body
+    // height. Check a conservative XY disk covering Lite3's 0.61 x 0.37 m
+    // body against the map-Z obstacle band, independent of that route Z.
+    const double resolution = planning_map.getResolution();
+    const int ix = static_cast<int>(std::floor(point.x / resolution));
+    const int iy = static_cast<int>(std::floor(point.y / resolution));
+    const int xy_steps = static_cast<int>(std::ceil(ground_clearance_radius_ / resolution)) + 1;
+    const int min_iz = static_cast<int>(std::ceil(ground_clearance_min_z_ / resolution - 0.5));
+    const int max_iz = static_cast<int>(std::floor(ground_clearance_max_z_ / resolution - 0.5));
+    double nearest = std::numeric_limits<double>::infinity();
+    for (int dx = -xy_steps; dx <= xy_steps; ++dx) {
+      for (int dy = -xy_steps; dy <= xy_steps; ++dy) {
+        const double cx = (static_cast<double>(ix + dx) + 0.5) * resolution;
+        const double cy = (static_cast<double>(iy + dy) + 0.5) * resolution;
+        // Occupancy is generated from sparse PCD returns at 0.2 m cells.
+        // Treating every cell's entire square as solid over-inflates the
+        // obstacle by another half-cell and rejects otherwise clear routes.
+        const double center_dx = cx - point.x;
+        const double center_dy = cy - point.y;
+        const double distance_sq = center_dx * center_dx + center_dy * center_dy;
+        if (distance_sq >
+            ground_clearance_radius_ * ground_clearance_radius_ + 1e-12) {
+          continue;
+        }
+        for (int iz = min_iz; iz <= max_iz; ++iz) {
+          const nav3d::common::Point3D cell{
+            cx, cy, (static_cast<double>(iz) + 0.5) * resolution};
+          if (planning_map.isOccupied(cell)) {
+            nearest = std::min(nearest, std::sqrt(distance_sq));
+            break;
+          }
+        }
+      }
+    }
+    return nearest;
   }
 
   visualization_msgs::msg::Marker makeTrajectoryMarker(
@@ -2887,12 +3212,17 @@ private:
     publisher.publish(marker);
   }
 
-  void publishTrajectory(const nav3d::planner::EgoPlanResult& result)
+  bool publishTrajectory(const nav3d::planner::EgoPlanResult& result, const std::string& context)
   {
     const auto path = sampleTrajectoryPath(result.trajectory);
+    if (!validatePublishedPath(path, context)) {
+      clearPublishedTrajectory();
+      return false;
+    }
     last_published_pose_count_ = path.poses.size();
     trajectory_pub_->publish(path);
     publishTrajectoryMarker(path);
+    return true;
   }
 
   // W-B (v3.8): raw-A* feasibility probe. Used by replanFromCurrentPose to
@@ -2957,6 +3287,15 @@ private:
     const auto path = sampleTrajectoryPath(*active_trajectory_, start_time);
     if (path.poses.size() <= 2) {
       clearPublishedTrajectory();
+      return;
+    }
+    if (!validatePublishedPath(path, "remaining_trajectory")) {
+      tracking_active_ = false;
+      active_trajectory_.reset();
+      active_goal_.reset();
+      clearPublishedTrajectory();
+      abortPendingNavigateGoal("navigate_aborted_path_clearance_rejected");
+      publishZeroCommand("remaining_path_clearance_rejected");
       return;
     }
     last_published_pose_count_ = path.poses.size();
@@ -3150,6 +3489,11 @@ private:
   int occupancy_grid_max_cells_ = 1000000;
   double occupancy_grid_min_z_ = 0.2;
   double occupancy_grid_max_z_ = 0.9;
+  double ground_clearance_radius_ = 0.36;
+  double ground_clearance_min_z_ = 0.2;
+  double ground_clearance_max_z_ = 0.6;
+  bool published_path_clearance_enabled_ = false;
+  double visualization_ground_height_band_ = 0.3;
   int uav_endpoint_snap_radius_cells_ = 12;
   double planning_inflation_radius_ = 0.0;
   std::size_t last_published_pose_count_ = 0;

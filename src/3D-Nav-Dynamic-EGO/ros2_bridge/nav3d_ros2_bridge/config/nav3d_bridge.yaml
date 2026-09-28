@@ -2,16 +2,37 @@ nav3d_bridge_node:
   ros__parameters:
     frame_id: map
 
+    # 2.5-D ground search: allow one voxel of floor quantization/step height,
+    # but never climb continuously along wall-adjacent occupied voxels.
     planning.mode: 3d
     planning.search_algorithm: astar
     planning.traversability: ground
     planning.use_octomap_map: false
     planning.inflation_radius: 0.0
     planning.ground_strict_direct_support: false
-    planning.ground_snap_radius_cells: 12
+    # Keep endpoint correction local.  A large radius could silently move the
+    # planned start several metres away from the real robot pose, producing a
+    # smooth-looking path that SCAN cannot safely enter.
+    planning.ground_snap_radius_cells: 2
     planning.ground_support_xy_radius_cells: 1
     planning.ground_support_depth_cells: 1
+    # Permit small floor quantization/steps, but do not let a ground route
+    # climb sparse wall/high-level voxels to bypass obstacles.
+    planning.ground_max_vertical_deviation_cells: 2
     planning.ground_robot_radius: 0.25
+    # Soft cost only: prefer the middle of a wide passage without making a
+    # narrow but collision-free passage impossible. Zero weight disables it.
+    planning.ground_wall_avoidance_radius: 0.8
+    planning.ground_wall_avoidance_weight: 0.0
+    # Final path guard after Nav3D flattens Z for SCAN. The XY disk covers
+    # Lite3's 0.61 x 0.37 m body; map-Z band is conservative for map922_02.
+    # Recheck the band if the map height datum or robot body geometry changes.
+    planning.ground_clearance_radius: 0.36
+    planning.ground_clearance_min_z: 0.2
+    planning.ground_clearance_max_z: 0.6
+    # Temporary planning-only test mode: return paths as before the final
+    # clearance guard. Do not use for unsupervised physical motion.
+    planning.published_path_clearance_enabled: false
     planning.uav_endpoint_snap_radius_cells: 12
     planning.enable_dynamic_feasibility_check: false
     planning.dynamic_feasibility_mode: sampled
@@ -34,6 +55,11 @@ nav3d_bridge_node:
     map.occupancy_grid_max_cells: 1000000
     map.occupancy_grid_min_z: 0.2
     map.occupancy_grid_max_z: 0.9
+
+    # RViz voxel colors only; this does not change collision checking.
+    # Voxels within this height of the lowest occupied voxel in each XY
+    # column are green (ground); higher static voxels are orange-red.
+    visualization.ground_height_band: 0.3
 
     local_grid.enabled: true
     local_grid.resolution: 0.2

@@ -341,10 +341,32 @@ namespace scan_planner
 
   void SCANReplanFSM::pathCallback(const nav_msgs::msg::Path::ConstSharedPtr &msg)
   {
-    if (!msg || msg->poses.empty())
+    if (!msg)
     {
-      RCLCPP_WARN_THROTTLE(node_->get_logger(), *node_->get_clock(), 1000,
-                           "Received empty initial_path; ignoring");
+      return;
+    }
+    if (msg->poses.empty())
+    {
+      // Nav3D publishes an empty path when a plan is canceled or rejected by
+      // final-path clearance checking. Never keep following the old spline.
+      active_waypoints_.clear();
+      current_wp_ = 0;
+      have_target_ = false;
+      have_new_target_ = false;
+      trigger_ = false;
+      need_hover_stop_ = true;
+      replan_fail_count_ = 0;
+      if (have_odom_ && exec_state_ != WAIT_TARGET && exec_state_ != INIT)
+      {
+        callEmergencyStop(odom_pos_);
+        flag_escape_emergency_ = false;
+        changeFSMExecState(EMERGENCY_STOP, "PATH_CLEAR");
+      }
+      else
+      {
+        changeFSMExecState(WAIT_TARGET, "PATH_CLEAR");
+      }
+      RCLCPP_WARN(node_->get_logger(), "Received empty initial_path; stopped old trajectory");
       return;
     }
 

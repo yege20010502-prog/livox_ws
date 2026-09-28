@@ -167,6 +167,13 @@ void LidarProcessor::process(SyncPackage &package)
     {
         pcl::copyPointCloud(*package.cloud, *m_cloud_down_lidar);
     }
+    const size_t scan_size = m_cloud_down_lidar->size();
+    m_cloud_down_world->resize(scan_size);
+    m_norm_vec->resize(scan_size);
+    m_effect_cloud_lidar->resize(scan_size);
+    m_effect_norm_vec->resize(scan_size);
+    m_nearest_points.resize(scan_size);
+    m_point_selected_flag.resize(scan_size, false);
     trimCloudMap();
     m_kf->update();
     incrCloudMap();
@@ -175,9 +182,12 @@ void LidarProcessor::process(SyncPackage &package)
 void LidarProcessor::updateLossFunc(State &state, SharedState &share_data)
 {
     int size = m_cloud_down_lidar->size();
+    int near_count = 0;
+    int plane_count = 0;
+    int score_count = 0;
 #ifdef MP_EN
     omp_set_num_threads(MP_PROC_NUM);
-#pragma omp parallel for
+#pragma omp parallel for reduction(+ : near_count, plane_count, score_count)
 #endif
     for (int i = 0; i < size; i++)
     {
@@ -198,15 +208,18 @@ void LidarProcessor::updateLossFunc(State &state, SharedState &share_data)
             m_point_selected_flag[i] = false;
         if (!m_point_selected_flag[i])
             continue;
+        ++near_count;
 
         Eigen::Vector4d pabcd;
         m_point_selected_flag[i] = false;
         if (esti_plane(points_near, 0.1, pabcd))
         {
+            ++plane_count;
             double pd2 = pabcd(0) * point_world_vec(0) + pabcd(1) * point_world_vec(1) + pabcd(2) * point_world_vec(2) + pabcd(3);
             double s = 1 - 0.9 * std::fabs(pd2) / std::sqrt(point_body_vec.norm());
             if (s > 0.9)
             {
+                ++score_count;
                 m_point_selected_flag[i] = true;
                 m_norm_vec->points[i].x = pabcd(0);
                 m_norm_vec->points[i].y = pabcd(1);
@@ -228,7 +241,17 @@ void LidarProcessor::updateLossFunc(State &state, SharedState &share_data)
     if (effect_feat_num < 1)
     {
         share_data.valid = false;
-        std::cerr << "NO Effective Points!" << std::endl;
+        static size_t failure_count = 0;
+        if ((failure_count++ % 10) == 0)
+        {
+            std::cerr << "NO Effective Points: scan=" << size
+                      << " near=" << near_count
+                      << " plane=" << plane_count
+                      << " score=" << score_count
+                      << " position=" << state.t_wi.transpose()
+                      << " velocity=" << state.v.transpose()
+                      << std::endl;
+        }
         return;
     }
     share_data.valid = true;
@@ -242,7 +265,7 @@ void LidarProcessor::updateLossFunc(State &state, SharedState &share_data)
         const PointType &norm_p = m_effect_norm_vec->points[i];
         Eigen::Vector3d laser_p_vec(laser_p.x, laser_p.y, laser_p.z);
         Eigen::Vector3d norm_vec(norm_p.x, norm_p.y, norm_p.z);
-        Eigen::Matrix<double, 1, 3> B = -norm_vec.transpose() * state.r_wi * Sophus::SO3d::hat(state.r_il * laser_p_vec + state.t_wi);
+        Eigen::Matrix<double, 1, 3> B = -norm_vec.transpose() * state.r_wi * Sophus::SO3d::hat(state.r_il * laser_p_vec + state.t_il);
         J.block<1, 3>(0, 0) = B;
         J.block<1, 3>(0, 3) = norm_vec.transpose();
         if (m_config.esti_il)

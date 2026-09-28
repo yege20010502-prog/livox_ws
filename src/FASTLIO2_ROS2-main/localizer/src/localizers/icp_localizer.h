@@ -6,6 +6,7 @@
 #include <pcl/registration/transformation_estimation_2D.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/filters/passthrough.h>
+#include <limits>
 
 struct ICPConfig
 {
@@ -33,6 +34,10 @@ public:
     ICPConfig &config() { return m_config; }
     CloudType::Ptr roughMap() { return m_rough_tgt; }
     CloudType::Ptr refineMap() { return m_refine_tgt; }
+    double roughScore() const { return m_last_rough_score; }
+    double refineScore() const { return m_last_refine_score; }
+    bool roughConverged() const { return m_last_rough_converged; }
+    bool refineConverged() const { return m_last_refine_converged; }
 
 
 private:
@@ -46,4 +51,8 @@ private:
     CloudType::Ptr m_refine_tgt;
     CloudType::Ptr m_rough_tgt;
     std::string m_pcd_path;
+    double m_last_rough_score{std::numeric_limits<double>::infinity()};
+    double m_last_refine_score{std::numeric_limits<double>::infinity()};
+    bool m_last_rough_converged{false};
+    bool m_last_refine_converged{false};
 };

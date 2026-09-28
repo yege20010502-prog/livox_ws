@@ -22,6 +22,8 @@ pcd_path="${1:-$workspace/maps/map9802/map_edited.pcd}"
 session="${NAV_TMUX_SESSION:-lite3_nav3d}"
 nav3d_rviz="${NAV3D_RVIZ:-false}"
 nav3d_rosbridge="${NAV3D_ROSBRIDGE:-false}"
+nav_tmux_detach="${NAV_TMUX_DETACH:-false}"
+nav_motion_enabled="${NAV_MOTION_ENABLED:-false}"
 script_path="$(readlink -f "$0")"
 
 if ! command -v tmux >/dev/null 2>&1; then
@@ -82,6 +84,16 @@ if tmux has-session -t "$session" 2>/dev/null; then
   exec tmux attach-session -t "$session"
 fi
 
+# PGO and localizer both publish map -> odom. Never start navigation with PGO active.
+if ros2 node list 2>/dev/null | grep -Fxq '/pgo/pgo_node'; then
+  echo "PGO is running and also publishes map -> odom. Stop PGO before starting navigation." >&2
+  exit 1
+fi
+if ros2 node list 2>/dev/null | grep -Fxq '/fastlio2/lio_node'; then
+  echo "FAST-LIO2 is already running. Stop the old LIO session before starting another." >&2
+  exit 1
+fi
+
 queue_command() {
   local target="$1"
   local delay="$2"
@@ -124,31 +136,44 @@ queue_command "$session:ALL-NODES.0" 0 "Livox MID360" \
   ros2 launch livox_ros_driver2 msg_MID360_launch.py
 queue_command "$session:ALL-NODES.1" 2 "FAST-LIO2 + Lite3 TF" \
   ros2 launch fastlio2 lio_launch.py rviz:=false
-queue_command "$session:ALL-NODES.2" 4 "Nav3D map pose bridge" \
+queue_command "$session:ALL-NODES.2" 25 "Nav3D map pose bridge" \
   python3 "$workspace/src/pose_bridge.py"
-queue_command "$session:ALL-NODES.3" 5 "SCAN sensor pose" \
+queue_command "$session:ALL-NODES.3" 26 "SCAN sensor pose" \
   ros2 run sensor_extrinsic lidar_extrinsic_publisher
-queue_command "$session:ALL-NODES.4" 6 "Path/cloud/pose data bridge" \
+queue_command "$session:ALL-NODES.4" 27 "Path/cloud/pose data bridge" \
   ros2 run topic_bridge nav_data_bridge
-queue_command "$session:ALL-NODES.5" 8 "Nav3D global planner" \
+queue_command "$session:ALL-NODES.5" 30 "Nav3D global planner" \
   ros2 launch nav3d_ros2_bridge nav3d_bridge.launch.py \
-  pcd_path:="$pcd_path" frame_id:=map planning_traversability:=ground \
+  pcd_path:="$pcd_path" frame_id:=map planning_mode:=3d planning_traversability:=ground \
   rviz:="$nav3d_rviz" rosbridge:="$nav3d_rosbridge"
-queue_command "$session:ALL-NODES.6" 10 "SCAN local planner" \
-  ros2 launch scan_planner run.launch.py \
-  is_real_world:=true navi_mode:=3 sensor_type:=lidar \
-  controller_mode:=closed_loop use_sim_time:=false
-queue_command "$session:ALL-NODES.7" 12 "Lite3 motion bridge" \
-  ros2 run dog_control_bridge dog_control_bridge
-queue_command "$session:ALL-NODES.8" 15 "Localizer (last node)" \
+if [[ "$nav_motion_enabled" == "true" ]]; then
+  queue_command "$session:ALL-NODES.6" 32 "SCAN local planner" \
+    ros2 launch scan_planner run.launch.py \
+    is_real_world:=true navi_mode:=3 sensor_type:=lidar \
+    controller_mode:=closed_loop use_sim_time:=false
+  queue_command "$session:ALL-NODES.7" 34 "Lite3 motion bridge" \
+    ros2 run dog_control_bridge dog_control_bridge
+else
+  tmux send-keys -t "$session:ALL-NODES.6" \
+    "echo '[SAFE] SCAN运动控制未启动；实机测试时设置 NAV_MOTION_ENABLED=true'" C-m
+  tmux send-keys -t "$session:ALL-NODES.7" \
+    "echo '[SAFE] 机器狗底盘桥未启动；实机测试时设置 NAV_MOTION_ENABLED=true'" C-m
+fi
+queue_command "$session:ALL-NODES.8" 36 "Localizer (last node)" \
   ros2 run localizer localizer_node --ros-args \
-  -p config_path:="$workspace/install/localizer/share/localizer/config/localizer.yaml"
+  -p config_path:="$workspace/install/localizer/share/localizer/config/localizer.yaml" \
+  -p map_path:="$pcd_path"
 
 tmux select-layout -t "$session:ALL-NODES" tiled
 tmux select-pane -t "$session:ALL-NODES.0"
 echo "Created tmux session: $session"
 echo "Map: $pcd_path"
 echo "Nav3D RViz: $nav3d_rviz (set NAV3D_RVIZ=true to enable)"
-echo "localizer_node starts last, after 15 seconds."
+echo "Motion control: $nav_motion_enabled (set NAV_MOTION_ENABLED=true only for supervised tests)"
+echo "localizer_node starts last, after 36 seconds."
 echo "Open another terminal for relocalization and navigation commands."
+if [[ "$nav_tmux_detach" == "true" ]]; then
+  echo "tmux session is running in the background (NAV_TMUX_DETACH=true)."
+  exit 0
+fi
 exec tmux attach-session -t "$session"

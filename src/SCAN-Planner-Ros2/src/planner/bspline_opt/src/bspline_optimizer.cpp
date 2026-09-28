@@ -820,7 +820,16 @@ namespace scan_planner
         }
         else
         {
-          RCLCPP_ERROR(rclcpp::get_logger("bspline_opt"), "A-star error");
+          const double segment_yaw = estimateSegmentYaw(in, out);
+          const int in_occupied = grid_map_->getInflateOccupancy(in, segment_yaw) ? 1 : 0;
+          const int out_occupied = grid_map_->getInflateOccupancy(out, segment_yaw) ? 1 : 0;
+          RCLCPP_ERROR(
+              rclcpp::get_logger("bspline_opt"),
+              "A-star error ret=%d segment=%zu in=[%.3f %.3f %.3f] occ=%d "
+              "out=[%.3f %.3f %.3f] occ=%d yaw=%.3f",
+              static_cast<int>(ret), i,
+              in.x(), in.y(), in.z(), in_occupied,
+              out.x(), out.y(), out.z(), out_occupied, segment_yaw);
           segment_ids.erase(segment_ids.begin() + i);
           i--;
         }

@@ -52,6 +52,7 @@ void GridMap::initMap(rclcpp::Node *node)
   load_parameter(node_, "grid_map.p_min", mp_.p_min_, -1.0);
   load_parameter(node_, "grid_map.p_max", mp_.p_max_, -1.0);
   load_parameter(node_, "grid_map.p_occ", mp_.p_occ_, -1.0);
+  load_parameter(node_, "grid_map.min_ray_length", mp_.min_ray_length_, 0.0);
   load_parameter(node_, "grid_map.max_ray_length", mp_.max_ray_length_, -0.1);
 
   load_parameter(node_, "grid_map.vis_height", mp_.vis_height_, 0.3);
@@ -916,6 +917,11 @@ void GridMap::cloudCallback(const sensor_msgs::msg::PointCloud2::ConstSharedPtr 
     }
     const Eigen::Vector3d devi = pt_world - ray_pos;
     const double ray_length = devi.norm();
+    // MID360 sees parts of the robot body and mounting structure.  Do not
+    // insert those near-field returns into the obstacle grid, otherwise the
+    // robot's own inflated footprint occupies every short navigation target.
+    if (ray_length < mp_.min_ray_length_)
+      continue;
     const bool in_local_range =
         fabs(devi(0)) <= mp_.local_update_range_(0) && fabs(devi(1)) <= mp_.local_update_range_(1) &&
         fabs(devi(2)) <= mp_.local_update_range_(2);

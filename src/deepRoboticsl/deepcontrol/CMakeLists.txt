@@ -9,6 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 
 add_executable(dog_control_bridge 
@@ -18,12 +19,14 @@ add_executable(dog_control_bridge
 target_include_directories(dog_control_bridge PUBLIC
     ${rclcpp_INCLUDE_DIRS}
     ${geometry_msgs_INCLUDE_DIRS}
+    ${nav_msgs_INCLUDE_DIRS}
     ${std_msgs_INCLUDE_DIRS}
 )
 
 target_link_libraries(dog_control_bridge
     ${rclcpp_LIBRARIES}
     ${geometry_msgs_LIBRARIES}
+    ${nav_msgs_LIBRARIES}
     ${std_msgs_LIBRARIES}
     pthread
 )

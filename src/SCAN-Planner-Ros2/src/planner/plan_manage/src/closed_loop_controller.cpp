@@ -27,6 +27,8 @@ public:
     kp_pos_ = declare_parameter<double>("kp_pos", 0.8);
     kp_yaw_ = declare_parameter<double>("kp_yaw", 1.5);
     max_vx_ = declare_parameter<double>("max_vx", 0.75);
+    allow_reverse_ = declare_parameter<bool>("allow_reverse", false);
+    odom_timeout_sec_ = declare_parameter<double>("odom_timeout_sec", 1.0);
     max_vy_ = declare_parameter<double>("max_vy", 0.35);
     max_vyaw_ = std::min(declare_parameter<double>("max_vyaw", 1.0), kMaxVYawLimit);
     finish_dist_ = declare_parameter<double>("finish_dist", 0.15);
@@ -114,6 +116,7 @@ private:
   {
     odom_pos_ << msg->pose.pose.position.x, msg->pose.pose.position.y, msg->pose.pose.position.z;
     odom_yaw_ = tf2::getYaw(msg->pose.pose.orientation);
+    last_odom_receive_time_ = now();
     have_odom_ = true;
   }
 
@@ -126,6 +129,15 @@ private:
       return;
     }
     const auto current_time = now();
+    if ((current_time - last_odom_receive_time_).seconds() > odom_timeout_sec_)
+    {
+      RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 2000,
+                           "Body pose timed out; stopping and waiting for a new trajectory");
+      receive_traj_ = false;
+      publishExecutionFrozen(true);
+      publishStop();
+      return;
+    }
     double dt = (current_time - last_update_time_).seconds();
     if (dt < 0.0 || dt > 0.2) dt = 0.0;
     const double t_eval = std::min(exec_time_, traj_duration_);
@@ -152,7 +164,9 @@ private:
     const double c = std::cos(odom_yaw_);
     const double s = std::sin(odom_yaw_);
     geometry_msgs::msg::Twist command;
-    command.linear.x = std::clamp(c * vel_world.x() + s * vel_world.y(), -max_vx_, max_vx_);
+    command.linear.x = std::clamp(
+        c * vel_world.x() + s * vel_world.y(),
+        allow_reverse_ ? -max_vx_ : 0.0, max_vx_);
     command.linear.y = std::clamp(-s * vel_world.x() + c * vel_world.y(), -max_vy_, max_vy_);
     command.angular.z = yaw_command;
     if (exec_time_ >= traj_duration_ && pos_error.norm() < finish_dist_)
@@ -167,6 +181,7 @@ private:
   rclcpp::TimerBase::SharedPtr cmd_timer_;
   bool receive_traj_{false};
   bool have_odom_{false};
+  bool allow_reverse_{false};
   std::vector<UniformBspline> traj_;
   double traj_duration_{0.0};
   std::int64_t traj_id_{0};
@@ -174,8 +189,10 @@ private:
   double odom_yaw_{0.0};
   double exec_time_{0.0};
   rclcpp::Time last_update_time_{0, 0, RCL_ROS_TIME};
+  rclcpp::Time last_odom_receive_time_{0, 0, RCL_ROS_TIME};
   double time_forward_, heading_error_threshold_, kp_pos_, kp_yaw_;
   double max_vx_, max_vy_, max_vyaw_, finish_dist_;
+  double odom_timeout_sec_{1.0};
 };
 }  // namespace scan_planner
 

@@ -52,11 +52,37 @@ class LIONode : public rclcpp::Node
 		RCLCPP_INFO(this->get_logger(), "LIO Node Started");
 		loadParameters();
 
-		m_imu_sub = this->create_subscription<sensor_msgs::msg::Imu>(m_node_config.imu_topic, 10, std::bind(&LIONode::imuCB, this, std::placeholders::_1));
-		m_lidar_sub = this->create_subscription<livox_ros_driver2::msg::CustomMsg>(m_node_config.lidar_topic, 10, std::bind(&LIONode::lidarCB, this, std::placeholders::_1));
+		m_imu_callback_group = this->create_callback_group(
+			rclcpp::CallbackGroupType::MutuallyExclusive);
+		m_lidar_callback_group = this->create_callback_group(
+			rclcpp::CallbackGroupType::MutuallyExclusive);
+		m_timer_callback_group = this->create_callback_group(
+			rclcpp::CallbackGroupType::MutuallyExclusive);
+		rclcpp::SubscriptionOptions imu_options;
+		imu_options.callback_group = m_imu_callback_group;
+		// Do not let DDS queue old lidar frames while point-to-map matching is
+		// busy.  LIO needs the newest scan; replaying a deep reliable queue makes
+		// the estimator run seconds behind the IMU and eventually diverge.
+		// Keep the IMU best-effort, but match the Livox CustomMsg publisher's
+		// reliable QoS for lidar.  On the target CycloneDDS setup a best-effort
+		// CustomMsg subscription was discovered but received no samples.  The
+		// small depth still bounds queued scans while matching is busy.
+		auto imu_qos = rclcpp::SensorDataQoS().keep_last(1000);
+		auto lidar_qos = rclcpp::QoS(rclcpp::KeepLast(10)).reliable().durability_volatile();
+		m_imu_sub = this->create_subscription<sensor_msgs::msg::Imu>(
+			m_node_config.imu_topic, imu_qos,
+			std::bind(&LIONode::imuCB, this, std::placeholders::_1), imu_options);
+		m_lidar_sub = this->create_subscription<livox_ros_driver2::msg::CustomMsg>(
+			m_node_config.lidar_topic, lidar_qos,
+			std::bind(&LIONode::lidarCB, this, std::placeholders::_1));
 
-		m_body_cloud_pub = this->create_publisher<sensor_msgs::msg::PointCloud2>("body_cloud", 10000);
-		m_world_cloud_pub = this->create_publisher<sensor_msgs::msg::PointCloud2>("world_cloud", 10000);
+		// Point clouds are large, high-rate sensor products.  A deep reliable
+		// queue back-pressures the estimator when RViz/localizer is slow and can
+		// create artificial sensor gaps.  Keep only the newest display/matching
+		// cloud; odometry below remains reliable.
+		auto cloud_qos = rclcpp::SensorDataQoS().keep_last(1);
+		m_body_cloud_pub = this->create_publisher<sensor_msgs::msg::PointCloud2>("body_cloud", cloud_qos);
+		m_world_cloud_pub = this->create_publisher<sensor_msgs::msg::PointCloud2>("world_cloud", cloud_qos);
 		m_path_pub = this->create_publisher<nav_msgs::msg::Path>("lio_path", 10000);
 		m_odom_pub = this->create_publisher<nav_msgs::msg::Odometry>("lio_odom", 10000);
 		m_tf_broadcaster = std::make_shared<tf2_ros::TransformBroadcaster>(*this);
@@ -66,7 +92,8 @@ class LIONode : public rclcpp::Node
 
 		m_kf = std::make_shared<IESKF>();
 		m_builder = std::make_shared<MapBuilder>(m_builder_config, m_kf);
-		m_timer = this->create_wall_timer(20ms, std::bind(&LIONode::timerCB, this));
+		m_timer = this->create_wall_timer(
+			20ms, std::bind(&LIONode::timerCB, this), m_timer_callback_group);
 	}
 
 		void loadParameters()
@@ -165,9 +192,19 @@ class LIONode : public rclcpp::Node
 		{
 			std::scoped_lock lock(m_state_data.imu_mutex, m_state_data.lidar_mutex);
 			if (m_state_data.imu_buffer.empty() || m_state_data.lidar_buffer.empty())
+			{
+				RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 2000,
+						"Waiting for sensor input: imu_buffer=%zu lidar_buffer=%zu",
+						m_state_data.imu_buffer.size(), m_state_data.lidar_buffer.size());
 				return false;
+			}
 			if (!m_state_data.lidar_pushed)
 			{
+				// The mapper may run slower than the sensor.  Use the newest scan
+				// instead of replaying stale lidar frames; all buffered IMU samples
+				// are still integrated up to that scan's end time below.
+				while (m_state_data.lidar_buffer.size() > 1)
+					m_state_data.lidar_buffer.pop_front();
 				m_package.cloud = m_state_data.lidar_buffer.front().second;
 				if (!m_package.cloud || m_package.cloud->empty())
 				{
@@ -177,11 +214,24 @@ class LIONode : public rclcpp::Node
 				std::sort(m_package.cloud->points.begin(), m_package.cloud->points.end(), [](PointType &p1, PointType &p2)
 						{ return p1.curvature < p2.curvature; });
 				m_package.cloud_start_time = m_state_data.lidar_buffer.front().first;
-				m_package.cloud_end_time = m_package.cloud_start_time + m_package.cloud->points.back().curvature / 1000.0;
+				const double scan_duration = m_package.cloud->points.back().curvature / 1000.0;
+				if (!std::isfinite(scan_duration) || scan_duration < 0.0 || scan_duration > 0.2)
+				{
+					RCLCPP_ERROR(this->get_logger(),
+							 "Reject lidar frame with invalid duration %.6f s", scan_duration);
+					m_state_data.lidar_buffer.pop_front();
+					return false;
+				}
+				m_package.cloud_end_time = m_package.cloud_start_time + scan_duration;
 				m_state_data.lidar_pushed = true;
 			}
 			if (m_state_data.last_imu_time < m_package.cloud_end_time)
+			{
+				RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 2000,
+						"Waiting for IMU to cover lidar frame: lag=%.6f s",
+						m_package.cloud_end_time - m_state_data.last_imu_time);
 				return false;
+			}
 
 			Vec<IMUData>().swap(m_package.imus);
 			while (!m_state_data.imu_buffer.empty() && m_state_data.imu_buffer.front().time < m_package.cloud_end_time)
@@ -270,9 +320,36 @@ class LIONode : public rclcpp::Node
 		{
 			if (!syncPackage())
 				return;
+
+			// Never propagate an already-running estimator across a long sensor
+			// outage.  With a stale lidar/IMU pair this otherwise becomes a long
+			// open-loop inertial update and can send odometry thousands of metres
+			// away before scan matching has a chance to recover.
+			if (m_builder->status() == BuilderStatus::MAPPING &&
+				m_last_processed_cloud_time > 0.0 &&
+				m_package.cloud_end_time - m_last_processed_cloud_time > 0.5)
+			{
+				RCLCPP_ERROR(this->get_logger(),
+					"Sensor gap %.3f s while mapping; resetting FAST-LIO estimator",
+					m_package.cloud_end_time - m_last_processed_cloud_time);
+				resetEstimator();
+				return;
+			}
 			auto t1 = std::chrono::high_resolution_clock::now();
 			m_builder->process(m_package);
 			auto t2 = std::chrono::high_resolution_clock::now();
+			m_last_processed_cloud_time = m_package.cloud_end_time;
+
+			const State &state = m_kf->x();
+			if (!state.t_wi.allFinite() || !state.v.allFinite() ||
+				state.v.norm() > 3.0 || std::abs(state.t_wi.z()) > 3.0)
+			{
+				RCLCPP_ERROR(this->get_logger(),
+					"Unsafe FAST-LIO state (position=%.3f %.3f %.3f, velocity_norm=%.3f); resetting",
+					state.t_wi.x(), state.t_wi.y(), state.t_wi.z(), state.v.norm());
+				resetEstimator();
+				return;
+			}
 
 			if (m_node_config.print_time_cost)
 			{
@@ -281,7 +358,12 @@ class LIONode : public rclcpp::Node
 			}
 
 			if (m_builder->status() != BuilderStatus::MAPPING)
+			{
+				RCLCPP_INFO_THROTTLE(this->get_logger(), *this->get_clock(), 2000,
+						"FAST-LIO initialization in progress (state=%d, frame_imus=%zu)",
+						static_cast<int>(m_builder->status()), m_package.imus.size());
 				return;
+			}
 
 			broadCastTF(m_tf_broadcaster, m_node_config.world_frame, m_node_config.body_frame, m_package.cloud_end_time);
 
@@ -298,6 +380,18 @@ class LIONode : public rclcpp::Node
 			publishPath(m_path_pub, m_node_config.world_frame, m_package.cloud_end_time);
 		}
 
+		void resetEstimator()
+		{
+			m_kf = std::make_shared<IESKF>();
+			m_builder = std::make_shared<MapBuilder>(m_builder_config, m_kf);
+			m_last_processed_cloud_time = -1.0;
+			m_state_data.lidar_pushed = false;
+			m_state_data.path.poses.clear();
+			std::scoped_lock lock(m_state_data.imu_mutex, m_state_data.lidar_mutex);
+			m_state_data.imu_buffer.clear();
+			m_state_data.lidar_buffer.clear();
+		}
+
 	private:
 		rclcpp::Subscription<livox_ros_driver2::msg::CustomMsg>::SharedPtr m_lidar_sub;
 		rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr m_imu_sub;
@@ -308,6 +402,9 @@ class LIONode : public rclcpp::Node
 		rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr m_odom_pub;
 
 		rclcpp::TimerBase::SharedPtr m_timer;
+		rclcpp::CallbackGroup::SharedPtr m_imu_callback_group;
+		rclcpp::CallbackGroup::SharedPtr m_lidar_callback_group;
+		rclcpp::CallbackGroup::SharedPtr m_timer_callback_group;
 		StateData m_state_data;
 		SyncPackage m_package;
 		NodeConfig m_node_config;
@@ -315,12 +412,17 @@ class LIONode : public rclcpp::Node
 		std::shared_ptr<IESKF> m_kf;
 		std::shared_ptr<MapBuilder> m_builder;
 		std::shared_ptr<tf2_ros::TransformBroadcaster> m_tf_broadcaster;
+		double m_last_processed_cloud_time{-1.0};
 };
 
 int main(int argc, char **argv)
 {
 	rclcpp::init(argc, argv);
-	rclcpp::spin(std::make_shared<LIONode>());
+	auto node = std::make_shared<LIONode>();
+	rclcpp::executors::MultiThreadedExecutor executor(
+		rclcpp::ExecutorOptions(), 6);
+	executor.add_node(node);
+	executor.spin();
 	rclcpp::shutdown();
 	return 0;
 }

@@ -1,6 +1,7 @@
 #include "map_builder.h"
 MapBuilder::MapBuilder(Config &config, std::shared_ptr<IESKF> kf) : m_config(config), m_kf(kf)
 {
+    m_kf->setMaxIter(m_config.ieskf_max_iter);
     m_imu_processor = std::make_shared<IMUProcessor>(config, kf);
     m_lidar_processor = std::make_shared<LidarProcessor>(config, kf);
     m_status = BuilderStatus::IMU_INIT;

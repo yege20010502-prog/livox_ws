@@ -77,7 +77,8 @@ void IESKF::predict(const Input &inp, double dt, const M12D &Q)
 
 void IESKF::update()
 {
-    State predict_x = m_x;
+    const State predict_x = m_x;
+    const M21D predict_P = m_P;
     SharedState shared_data;
     shared_data.iter_num = 0;
     shared_data.res = 1e10;
@@ -89,7 +90,15 @@ void IESKF::update()
     {
         m_loss_func(m_x, shared_data);
         if (!shared_data.valid)
-            break;
+        {
+            // No usable lidar constraint: keep the IMU prediction and its
+            // propagated covariance.  The previous code fell through with an
+            // identity H and overwrote P, which made a transient empty match
+            // corrupt subsequent filter updates.
+            m_x = predict_x;
+            m_P = predict_P;
+            return;
+        }
         H.setZero();
         b.setZero();
         delta = m_x - predict_x;
@@ -104,6 +113,15 @@ void IESKF::update()
 
         delta = -H.inverse() * b;
 
+        if (!H.allFinite() || !b.allFinite() || !delta.allFinite() ||
+            delta.segment<3>(0).norm() > 0.5 ||
+            delta.segment<3>(3).norm() > 1.0)
+        {
+            m_x = predict_x;
+            m_P = predict_P;
+            return;
+        }
+
         m_x += delta;
         shared_data.iter_num += 1;
 
@@ -116,5 +134,13 @@ void IESKF::update()
     // L.block<3, 3>(6, 6) = JrInv(delta.segment<3>(6));
     L.block<3, 3>(0, 0) = Jr(delta.segment<3>(0));
     L.block<3, 3>(6, 6) = Jr(delta.segment<3>(6));
-    m_P = L * H.inverse() * L.transpose();
+    const M21D updated_P = L * H.inverse() * L.transpose();
+    if (!updated_P.allFinite())
+    {
+        m_x = predict_x;
+        m_P = predict_P;
+        return;
+    }
+    // Limit numerical asymmetry before the next propagation/inversion.
+    m_P = 0.5 * (updated_P + updated_P.transpose());
 }

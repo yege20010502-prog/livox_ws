@@ -51,7 +51,12 @@ public:
         loadParameters();
         m_pgo = std::make_shared<SimplePGO>(m_pgo_config);
         rclcpp::QoS qos = rclcpp::QoS(10);
-        m_cloud_sub.subscribe(this, m_node_config.cloud_topic, qos.get_rmw_qos_profile());
+        // FAST-LIO publishes body_cloud with SensorDataQoS (best effort).
+        // A reliable reader is incompatible with that writer and silently
+        // starves the ExactTime synchronizer of clouds.
+        m_cloud_sub.subscribe(
+            this, m_node_config.cloud_topic,
+            rclcpp::SensorDataQoS().get_rmw_qos_profile());
         m_odom_sub.subscribe(this, m_node_config.odom_topic, qos.get_rmw_qos_profile());
         m_loop_marker_pub = this->create_publisher<visualization_msgs::msg::MarkerArray>("/pgo/loop_markers", 10000);
         m_tf_broadcaster = std::make_shared<tf2_ros::TransformBroadcaster>(*this);
