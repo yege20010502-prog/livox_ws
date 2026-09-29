@@ -21,6 +21,8 @@ max_initial_translation_jump: 1.20
 initial_consistency_count: 3
 initial_consistency_translation: 0.20
 initial_consistency_yaw: 0.08
+# Revoke localization after repeated online ICP quality failures.
+tracking_failure_count: 3
 
 input_cloud_type: PointXYZ
 
@@ -28,8 +30,18 @@ rough_scan_resolution: 0.30
 rough_map_resolution: 0.30
 rough_max_iteration: 15
 rough_score_thresh: 0.30
+rough_max_correspondence_distance: 0.75
 
 refine_scan_resolution: 0.15
 refine_map_resolution: 0.15
 refine_max_iteration: 20
-refine_score_thresh: 0.15
+refine_score_thresh: 0.10
+refine_max_correspondence_distance: 0.30
+# A low FitnessScore alone is insufficient: it ignores unmatched points.
+min_overlap_ratio: 0.70
+min_overlap_points: 80
+# Remove the dominant near-horizontal plane before ICP. Otherwise a floor can
+# produce a convincing score at many unrelated XY positions.
+remove_ground_plane: true
+ground_plane_distance: 0.08
+ground_plane_min_points: 80

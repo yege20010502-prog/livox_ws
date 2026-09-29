@@ -42,6 +42,7 @@ struct NodeConfig
     int initial_consistency_count = 3;
     double initial_consistency_translation = 0.08;
     double initial_consistency_yaw = 0.08;
+    int tracking_failure_count = 3;
 };
 
 struct NodeState
@@ -62,6 +63,7 @@ struct NodeState
     V3D last_offset_t = V3D::Zero();     // map_localmap_t
     M4F initial_guess = M4F::Identity();
     int initial_consistent_matches = 0;
+    int consecutive_tracking_failures = 0;
     M3D pending_offset_r = M3D::Identity();
     V3D pending_offset_t = V3D::Zero();
 };
@@ -173,6 +175,8 @@ public:
             m_config.initial_consistency_translation = config["initial_consistency_translation"].as<double>();
         if (config["initial_consistency_yaw"])
             m_config.initial_consistency_yaw = config["initial_consistency_yaw"].as<double>();
+        if (config["tracking_failure_count"])
+            m_config.tracking_failure_count = config["tracking_failure_count"].as<int>();
 
         m_localizer_config.rough_scan_resolution = config["rough_scan_resolution"].as<double>();
         m_localizer_config.rough_map_resolution = config["rough_map_resolution"].as<double>();
@@ -183,6 +187,22 @@ public:
         m_localizer_config.refine_map_resolution = config["refine_map_resolution"].as<double>();
         m_localizer_config.refine_max_iteration = config["refine_max_iteration"].as<int>();
         m_localizer_config.refine_score_thresh = config["refine_score_thresh"].as<double>();
+        if (config["rough_max_correspondence_distance"])
+            m_localizer_config.rough_max_correspondence_distance =
+                config["rough_max_correspondence_distance"].as<double>();
+        if (config["refine_max_correspondence_distance"])
+            m_localizer_config.refine_max_correspondence_distance =
+                config["refine_max_correspondence_distance"].as<double>();
+        if (config["min_overlap_ratio"])
+            m_localizer_config.min_overlap_ratio = config["min_overlap_ratio"].as<double>();
+        if (config["min_overlap_points"])
+            m_localizer_config.min_overlap_points = config["min_overlap_points"].as<int>();
+        if (config["remove_ground_plane"])
+            m_localizer_config.remove_ground_plane = config["remove_ground_plane"].as<bool>();
+        if (config["ground_plane_distance"])
+            m_localizer_config.ground_plane_distance = config["ground_plane_distance"].as<double>();
+        if (config["ground_plane_min_points"])
+            m_localizer_config.ground_plane_min_points = config["ground_plane_min_points"].as<int>();
     }
     void timerCB()
     {
@@ -246,12 +266,19 @@ public:
         RCLCPP_INFO_THROTTLE(
             get_logger(), *get_clock(), 1000,
             "ICP diagnostics: accepted=%s rough_converged=%s rough_score=%.6f/%.6f "
-            "refine_converged=%s refine_score=%.6f/%.6f",
+            "refine_converged=%s refine_score=%.6f/%.6f overlap=%d/%d=%.3f/%.3f",
             result ? "true" : "false",
             m_localizer->roughConverged() ? "true" : "false",
             m_localizer->roughScore(), m_localizer_config.rough_score_thresh,
             m_localizer->refineConverged() ? "true" : "false",
-            m_localizer->refineScore(), m_localizer_config.refine_score_thresh);
+            m_localizer->refineScore(), m_localizer_config.refine_score_thresh,
+            m_localizer->overlapPoints(), m_localizer->inputPoints(),
+            m_localizer->overlapRatio(), m_localizer_config.min_overlap_ratio);
+        // Initial consistency means consecutive valid observations. A failed
+        // ICP frame must break the sequence; otherwise intermittent matches
+        // in a repeated scene eventually accumulate into a false success.
+        if (!result && !m_state.localize_success)
+            m_state.initial_consistent_matches = 0;
         if (result)
         {
             // ICP directly returns map -> odom. Keep this transform planar and
@@ -332,6 +359,7 @@ public:
                         m_state.localize_success = true;
                         m_state.service_received = false;
                         m_state.initial_consistent_matches = 0;
+                        m_state.consecutive_tracking_failures = 0;
                         RCLCPP_INFO(get_logger(),
                                     "Initial localization accepted after %d consistent ICP results",
                                     m_config.initial_consistency_count);
@@ -353,6 +381,28 @@ public:
                 const double filtered_yaw = previous_yaw + alpha * delta_yaw;
                 m_state.last_offset_r =
                     Eigen::AngleAxisd(filtered_yaw, Eigen::Vector3d::UnitZ()).toRotationMatrix();
+            }
+        }
+        if (m_state.localize_success)
+        {
+            if (result)
+            {
+                m_state.consecutive_tracking_failures = 0;
+            }
+            else
+            {
+                ++m_state.consecutive_tracking_failures;
+                if (m_state.consecutive_tracking_failures >=
+                    m_config.tracking_failure_count)
+                {
+                    std::lock_guard<std::mutex> lock(m_state.service_mutex);
+                    m_state.localize_success = false;
+                    m_state.service_received = false;
+                    RCLCPP_ERROR(
+                        get_logger(),
+                        "Localization invalidated after %d consecutive ICP quality failures",
+                        m_state.consecutive_tracking_failures);
+                }
             }
         }
         if (m_state.localize_success)
@@ -514,10 +564,12 @@ public:
             m_state.service_received = true;
             m_state.localize_success = false;
             m_state.initial_consistent_matches = 0;
+            m_state.consecutive_tracking_failures = 0;
         }
 
         response->success = true;
-        response->message = "relocalize success";
+        response->message =
+            "relocalize request accepted; wait for relocalize_check validation";
         return;
     }
 

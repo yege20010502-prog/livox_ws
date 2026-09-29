@@ -98,6 +98,7 @@ NAV_MOTION_ENABLED=false ./scripts/start_nav3d_scan_tmux.sh \
 
 ## 已确认的定位现象
 
+- 2026-09-29 已复现“机器狗明显位于地图覆盖范围外，但手动 `2D Pose Estimate` 后仍返回 `valid=True`”。第一轮增加对应距离与覆盖率后，错误场景仍有约 `0.60–0.66` 覆盖率；去除水平地面后精配准错误分数升至约 `0.107–0.15`。同时确认初始一致性计数存在逻辑错误：失败帧没有清零，非连续的偶发成功会累积到 `3/3`。现已改为失败即清零，精配准阈值收紧至 `0.10`、最低覆盖率收紧至 `0.70`，并保留至少 80 个匹配点和连续运行失效撤销。地图外相同手工初值复测时，精配准分数持续高于 `0.10`、`/relocalize_check` 保持 `valid=False`，错误位置已被拒绝。`/relocalize` 的成功消息只表示请求已接收，最终状态以 `/relocalize_check` 为准。下一步仍需在地图内真实位置验证，避免阈值过严造成正确定位被拒绝。
 - 2026-09-20 冷启动验证：Nav3D 不支持 PCL 的 `binary_compressed` PCD，当时试用普通 binary 格式的 `maps/map918/map_height_leveled_nav.pcd`，Nav3D、localizer 均成功加载。**后续已改用仅旋转、不平移 Z 的 `map_height_leveled_rotation_only_nav.pcd`；旧验证不代表现用地图已通过通行验收。**
 - 2026-09-20 冷启动时，Livox 原始帧正常（每帧 20064 点），但 FAST-LIO 的独立 lidar callback group 未及时收到帧。激光订阅恢复默认 callback group，并匹配驱动使用 `Reliable + KeepLast(10)` 后，`/fastlio2/lio_odom` 实测稳定约 10 Hz，`/fastlio2/world_cloud` 持续更新。修改前备份为 `src/FASTLIO2_ROS2-main/fastlio2/src/lio_node.cpp.20260920_before_lidar_reliable.bak`。
 - 2026-09-19 已修正 FAST-LIO 点面残差姿态雅可比中将雷达外参 `t_il` 误写为世界位置 `t_wi` 的错误。IMU 初始化窗口改为400点，执行器使用6线程。清理遗留诊断订阅器后，在完整导航栈下相隔30秒的两次静止读数，平面位移约1.8毫米，IMU缓存约9至26条，没有再次发散。运动状态仍需继续验收。
