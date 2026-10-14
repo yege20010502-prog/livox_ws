@@ -24,7 +24,26 @@ nav3d_rviz="${NAV3D_RVIZ:-false}"
 nav3d_rosbridge="${NAV3D_ROSBRIDGE:-false}"
 nav_tmux_detach="${NAV_TMUX_DETACH:-false}"
 nav_motion_enabled="${NAV_MOTION_ENABLED:-false}"
+nav3d_min_points_per_voxel="${NAV3D_MIN_POINTS_PER_VOXEL:-1}"
+nav3d_resolution="${NAV3D_RESOLUTION:-0.2}"
+nav3d_ground_robot_radius="${NAV3D_GROUND_ROBOT_RADIUS:-0.25}"
+nav3d_ground_support_depth_cells="${NAV3D_GROUND_SUPPORT_DEPTH_CELLS:-1}"
+nav3d_occupancy_grid_min_z="${NAV3D_OCCUPANCY_GRID_MIN_Z:-0.2}"
+nav3d_occupancy_grid_max_z="${NAV3D_OCCUPANCY_GRID_MAX_Z:-0.9}"
 script_path="$(readlink -f "$0")"
+
+# Fail before starting any nodes if an explicitly requested keepout file is
+# unavailable. Never silently run motion without the requested restrictions.
+if [[ -n "${NAV3D_ZONE_FILE:-}" && ! -r "$NAV3D_ZONE_FILE" ]]; then
+  echo "Missing or unreadable navigation zone file: $NAV3D_ZONE_FILE" >&2
+  echo "Save the zones first, or explicitly use NAV3D_ZONE_FILE='' to disable zones for supervised testing." >&2
+  exit 1
+fi
+
+if [[ ! "$nav3d_min_points_per_voxel" =~ ^[1-9][0-9]*$ ]]; then
+  echo "NAV3D_MIN_POINTS_PER_VOXEL must be a positive integer." >&2
+  exit 1
+fi
 
 if ! command -v tmux >/dev/null 2>&1; then
   echo "tmux is not installed. Run: sudo apt install tmux" >&2
@@ -142,9 +161,19 @@ queue_command "$session:ALL-NODES.3" 26 "SCAN sensor pose" \
   ros2 run sensor_extrinsic lidar_extrinsic_publisher
 queue_command "$session:ALL-NODES.4" 27 "Path/cloud/pose data bridge" \
   ros2 run topic_bridge nav_data_bridge
+nav3d_zone_args=()
+if [[ -n "${NAV3D_ZONE_FILE:-}" ]]; then
+  nav3d_zone_args+=("navigation_zone_file:=$NAV3D_ZONE_FILE")
+fi
 queue_command "$session:ALL-NODES.5" 30 "Nav3D global planner" \
   ros2 launch nav3d_ros2_bridge nav3d_bridge.launch.py \
   pcd_path:="$pcd_path" frame_id:=map planning_mode:=3d planning_traversability:=ground \
+  resolution:="$nav3d_resolution" ground_robot_radius:="$nav3d_ground_robot_radius" \
+  ground_support_depth_cells:="$nav3d_ground_support_depth_cells" \
+  min_points_per_voxel:="$nav3d_min_points_per_voxel" \
+  occupancy_grid_min_z:="$nav3d_occupancy_grid_min_z" \
+  occupancy_grid_max_z:="$nav3d_occupancy_grid_max_z" \
+  "${nav3d_zone_args[@]}" \
   rviz:="$nav3d_rviz" rosbridge:="$nav3d_rosbridge"
 if [[ "$nav_motion_enabled" == "true" ]]; then
   queue_command "$session:ALL-NODES.6" 32 "SCAN local planner" \

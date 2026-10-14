@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Create a conservative binary PCD navigation candidate from a PGO map.
 
-Only height-crops the map; it never levels, translates, downsamples, or
-classifies occupied columns as free. The source file is never modified.
+It can crop to the driven trajectory plus a margin and then height-crop the
+map. It never levels, translates, downsamples, or classifies occupied columns
+as free. The source file is never modified.
 """
 
 import argparse
@@ -62,12 +63,33 @@ def estimate_floor(z):
         raise ValueError("Too little vertical range to identify a floor")
     edges = np.arange(low, high + 0.05, 0.05)
     hist, edges = np.histogram(z, bins=edges)
-    peak = int(np.argmax(hist))
+    # A PGO map can contain another dense horizontal layer slightly above the
+    # actual floor.  Prefer the lowest strong peak instead of blindly taking
+    # the absolute maximum (map1022 has comparable peaks near -0.40 and +0.30).
+    strong = np.flatnonzero(hist >= hist.max() * 0.65)
+    peak = int(strong[0])
     center = float((edges[peak] + edges[peak + 1]) / 2)
     near = z[(z >= center - 0.05) & (z <= center + 0.05)]
     if len(near) < max(1000, len(z) * 0.01):
         raise ValueError("No strong floor peak; provide --floor-z after inspection")
     return float(np.median(near)), int(len(near))
+
+
+def trajectory_bounds(path, margin):
+    positions = []
+    with path.open("r", encoding="utf-8") as stream:
+        for line_number, line in enumerate(stream, 1):
+            fields = line.split()
+            if not fields:
+                continue
+            if len(fields) < 4:
+                raise ValueError(f"Invalid poses line {line_number}: expected name x y z ...")
+            positions.append((float(fields[1]), float(fields[2])))
+    if not positions:
+        raise ValueError("Poses file contains no positions")
+    xy = np.asarray(positions, dtype=np.float64)
+    return (float(xy[:, 0].min() - margin), float(xy[:, 0].max() + margin),
+            float(xy[:, 1].min() - margin), float(xy[:, 1].max() + margin), len(xy))
 
 
 def main():
@@ -77,9 +99,13 @@ def main():
     parser.add_argument("--floor-z", type=float, help="measured floor Z; omit for automatic estimate")
     parser.add_argument("--below", type=float, default=0.15, help="retain this far below floor (m)")
     parser.add_argument("--above", type=float, default=2.0, help="retain this far above floor (m)")
+    parser.add_argument("--poses", type=Path,
+                        help="PGO poses.txt; retain its XY extent plus --xy-margin")
+    parser.add_argument("--xy-margin", type=float, default=2.5,
+                        help="margin around pose XY bounds when --poses is used (m)")
     args = parser.parse_args()
-    if args.below < 0 or args.above <= 0:
-        parser.error("--below must be >= 0 and --above must be > 0")
+    if args.below < 0 or args.above <= 0 or args.xy_margin < 0:
+        parser.error("--below/--xy-margin must be >= 0 and --above must be > 0")
     source = args.input.resolve()
     output = args.output.resolve()
     report = output.with_suffix(".json")
@@ -96,6 +122,16 @@ def main():
     floor_z, support = (float(args.floor_z), None) if args.floor_z is not None else estimate_floor(z)
     lower, upper = floor_z - args.below, floor_z + args.above
     keep = valid & (points["z"] >= lower) & (points["z"] <= upper)
+    xy_bounds = None
+    pose_count = None
+    if args.poses is not None:
+        poses_path = args.poses.resolve()
+        if not poses_path.is_file():
+            parser.error(f"poses file does not exist: {poses_path}")
+        min_x, max_x, min_y, max_y, pose_count = trajectory_bounds(poses_path, args.xy_margin)
+        xy_bounds = {"min_x": min_x, "max_x": max_x, "min_y": min_y, "max_y": max_y}
+        keep &= ((points["x"] >= min_x) & (points["x"] <= max_x) &
+                 (points["y"] >= min_y) & (points["y"] <= max_y))
     if keep.sum() < 1000:
         raise ValueError("Crop would leave too few points")
     if keep.sum() / valid.sum() < 0.10:
@@ -112,6 +148,7 @@ def main():
         "source": str(source), "output": str(output), "source_points": int(len(points)),
         "kept_points": int(len(selected)), "removed_points": int(len(points) - len(selected)),
         "floor_z": floor_z, "floor_peak_support": support, "min_z": lower, "max_z": upper,
+        "xy_bounds": xy_bounds, "pose_count": pose_count,
         "source_z_percentiles_01_05_50_95_99": np.quantile(z, [0.01, 0.05, 0.5, 0.95, 0.99]).tolist(),
         "coordinates_changed": False,
         "warning": "Candidate only: visually verify floor, obstacles, and traversability before navigation",

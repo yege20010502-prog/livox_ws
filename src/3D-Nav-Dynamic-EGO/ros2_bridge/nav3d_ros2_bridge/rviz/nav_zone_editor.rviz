@@ -1,0 +1,142 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+  - Class: rviz_common/Views
+    Name: Views
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Alpha: 0.5
+      Cell Size: 1
+      Class: rviz_default_plugins/Grid
+      Color: 160; 160; 164
+      Enabled: true
+      Line Style:
+        Line Width: 0.03
+        Value: Lines
+      Name: Map Grid
+      Normal Cell Count: 0
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Plane: XY
+      Plane Cell Count: 40
+      Reference Frame: <Fixed Frame>
+      Value: true
+    - Alpha: 0.82
+      Class: rviz_default_plugins/Map
+      Color Scheme: map
+      Draw Behind: true
+      Enabled: true
+      Name: Editable Occupancy Grid
+      Topic:
+        Depth: 5
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /nav3d/occupied_grid
+      Update Topic: /map_updates
+      Use Timestamp: false
+      Value: true
+    - Alpha: 0.22
+      Class: rviz_default_plugins/MarkerArray
+      Enabled: false
+      Name: 3D Voxels Reference
+      Namespaces:
+        nav3d_elevated_obstacle_voxels: true
+        nav3d_ground_voxels: true
+        nav3d_local_occupied_voxels: true
+      Topic:
+        Depth: 5
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /nav3d/planning_occupied_markers
+      Value: false
+    - Alpha: 1
+      Class: rviz_default_plugins/MarkerArray
+      Enabled: true
+      Name: Navigation Zones (red keepout / blue passable / yellow preferred)
+      Namespaces:
+        navigation_zone_vertices: true
+        navigation_zones: true
+      Topic:
+        Depth: 1
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /nav3d/navigation_zone_markers
+      Value: true
+    - Alpha: 1
+      Axes Length: 0.55
+      Axes Radius: 0.04
+      Class: rviz_default_plugins/Pose
+      Color: 255; 255; 255
+      Enabled: true
+      Head Length: 0.3
+      Head Radius: 0.1
+      Name: Robot Current Pose
+      Queue Size: 10
+      Shaft Length: 0.5
+      Shaft Radius: 0.05
+      Shape: Axes
+      Topic:
+        Depth: 10
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /nav3d/current_pose
+      Value: true
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+      Marker Scale: 0.5
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: false
+      Tree:
+        map:
+          {}
+      Update Interval: 0
+      Value: true
+  Enabled: true
+  Global Options:
+    Background Color: 5; 7; 6
+    Fixed Frame: map
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz_default_plugins/Interact
+      Hide Inactive Objects: true
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/Measure
+    # The only point-publishing tool in this profile. It never publishes a
+    # Nav3D start/goal, so polygon editing cannot accidentally request a path.
+    - Class: rviz_default_plugins/PublishPoint
+      Single click: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /nav3d/zone_point
+  Value: true
+  Views:
+    Current:
+      Class: rviz_default_plugins/TopDownOrtho
+      Angle: 0
+      Scale: 25
+      Target Frame: <Fixed Frame>
+      X: 0
+      Y: 4
+    Saved: ~
+Window Geometry:
+  Height: 900
+  Width: 1500
+  X: 80
+  Y: 60

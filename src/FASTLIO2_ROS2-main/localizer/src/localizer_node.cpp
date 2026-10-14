@@ -20,6 +20,7 @@
 #include "localizers/icp_localizer.h"
 #include "interface/srv/relocalize.hpp"
 #include "interface/srv/is_valid.hpp"
+#include <std_msgs/msg/bool.hpp>
 #include <yaml-cpp/yaml.h>
 
 using namespace std::chrono_literals;
@@ -125,6 +126,7 @@ public:
             }
         }
 
+        m_health_pub = create_publisher<std_msgs::msg::Bool>("/localizer/healthy", 10);
         m_timer = this->create_wall_timer(10ms, std::bind(&LocalizerNode::timerCB, this));
         m_map_timer = this->create_wall_timer(1s, [this]() {
             if (!m_map_loaded)
@@ -206,6 +208,14 @@ public:
     }
     void timerCB()
     {
+        std_msgs::msg::Bool health;
+        {
+            std::scoped_lock lock(m_state.message_mutex, m_state.service_mutex);
+            health.data = m_map_loaded && m_state.message_received && m_state.localize_success &&
+                (this->now() - m_state.last_sync_receive_time).seconds() >= 0.0 &&
+                (this->now() - m_state.last_sync_receive_time).seconds() <= 1.0;
+        }
+        m_health_pub->publish(health);
         if (!m_state.message_received || !m_map_loaded)
             return;
 
@@ -698,6 +708,7 @@ private:
     std::deque<nav_msgs::msg::Odometry::ConstSharedPtr> m_odom_cache;
     std::deque<sensor_msgs::msg::PointCloud2::ConstSharedPtr> m_cloud_cache;
     rclcpp::TimerBase::SharedPtr m_timer;
+    rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr m_health_pub;
     rclcpp::TimerBase::SharedPtr m_map_timer;
     std::shared_ptr<tf2_ros::TransformBroadcaster> m_tf_broadcaster;
     std::unique_ptr<tf2_ros::Buffer> m_tf_buffer;

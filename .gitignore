@@ -9,6 +9,11 @@
 # ROS bags and test recordings
 /rosbag2_*/
 /lite3_single_floor_test/
+/test_records/
+**/build/
+**/install/
+**/log/
+*.bak
 *.db3
 *.mcap
 *.bag

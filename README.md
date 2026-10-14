@@ -1,239 +1,375 @@
-# Lite3 + MID360：Nav3D / SCAN 导航进度与操作
+# Lite3 + MID360 导航操作手册
 
-本 README 记录截至 **2026-09-28** 的实机定位、地图和导航排查。当前目标是在新建地图上先完成稳定的单点导航，再实现带目标四元数的预置点位和多点导航。**当前 map918 在实际可通行区域含可疑的连续高处占据点，尚未验收多点实机运行；不要把 `valid=True` 当作可发目标的唯一条件。新地图尚未采集，采集完成前不覆盖旧地图。**
+当前已撤回 test1–test5 控制／规划实验，并与昨天 test1 源码差异中记录的原控制器／状态机对象核对一致；不是直接认定旧提交日期就是正常版本。没有完整实机环境快照，不保证效果已恢复。最新流程以 [当前导航基线](docs/navigation_baseline.md) 为准。贴墙和提前转向风险仍在，先验证开阔区域直线，不测墙角。
 
-## 当前运行链路
+当前使用 **map108**。板卡工作目录为 `/root/nav/livox_ws`，ROS 2 为 Humble。本手册只记录目前的使用方法、功能限制和后续优化。
 
-```text
-MID360 → FAST-LIO2 (odom → imu_link)
-                  → localizer (map → odom)
-                  → Nav3D 全局路径 → /nav3d/trajectory
-                  → nav_data_bridge → /initial_path
-                  → SCAN 局部规划/闭环控制 → /cmd_vel → Lite3 底盘桥
+## 1. 当前功能
+
+| 功能 | 状态 |
+| --- | --- |
+| FAST-LIO 里程计、PCD 地图定位 | 已接入，每次启动后需要重定位并检查对齐 |
+| Nav3D 全局地面路径规划 | 已接入 |
+| SCAN 实时局部规划与底盘控制 | 实机模式启动，需要现场验收避障和停车 |
+| 红色 keepout 禁行区 | Nav3D 规划和轨迹安全检查已接入 |
+| 蓝色 passable 可通行区 | 仅保存、预览，尚未影响规划 |
+| 黄色 preferred 优先通行区 | 仅保存、预览，尚未影响规划 |
+| SCAN 遵守人工禁行区 | 尚未接入，局部绕行可能进入红区 |
+| 预置点位、多点任务、到点固定朝向 | 待完善和验收 |
+| Web 导航控制台 | 待实现 |
+
+Nav3D 当前关闭自身速度控制器，由 SCAN 控制机器狗。`/nav3d/navigate_to_pose` 返回成功表示规划结果，不能当成机器狗已经到点。
+
+当前全局最终路径净空后校验关闭、离墙权重为 0；当前未启用新增机身转向保护。此基线存在贴墙及拐角风险。
+
+SCAN 规划最高速度恢复 0.75 m/s，实际控制仍限速 vx=0.15、vy=0.10、角速度=0.25；控制器恢复连续时间推进与 0.5 秒预瞄，末端容差恢复 0.15 m。规划／执行速度不一致仍需独立排查，不叠加新转弯算法。
+
+包装启动脚本的全局半径恢复为 0.20 m；局部双圆恢复为半径 0.25 m、前后偏移 0.18 m。全局半径不足以覆盖整机转弯范围，后续需要朝向相关的机身碰撞与路径校验，而不是直接扩大圆形半径堵住窄路。导航输入代码使用 map→base_link，雷达至机身中心静态 TF 仍需实测核验，定位代码和外参未改动。
+
+重启后先在开阔场地测试连续直线，再测左右转弯；有墙拐角暂不作为首轮测试。发生碰撞、定位跳变或地图错位立即用遥控／急停终止导航，停稳后检查并重新定位，重新下发目标，不继续旧路径。当前有位姿／速度超时保护，但不能保证识别“仍持续发布的错误定位”，没有实现撞墙检测或完整定位健康联锁。
+
+## 2. 设备分工与运行链路
+
+### 实机测试录制（板卡执行）
+
+
+
+
+无需人工解锁，原位姿超时与局部碰撞停车保留；新增健康心跳仅用于录制诊断，不再阻断控制。最新验证见 [当前导航基线](docs/navigation_baseline.md)。录制默认轻量话题，第二参数 full 才录全部。
+
+导航启动后、下发目标前，在另一个终端运行：
+
+```bash
+cd /root/nav/livox_ws
+bash scripts/record_nav_test.sh baseline_straight
 ```
 
-入口脚本：[scripts/start_nav3d_scan_tmux.sh](scripts/start_nav3d_scan_tmux.sh)。map918 当前应使用仅旋转调平且兼容 Nav3D 的 `maps/map918/map_height_leveled_rotation_only_nav.pcd`；重定位和 Nav3D 必须使用同一 PCD。不要同时运行 PGO 和 localizer 来发布 `map → odom`，也不要重复启动 FAST-LIO。脚本默认 `NAV_MOTION_ENABLED=false`，不启动 SCAN 和底盘桥；也不会自动完成重定位。
+脚本不启动导航、不发送速度。默认保存关键诊断 ROS topic 的 bag（full 模式保存全部）、节点列表、参数、Git 版本及源码差异到 `test_records/时间_corner_test_进程号/`。测试中观察剩余磁盘空间（全量点云占用较大）；先用遥控／急停停稳机器狗，再在录制终端按 Ctrl-C。Ctrl-C 只结束录制，不会停车。用 `ros2 bag info test_records/对应目录/bag` 检查录制时长与消息数量，将整个对应目录拷贝回来，并附上现场视频、目标点、撞墙／停顿发生时间。没有完整结束或磁盘耗尽可能导致录制不完整。离线分析／回放不得连接实机速度控制链路。
 
-## 2026-09-22 地图问题与是否重扫
 
-- 在用户标记的可通行位置，约 `map (1.05, 0.00)`，当前导航 PCD 的一个 0.2 m 栅格柱同时含地面点和 `z≈0.1–0.5 m` 的密集高点；其中 `z≈0.1 m` 有 39 个原始点、`z≈0.3 m` 有 107 个。这不是少数孤立点，Nav3D 会把它当作障碍。该处扩大至半径 0.3 m 后，10 帧实时 `/fastlio2/world_cloud` 只看到 `z≈-0.1 m` 的 210 个点，未重现静态地图的高点；但单一视角不能排除遮挡。因此暂称**可疑重影/高度不一致**，不能直接删点或把红格设为空地。
-- 当前 `/nav3d/occupied_grid` 把 `z=0.2–0.9 m` 内任意占据体素投影为整格障碍；橙红色 Marker 则仅表示同一 XY 柱内“比最低占据点高超过 0.3 m”，**不是机器人可通行性的结论**。绿色也不保证能走。严格地面搜索下，对目标 `(1.81, 0.06)` 返回 `no_path`；把端点吸附半径再调大只会掩盖地图问题。
-- 如从不同观察位置重复确认该通道没有对应高处实物，**建议重新扫描一张地图**，而不是在旧 PCD 上大面积强制清障。保留 map918，不覆盖、不删除，以便比较和回退。
-- Lite3 已知尺寸：机身 `0.61 × 0.37 m`，站立机身中心离地约 `0.406 m`；雷达相对中心前方 `0.22 m`，俯仰实际为 `23.13°`。当前 TF 角度与 FAST-LIO 雷达–IMU 外参一致。`base_link` 物理原点高度尚未实测确认，**不要为了修地图直接改外参**；若以后确实改外参，需重新评估已经用旧外参建立的地图。
+板卡运行 ROS 节点、地图处理和区域采集；可视化电脑运行 RViz 与 PCD Viewer。电脑与板卡需网络互通、ROS_DOMAIN_ID 一致。板卡无需图形界面。
 
-### 重扫前先核对 PGO
+```text
+MID360 → FAST-LIO → Localizer → map坐标位姿
+PCD地图 → Nav3D全局路径 → nav_data_bridge → SCAN → /cmd_vel → Lite3底盘
+实时雷达点云 ────────────────────────────↑
+```
 
-当前 PGO 配置在 `src/FASTLIO2_ROS2-main/pgo/config/pgo.yaml`：关键帧平移阈值 `0.5 m`、转角阈值 `10°`、回环搜索半径 `1.0 m`、最小时间间隔 `60 s`、ICP 分数阈值 `0.15`。实现使用 `ExactTime` 配对 `/fastlio2/body_cloud` 与 `/fastlio2/lio_odom`；导出地图只包含已接收且被选作关键帧的数据。回环实现从半径内挑第一个符合时间条件的候选，ICP 最大对应距离为 `10 m`，目前缺少独立的回环位姿跳变/几何一致性门槛。**这些是代码风险，不等于已经证实某个回环导致 map918 错误。**
+板卡手动执行 ROS 命令时先加载环境：
 
-**已确认并修复的 PGO 输入问题**：FAST-LIO 当前以 `SensorDataQoS`（`BEST_EFFORT`）发布 `/fastlio2/body_cloud`，旧 PGO 对点云请求 `RELIABLE`，二者不兼容，PGO 的 `ExactTime` 同步可能始终收不到云。2026-09-22 已把 PGO 的点云订阅改为 `SensorDataQoS`、保留里程计的可靠订阅，并通过 `colcon build --packages-select pgo --symlink-install` 编译。修改前备份：`src/FASTLIO2_ROS2-main/pgo/src/pgo_node.cpp.20260922_before_cloud_sensor_qos.bak`。**尚未实机重扫验证**，启动新 PGO 后必须确认关键帧数量随移动增长；仅看到服务存在或 `/pgo/loop_markers` 无数据不能算通过。
+```bash
+cd /root/nav/livox_ws
+source scripts/ros_env.bash
+```
 
-重新扫描时先用 `ros2 topic hz` 短时确认 `/livox/lidar`、`/fastlio2/body_cloud`、`/fastlio2/lio_odom` 持续约 10 Hz；用 `ros2 topic info /fastlio2/body_cloud -v` 确认 PGO 订阅端与发布端 QoS 匹配，并观察 PGO 关键帧随移动增长。`ros2 topic hz` 用完正常 `Ctrl-C` 退出，不要长时间叠加点云订阅。若 PGO 报输入队列满、时间乱序、回环后地图墙体突然重影/跳变，先停止该次建图并保留日志，不应靠放宽 ICP 阈值继续。采集路线要覆盖通道两侧和明显特征，低速、平稳、多角度回看，避免只在重复结构附近做快速回环。PGO 的 `map→odom` 与导航 localizer 不能同时发布，且不能同时运行两个 FAST-LIO。
+启动脚本自动加载环境。导航时不要同时运行 PGO 和 Localizer，两者都会发布 map→odom；不要重复启动 FAST-LIO。
 
-### 新地图从采集到导航的处理顺序
+## 3. 建图和导出
 
-1. **独立建图会话**：先停止 `lite3_nav3d` 导航会话，确认无旧 `/fastlio2/lio_node`、`/localizer_node`、`/pgo/pgo_node`。然后启动 `ros2 launch pgo pgo_launch.py use_rviz:=false`（此 launch 自带 FAST-LIO 和 Lite3 静态 TF，不要另外再启动一次）。若要复盘 PGO，应同时记录点云、里程计、TF 和 PGO 日志；保存原始记录便于离线重建。
-2. **导出到全新目录**：先建立唯一的新目录，例如 `mkdir -m 700 /root/nav/livox_ws/maps/map_new_20260922_run01`，再调用：
+停止导航：
 
-   ```bash
-   source /root/nav/livox_ws/scripts/ros_env.bash
-   ros2 service call /pgo/save_maps interface/srv/SaveMaps \
-     "{file_path: '/root/nav/livox_ws/maps/map_new_20260922_run01', save_patches: true}"
-   ```
+```bash
+cd /root/nav/livox_ws
+./scripts/start_map1022_nav.sh stop
+source scripts/ros_env.bash
+```
 
-   服务只接受**已存在目录**，会写入 `map.pcd`、`poses.txt` 和 `patches/`。同一目录再次 `save_patches: true` 会删除并重建旧 `patches/`，也会覆盖地图，因此每次导出必须使用新目录，不要指向 map918 或已有成果目录。检查返回 `success: true`、文件大小、PCD `POINTS` 数及关键帧数量，保留原始导出文件不覆盖。
-3. **先验收 PGO 原图**：在 RViz 用俯视和侧视查看墙面重影、地面双层、悬空点、通道被高点堵塞；特别复查 map918 的 `(1.05,0.00)` 类似位置。检查闭环前后地图有没有跳变，墙角/门洞是否对齐。若原图已扭曲，后续裁剪、调平或放宽规划参数都不能替代重新检查 PGO/FAST-LIO；不要立即生成导航图。
-4. **再制作导航候选图**：从原始 `map.pcd` 复制生成新文件；需要裁剪高度时可参考 `src/pcd_height/filter_pcd_height.py`，但该脚本用全局最低 5% 点估计地面，斜坡/多层地面可能误判，必须人工检查结果。只在测得整体倾斜时拟合地面并对**完整图和高度图施加同一个刚体旋转**；不要照搬 map918 的 `2.979°` 旋转或 `+0.432958 m` Z 平移。Nav3D 当前内置 PCD 读取器要求普通 `DATA binary`，不要把 `binary_compressed` 直接交给它。导航与 localizer 必须加载同一份最终 PCD。
-5. **只读验收后再行走**：用 `NAV_MOTION_ENABLED=false` 启动导航，重新执行 `2D Pose Estimate`，检查 `valid=True`、`map→base_link` 时间前进、实时点云在至少两处特征处与地图重合；用 RViz 仅点目标检查全局路径首点、长度和可走通道。新地图的坐标原点可能变化，旧初始位姿、自动重定位锚点、多点坐标**全部作废**，必须重新采集。通过静态与短距离单点验证后，才开启 SCAN 和底盘桥做实机测试。
+两个终端分别启动雷达和 PGO：
 
-当前没有可靠证据支持一个可直接用于导航的“自动清理红格”阈值。优先完成新图质量验收，再决定是否给 Nav3D 增加基于机身高度和宽度的专用通行层，而不是修改 RViz 颜色冒充地图已修好。
+```bash
+ros2 launch livox_ros_driver2 msg_MID360_launch.py
+```
 
-### map922_02：生成导航候选 PCD（2026-09-22）
+```bash
+source /root/nav/livox_ws/scripts/ros_env.bash
+ros2 launch pgo pgo_launch.py use_rviz:=false
+```
 
-完整 PGO 原图为 `maps/map922_02/map.pcd`（163 关键帧、696438 点），原件不要修改。它的高度直方图在约 `z=-0.175 m` 有地面峰、约 `z=2.5 m` 有天花板峰。使用下面的专用脚本保守地去掉地面以下噪声及高天花板，同时**保留 0–2 m 内的障碍物**：
+PGO launch 自带 FAST-LIO 和静态 TF。慢速扫描通道、多角度回看；允许人员跟随，尽量减少长时间遮挡固定特征。
+
+每次导出使用全新目录，以下名称仅作示例：
+
+```bash
+mkdir -m 700 /root/nav/livox_ws/maps/map_new_run01
+ros2 service call /pgo/save_maps interface/srv/SaveMaps \
+  "{file_path: '/root/nav/livox_ws/maps/map_new_run01', save_patches: true}"
+```
+
+确认 success，检查 map.pcd、poses.txt、patches/。已有目录会被覆盖，patches 可能被重建。保留原图。结束建图节点后再启动导航。
+
+## 4. 地图处理：map108
+
+原图 `maps/map108/map.pcd` 有 370614 点、90 个关键帧，估计地面 z≈−0.394 m。已生成 `map_nav_candidate.pcd`。
+
+复用处理命令：
 
 ```bash
 cd /root/nav/livox_ws
 python3 scripts/prepare_pgo_map.py \
-  maps/map922_02/map.pcd \
-  maps/map922_02/map_nav_candidate.pcd \
-  --below 0.15 --above 2.0
+  maps/map108/map.pcd maps/map108/map_nav_candidate.pcd \
+  --poses maps/map108/poses.txt --xy-margin 2.5 \
+  --floor-z -0.394 --below 0.15 --above 2.0
 ```
 
-脚本只接受普通 `DATA binary` PCD，保留原始 XY/Z 坐标和 intensity；不会自动调平、平移、降采样，也**不会把红格当作空地清除**。输出另有同名 `.json` 报告，包含估计地面 Z、裁剪上下界和点数；文件已存在时拒绝覆盖。若自动地面高度明显不符合现场，可先人工测量，再使用 `--floor-z <米>` 重新生成到**另一个新文件名**，不可盲目修改阈值。该脚本尚不能处理多层地面或局部斜坡的逐格高度分类。
+保留扫描轨迹外扩 2.5 m、地面以下 0.15 m 到地面以上 2 m。保留原坐标，生成 PCD 和 JSON 报告。已有输出拒绝覆盖，重新处理应换 v2 等名称。其他地图需要重新确定地面高度。
 
-处理后先用 PCD viewer/RViz 对比原图和候选图，特别检查先前被误标红的实际可通行通道是否还有密集高点、真实障碍是否仍在，以及地面是否连续。通过视觉和规划检查后，才将候选图同时提供给 localizer 和 Nav3D；启动脚本示例：
+复制到可视化电脑查看：
 
 ```bash
-NAV_MOTION_ENABLED=false ./scripts/start_nav3d_scan_tmux.sh \
-  /root/nav/livox_ws/maps/map922_02/map_nav_candidate.pcd
+pcl_viewer /实际保存路径/map_nav_candidate.pcd
 ```
 
-这一步只读规划、不启动 SCAN/底盘。新地图坐标系不同于 map918：重新重定位并重新采集点位，不复用旧图锚点和多点坐标。
+检查墙体重影、门洞、细柱、地面连续性。整体扭曲应检查建图，不能仅靠裁剪修复。
 
-## map918 地图调平（2026-09-19）
-
-已确认白色 `/map_cloud` 本身存在约 `2.979°` 的整体倾斜，而非单纯 RViz
-观察视角问题。原始 PGO 使用完整 6DoF 位姿图，但没有重力方向、roll/pitch
-或地面高度约束，因此会保留并可能累积姿态倾斜。
-
-现已保留原图并生成：
-
-- `maps/map918/map_height_leveled_rotation_only_nav.pcd`：普通 binary 格式，仅旋转调平并保留原始 Z 高度基准，导航与定位使用；
-- `maps/map918/map_height_leveled_nav.pcd`：包含额外 Z 平移的早期实验版本，不再用于当前平面 ICP localizer；
-- `maps/map918/map_height_leveled.pcd`：binary_compressed 调平母版，Nav3D 不支持直接读取；
-- `maps/map918/map_leveled.pcd`：完整调平点云；
-- `maps/map918/*.before_leveling_20260919.bak`：原始文件备份。
-
-调平后的高度地图重新拟合得到法向量约
-`(-0.000002, -0.000001, 1.000000)`，共 271254 点。详细变换和复核记录见
-[maps/map918/LEVELING.md](maps/map918/LEVELING.md)。启动命令：
+可选动态点过滤，另生成待验收候选：
 
 ```bash
-./scripts/start_nav3d_scan_tmux.sh \
-  /root/nav/livox_ws/maps/map918/map_height_leveled_rotation_only_nav.pcd
+cd /root/nav/livox_ws
+python3 scripts/filter_dynamic_pgo_map.py \
+  maps/map108/map_nav_candidate.pcd maps/map108/map_static_candidate.pcd \
+  --poses maps/map108/poses.txt --patches maps/map108/patches \
+  --resolution 0.15 --min-frame-gap 5 --ground-band 0.15 --floor-z -0.394
 ```
 
-调平改变了 `map` 坐标系，因此旧初始位姿和旧导航点全部作废；需在新地图
-上重新重定位并重新记录多点坐标。
+过滤依据是关键帧重复观测，地面带受保护。这不是人体识别，可能残留人影或删除少量真实细障碍；先对比点云和规划效果再采用。
 
-## 已确认的定位现象
+## 5. 当前栅格参数
 
-- 2026-09-29 已复现“机器狗明显位于地图覆盖范围外，但手动 `2D Pose Estimate` 后仍返回 `valid=True`”。第一轮增加对应距离与覆盖率后，错误场景仍有约 `0.60–0.66` 覆盖率；去除水平地面后精配准错误分数升至约 `0.107–0.15`。同时确认初始一致性计数存在逻辑错误：失败帧没有清零，非连续的偶发成功会累积到 `3/3`。现已改为失败即清零，精配准阈值收紧至 `0.10`、最低覆盖率收紧至 `0.70`，并保留至少 80 个匹配点和连续运行失效撤销。地图外相同手工初值复测时，精配准分数持续高于 `0.10`、`/relocalize_check` 保持 `valid=False`，错误位置已被拒绝。`/relocalize` 的成功消息只表示请求已接收，最终状态以 `/relocalize_check` 为准。下一步仍需在地图内真实位置验证，避免阈值过严造成正确定位被拒绝。
-- 2026-09-29 使用 `maps/map831/map_indoor_clean.pcd` 在地图内真实位置复测：`/relocalize_check` 持续为 `valid=True`，粗配准分数约 `0.039–0.052`，精配准分数约 `0.029–0.038`，覆盖率约 `0.893–0.995`，均明显优于当前阈值。静止短采样中 `map → base_link` 约为 `x=1.154–1.166 m`、`y=-0.064–-0.069 m`、`yaw=-174.42°–-174.56°`，TF 时间持续前进。由此确认当前阈值在本轮测试中能区分“地图外错误初值”和“地图内正确位置”；静止定位验收通过，运动中点云重合与丢失恢复仍需单独验收。
-- 2026-09-20 冷启动验证：Nav3D 不支持 PCL 的 `binary_compressed` PCD，当时试用普通 binary 格式的 `maps/map918/map_height_leveled_nav.pcd`，Nav3D、localizer 均成功加载。**后续已改用仅旋转、不平移 Z 的 `map_height_leveled_rotation_only_nav.pcd`；旧验证不代表现用地图已通过通行验收。**
-- 2026-09-20 冷启动时，Livox 原始帧正常（每帧 20064 点），但 FAST-LIO 的独立 lidar callback group 未及时收到帧。激光订阅恢复默认 callback group，并匹配驱动使用 `Reliable + KeepLast(10)` 后，`/fastlio2/lio_odom` 实测稳定约 10 Hz，`/fastlio2/world_cloud` 持续更新。修改前备份为 `src/FASTLIO2_ROS2-main/fastlio2/src/lio_node.cpp.20260920_before_lidar_reliable.bak`。
-- 2026-09-19 已修正 FAST-LIO 点面残差姿态雅可比中将雷达外参 `t_il` 误写为世界位置 `t_wi` 的错误。IMU 初始化窗口改为400点，执行器使用6线程。清理遗留诊断订阅器后，在完整导航栈下相隔30秒的两次静止读数，平面位移约1.8毫米，IMU缓存约9至26条，没有再次发散。运动状态仍需继续验收。
-- 排查期间发现多个由 `timeout ros2 topic hz/bw` 遗留的订阅进程，其中 `/fastlio2/world_cloud` 带宽测试会迫使 LIO 持续转换和发送大点云，并显著放大回调延迟。测试结束后应 `Ctrl-C` 正常退出并用 `ps` 确认没有遗留；不要同时长期运行多个 `hz`、`bw` 或点云录制命令。
-- 新会话未重定位时 `/relocalize_check` 为 `valid=False`、没有 `map → odom`，这是预期状态。FAST-LIO 点云与里程计在同一 5 秒窗口有 **50 对完全相同的时间戳**，`odom → base_link` 在静止时持续更新。
-- 之前一个长时间运行的会话中，localizer 持续报 `No fresh synchronized LIO cloud/odometry` 并停止发布 `map → odom`，但 `/relocalize_check` 仍返回 `valid=True`。这是历史成功状态残留；那次同步中断的根因**尚未确定**，不能说已经修好。
-- 手工在 RViz 点选的 `map → base_link` 为约 `(0.086, -0.009, -0.038 rad)`；据此算出的 `map → odom` 初值约 `(0.298, 0.008, -0.040 rad)`。重定位后的 `map → base_link` 却在约 `(-0.47, 0.00, 0.14 rad)`，与点选位置相差约半米、朝向约 0.18 rad。**这说明点选或配准结果至少有一处需要核实，不应直接保存为正确出发位姿。**
-- `map918` 存在重复结构：自动点云匹配的两个不同三维候选分数约为 `0.122` 和 `0.125`。仅凭当前静止点云无法可靠区分，程序会拒绝自动执行；不能通过关闭歧义检查来“解决”。
+包装脚本名称仍为 `start_map1022_nav.sh`，传入完整 PCD 路径即可用于 map108。**不传路径会默认加载 map1022。**
 
-## 现在先做什么
+| 参数 | 当前包装脚本值 |
+| --- | --- |
+| map.resolution | 0.1 m |
+| map.min_points_per_voxel | 1 |
+| planning.ground_robot_radius | 0.20 m |
+| planning.ground_support_depth_cells | 3 |
+| map.occupancy_grid_min_z | −0.2 m |
+| map.occupancy_grid_max_z | 0.5 m |
+| NAV_MOTION_ENABLED | false |
+| NAV3D_RVIZ | false |
 
-1. 让机器狗保持静止，不发送导航目标；保留遥控器或实体急停。
-2. 在 RViz 设置 `Fixed Frame = map`，显示 `/nav3d/planning_occupied_markers`（地图）和 `/fastlio2/world_cloud`（实时点云）。确认墙角、门洞、柱子等至少两处特征重合。若明显错位，先不要学习出发位置，也不要测试多点导航。
-3. 检查定位不仅“成功”，而且**持续有效**：
+地图支撑与高度参数来自 map1022 测试，map108 需验证。当前回退半径仅用于基线对照，不保证 0.61×0.37 m 机身在拐角处无碰撞。
 
-   ```bash
-   source /root/nav/livox_ws/scripts/ros_env.bash
-   ros2 service call /relocalize_check interface/srv/IsValid "{code: 0}"
-   ros2 run tf2_ros tf2_echo map base_link
-   ros2 topic hz /LIO/odom_vehicle
-   ```
+3D 体素绿色/橙红色是高度显示，不等于通行结论。查看二维规划层时启用 `Nav3D OccupancyGrid Fallback`：黑色占据、白色自由、灰色未知。
 
-   验收：`valid=True`；`map → base_link` 的 `At time` 持续前进；静止位姿稳定；`/LIO/odom_vehicle` 持续有数据；实时点云与地图重合。若 localizer 报 `No fresh synchronized...` 或时间戳停止，取消测试，不要仅凭 `valid=True` 继续。
-4. 若 RViz 中的地图不易辨认，先确定一个有明显墙角/门洞特征的固定出发点。当前地图的重复结构决定了完全未知起点的一次静止扫描可能无法唯一定位。
+## 6. 安全模式启动 map108
 
-## 使用 RViz 设置初始位置
+```bash
+cd /root/nav/livox_ws
+./scripts/start_map1022_nav.sh stop
+NAV_MOTION_ENABLED=false NAV3D_ZONE_FILE='' \
+  ./scripts/start_map1022_nav.sh \
+  /root/nav/livox_ws/maps/map108/map_nav_candidate.pcd
+```
 
-2026-09-19 起，localizer 已直接订阅 `/initialpose`。启动脚本会把本次 Nav3D 使用的同一 PCD 路径通过 `map_path` 参数传给 localizer。在 RViz 中将 `Fixed Frame` 设为 `map`，点击 `2D Pose Estimate`，在地图上按住并拖出机器狗真实朝向。localizer 会使用实时 `odom → base_link`，将 RViz 给出的 `map → base_link` 换算成 `map → odom` 初值，然后执行现有 ICP 重定位。
+进入九宫格，各节点按顺序启动，Localizer 约 36 秒后启动。此模式只做定位和全局规划，不启动 SCAN 和底盘。空区域变量明确禁用区域。不指定 `NAV3D_ZONE_FILE` 时，仅自动加载所选 PCD 同目录下已存在的 `navigation_zones.yaml`；不存在则不加载，绝不套用其他地图的区域。
 
-点击后在第 9 个 tmux 窗格应看到 `Accepted RViz initial pose`。随后仍须按上一节检查 `valid=True`、TF 时间持续更新和地图点云真实重合。若日志提示没有新鲜 LIO、TF 不存在、地图路径为空或配准失败，不要发送导航目标。
+若看到 `bad file: .../map108/navigation_zones.yaml`，是区域文件尚未保存却使用了加载区域的命令，不是 PCD 缺失。使用本节的无区域命令重启即可；新脚本会在启动节点前检查显式指定的区域文件，缺失时直接报错，不会悄悄忽略禁行区。无需重新编译脚本修改。
 
-修改前备份为：
+F12 退出九宫格并保留运行。会话管理：
 
-- `src/FASTLIO2_ROS2-main/localizer/src/localizer_node.cpp.20260919_before_initialpose.bak`
-- `scripts/start_nav3d_scan_tmux.sh.20260919_before_initialpose.bak`
+```bash
+./scripts/start_map1022_nav.sh status
+./scripts/start_map1022_nav.sh attach
+./scripts/start_map1022_nav.sh stop
+```
 
-## 自动重定位程序
+独立 tmux socket 为 /tmp/lite3_tmux_nav。RUNNING 只代表会话存在，需要 attach 查看节点报错。旧会话存在时不会自动重新加载参数；换图或改参数先 stop。
 
-[scripts/auto_relocalize.py](scripts/auto_relocalize.py) 从 `/fastlio2/world_cloud` 采集实时点云，与 PCD 做多候选全局匹配和三维复核。它只估计平面 `map → odom` 的 `x/y/yaw`，与当前 localizer 的约束一致。匹配弱、位置含糊、传感器缺失、服务失败或没有新鲜 TF 时会报错退出。程序本身不发送运动指令。
+## 7. 电脑端 RViz
 
-先只读试算：
+复制配置文件：
+
+```text
+src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge/rviz/nav3d.rviz
+```
+
+电脑执行：
+
+```bash
+rviz2 -d /实际配置路径/nav3d.rviz
+```
+
+Fixed Frame 设置 map。显示二维栅格、全局路径、当前位姿和实时点云。实时点云使用 /fastlio2/world_cloud 或抽样主题 /fastlio2/world_cloud_viz，QoS 使用 Best Effort、Volatile。抽样显示不等于全部定位输入。
+
+## 8. 重定位
+
+1. 等节点启动完成，保持机器狗静止。
+2. 用 2D Pose Estimate 在真实位置按下、拖出狗头方向，Topic 必须为 /initialpose。
+3. 检查定位状态和 TF。
+4. 核对实时墙角、门洞等至少两处特征与地图重合。
 
 ```bash
 source /root/nav/livox_ws/scripts/ros_env.bash
-python3 /root/nav/livox_ws/scripts/auto_relocalize.py \
-  /root/nav/livox_ws/maps/map918/map_height_leveled_rotation_only_nav.pcd
+ros2 service call /relocalize_check interface/srv/IsValid "{code: 0}"
+ros2 run tf2_ros tf2_echo map base_link
 ```
 
-**首次只在确认当前定位与地图真实重合后**，将狗停在以后固定使用的出发区，保存一次出发位姿：
+valid=true 还需结合真实对齐和 TF 持续更新。每次重启、换图重新定位；旧图点位、区域、初值和锚点不能直接沿用。
+
+固定出发区可选自动定位。确认对齐后学习锚点：
 
 ```bash
-python3 /root/nav/livox_ws/scripts/auto_relocalize.py \
-  /root/nav/livox_ws/maps/map918/map_height_leveled_rotation_only_nav.pcd --learn-start
+python3 scripts/auto_relocalize.py maps/map108/map_nav_candidate.pcd --learn-start
 ```
 
-此命令会在所用 PCD 旁生成同名 `.start_pose.json`。它只是记录当前 `map → base_link`，**不会替你判断这个 TF 是否物理正确**。如果地图和实时点云尚未重合，不要执行 `--learn-start`；新地图不能沿用旧地图的锚点文件。
-
-之后每次在同一出发区启动，可让程序重新计算并调用 `/relocalize`：
+同一出发区先试算再执行：
 
 ```bash
-python3 /root/nav/livox_ws/scripts/auto_relocalize.py \
-  /root/nav/livox_ws/maps/map918/map_height_leveled_rotation_only_nav.pcd --execute
+python3 scripts/auto_relocalize.py maps/map108/map_nav_candidate.pcd
+python3 scripts/auto_relocalize.py maps/map108/map_nav_candidate.pcd --execute
 ```
 
-`--execute` 会要求候选位于已学习出发区附近，并等待 localizer 返回成功和新鲜 `map → odom` TF。若狗被搬到其他位置，可能拒绝执行；这时需要重新确认真实位置，而不是扩大 `--anchor-radius` 强行通过。当前已做语法检查、已知位姿的离线点云回归测试和实机**只读试算**；尚未在真机上测试 `--execute` 服务调用。
+搬到别处时用手动定位。地图与锚点必须一致。
 
-## 启动与 tmux
+## 9. 全局路径验证
 
-默认 tmux socket 曾报 `server exited unexpectedly`，独立 socket 可正常使用。在一个终端中：
+安全模式完成定位后，使用 Topic 为 **/nav3d/goal** 的 2D Goal Pose 点击目标并拖出方向。配置里另有发送到 /nav3d/start 的工具，不要误用。普通 Publish Point /clicked_point 有起终点状态逻辑，日常优先使用 /nav3d/goal。
 
 ```bash
-export TMUX_TMPDIR=/tmp/lite3_tmux_nav
-mkdir -p "$TMUX_TMPDIR"
-chmod 700 "$TMUX_TMPDIR"
-./scripts/start_nav3d_scan_tmux.sh \
-  /root/nav/livox_ws/maps/map918/map_height_leveled_rotation_only_nav.pcd
+source /root/nav/livox_ws/scripts/ros_env.bash
+ros2 topic echo /nav3d/status
 ```
 
-另一个终端连接时同样先设置 `TMUX_TMPDIR=/tmp/lite3_tmux_nav`，再运行 `tmux attach -t lite3_nav3d`。若会话已存在，脚本会连接旧会话，**不会按新地图重新启动**。不要直接删除仍有进程监听的默认 tmux socket。
+先测近距离直线、再测转弯和绕行。路径首点应靠近当前位置，不穿墙，目标有足够空间。终点四元数输入不代表当前链路已保证固定朝向到点。
 
-## 多点导航的下一步
+## 10. 实机导航和局部避障
 
-1. **先过定位验收**：墙体重合、TF 持续更新，固定出发区自动重定位能重复成功。
-2. **再过单点验收**：近距离空旷目标，检查 Nav3D 路径高度、SCAN 跟踪、底盘方向和真实到点误差。
-3. **最后做多点任务层**：按序发送 A→B→C。当前 Nav3D 关闭自身控制器，因此其 `NavigateToPose` action 在**规划并发布路径后**即可返回成功，不能用这个结果判断狗已到点；应以实时 `map → base_link` 到点距离、停稳状态及超时判定后再发下一点。
-
-预置点位将按地图分别保存完整位姿 `x/y/z + qx/qy/qz/qw`。到达目标位置后，局部控制器还要根据四元数对应的 yaw 完成终点转向，位置误差和朝向误差都满足阈值后才算到点。后续 Web 控制台将提供点位保存、单点导航、多点排序、任务取消、紧急停车和定位/规划状态显示；Web 层调用统一的 ROS 2 点位任务节点，不直接生成底盘速度。
-
-## 2026-09-28 全局与局部规划状态
-
-- Nav3D 当前临时使用便于实机排查的回退配置：`planning.published_path_clearance_enabled: false`，并将 `planning.ground_wall_avoidance_weight` 设为 `0.0`。这会恢复净空后校验加入前的路径发布行为，目的是先确认全局路径和 SCAN 的基本链路；新地图完成后必须重新检查真实机身净空。
-- SCAN 的 `fsm.max_replan_fail_count` 已从 `1000` 调整为 `5`。局部 A* 连续失败时会更快进入停车流程，避免长时间刷错和重复尝试。
-- SCAN 的 A* 错误日志已增加返回码、碰撞段起终点、两端占用状态和估计 yaw。下一次出现 `A-star error` 时，应保留整行日志，用它区分端点落在膨胀障碍、局部地图越界和搜索空间不连通。
-- `bspline_opt` 与 `scan_planner` 已重新编译，安装配置中已核实 `max_replan_fail_count: 5`。这些修改尚未在新地图上完成实机闭环验收。
-
-## GitHub 代码保存与上传
-
-GitHub 仓库为 `yege20010502-prog/livox_ws`，当前分支为 `main`。板卡使用已有 SSH 密钥，通过电脑代理的 GitHub SSH 443 端口推送；当前仓库已经保存对应配置，正常情况下不需要用户名、密码或 Token。
-
-查看修改并选择文件：
+只读验证通过后，现场准备好遥控器停车方式，执行：
 
 ```bash
 cd /root/nav/livox_ws
-git status
-git diff
-git add README.md scripts src
-git diff --cached
+./scripts/start_map1022_nav.sh stop
+NAV_MOTION_ENABLED=true NAV3D_ZONE_FILE='' \
+  ./scripts/start_map1022_nav.sh \
+  /root/nav/livox_ws/maps/map108/map_nav_candidate.pcd
 ```
 
-确认暂存内容后提交并上传：
+重新定位后发送近距离空旷目标。SCAN 接收实时点云、位姿和 /initial_path，输出 /cmd_vel。局部连续重规划失败上限配置为 5；绕行与停车仍需实机验收。
+
+检查链路：
 
 ```bash
-git commit -m "说明本次修改内容"
-git push
+source /root/nav/livox_ws/scripts/ros_env.bash
+ros2 topic hz /LIO/clouds_lidar
+ros2 topic hz /LIO/odom_vehicle
+ros2 topic echo /initial_path --once
+ros2 topic info /cmd_vel -v
 ```
 
-不要直接执行 `git add .`。工作空间中保留了地图、备份、日志及部分嵌套编译产物，直接全量暂存容易上传大文件或无关文件。地图 PCD 已由根目录 `.gitignore` 排除；提交前仍应检查 `git status` 和 `git diff --cached`。
+频率命令短时观察后 Ctrl-C 退出。低速、空旷场地提前摆放明显障碍，检查局部轨迹改变以及绕不开时停车。节点启动不代表避障已经验证。
 
-当前 SSH 代理地址为 `192.168.1.179:10090`。运行代理的电脑 IP 改变后，在板卡执行：
+异常运动优先使用真实遥控器/急停，停稳后执行包装脚本 stop。结束 tmux 不等于已验证底盘急停，单次发布零速度也不能作为唯一停止保障。
+
+## 11. 人工区域配置
+
+map108 使用独立文件 `maps/map108/navigation_zones.yaml`。电脑加载：
+
+```text
+src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge/rviz/nav_zone_editor.rviz
+```
+
+```bash
+rviz2 -d /实际配置路径/nav_zone_editor.rviz
+```
+
+板卡采集红色禁行区，例如 6 个顶点：
 
 ```bash
 cd /root/nav/livox_ws
-git config core.sshCommand \
-  "ssh -o HostKeyAlias=github.com -o 'ProxyCommand=nc -X connect -x 新IP:10090 %h %p' -p 443"
-git push
+source scripts/ros_env.bash
+python3 scripts/nav_zone_editor.py maps/map108/navigation_zones.yaml add \
+  --type keepout --name forbidden_01 --vertices 6
 ```
 
-若代理端口也改变，同时替换 `10090`。电脑代理软件必须允许局域网连接。可用下面命令查看最近提交和远端地址：
+看到 Waiting 后，专用 RViz Publish Point 顺着边界点击；Topic 为 /nav3d/zone_point。至少 3 点，可超过 4 点，最后一点自动闭合；不要自交。内部和边界都禁行，避免覆盖希望可走的走廊。
 
 ```bash
-git log --oneline -5
-git remote -v
+python3 scripts/nav_zone_editor.py maps/map108/navigation_zones.yaml list
+python3 scripts/nav_zone_editor.py maps/map108/navigation_zones.yaml preview
+python3 scripts/nav_zone_editor.py maps/map108/navigation_zones.yaml delete --name forbidden_01
 ```
 
-现有详细启动说明见 [docs/NAV3D_SCAN_STARTUP_GUIDE.md](docs/NAV3D_SCAN_STARTUP_GUIDE.md)。该旧说明以 `map9802` 为示例，实际使用 `map918` 时不要照抄其中的地图路径或 `0,0,0` 初值。
+preview 在板卡发布，电脑 MarkerArray 订阅 /nav3d/navigation_zone_markers。Ctrl-C 保留文件。
 
-历史参考：[旧版 Nav2 操作手册](docs/legacy_nav2_guide.md)（旧链路记录，当前操作以本页为准）。
+只有先保存区域文件后，才使用下面的命令加载区域做安全规划（未画区域请使用第 6 节）：
+
+```bash
+cd /root/nav/livox_ws
+./scripts/start_map1022_nav.sh stop
+NAV_MOTION_ENABLED=false \
+NAV3D_ZONE_FILE=/root/nav/livox_ws/maps/map108/navigation_zones.yaml \
+  ./scripts/start_map1022_nav.sh \
+  /root/nav/livox_ws/maps/map108/map_nav_candidate.pcd
+```
+
+启动日志应包含 Loaded ... keepout navigation zone(s)。修改区域需重启。红框可见只证明预览成功；还需确认规划器加载并测试绕行。
+
+蓝/黄区域可用 --type passable / preferred 保存，但目前不影响路线。SCAN 尚未读取区域，局部绕行可能进入红框。
+
+## 12. 排错与参数核对
+
+| 问题 | 处理 |
+| --- | --- |
+| navigation_zone_file:= malformed | 更新启动脚本，空变量应省略该 launch 参数 |
+| bad file: .../navigation_zones.yaml | 区域文件不存在或不可读；保存文件后加载，或用第 6 节 NAV3D_ZONE_FILE='' 明确禁用区域 |
+| Missing PCD map | 检查完整路径、候选文件是否生成 |
+| 旧 FAST-LIO / PGO 已运行 | 停止旧来源，避免重复节点与 TF 冲突 |
+| map frame does not exist | 等启动完成并重定位，检查定位和 TF |
+| lidar_buffer=0 但点云正常 | 瞬间队列为空不等于断流，结合实际更新判断 |
+| 点云无显示 | 检查 Topic、QoS、时间戳、TF 和频率 |
+| 加区域后 no_path | 禁用区域对照，检查是否封住端点或唯一通道 |
+| 普通空地 no_path | 检查地面支撑、高度基准、静态误障碍、真实连通性 |
+| 有路径不走 | 检查安全模式开关、SCAN/底盘、路径和速度输入 |
+| SCAN 连续失败 | 先停稳，检查局部地图、位姿、路径入口和障碍 |
+| GLSL sampler 报错但显示正常 | 可继续显示；实际无法显示时排查图形驱动 |
+
+```bash
+source /root/nav/livox_ws/scripts/ros_env.bash
+ros2 param get /nav3d_bridge_node map.pcd_path
+ros2 param get /nav3d_bridge_node map.resolution
+ros2 param get /nav3d_bridge_node map.min_points_per_voxel
+ros2 param get /nav3d_bridge_node planning.ground_robot_radius
+ros2 param get /nav3d_bridge_node planning.ground_support_depth_cells
+ros2 param get /nav3d_bridge_node map.occupancy_grid_min_z
+ros2 param get /nav3d_bridge_node map.occupancy_grid_max_z
+ros2 param get /nav3d_bridge_node planning.navigation_zone_file
+ros2 param get /localizer_node map_path
+```
+
+## 13. 构建与文件位置
+
+已有编译结果时启动不需重新构建。改脚本无需编译，改 C++ 节点需构建对应包并重启：
+
+```bash
+cd /root/nav/livox_ws
+source scripts/ros_env.bash
+colcon build --packages-select scan_planner --symlink-install
+colcon build --base-paths src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge --packages-select nav3d_ros2_bridge --symlink-install
+```
+
+| 文件 | 用途 |
+| --- | --- |
+| scripts/start_map1022_nav.sh | 地图路径、固定参数与会话管理 |
+| scripts/start_nav3d_scan_tmux.sh | 节点启动与实机开关 |
+| scripts/prepare_pgo_map.py | 地图裁剪 |
+| scripts/filter_dynamic_pgo_map.py | 动态点过滤候选 |
+| scripts/nav_zone_editor.py | 区域记录和预览 |
+| scripts/auto_relocalize.py | 自动定位 |
+| src/3D-Nav-Dynamic-EGO/ros2_bridge/nav3d_ros2_bridge/config/nav3d_bridge.yaml | 全局规划和安全配置 |
+| src/SCAN-Planner-Ros2/src/planner/plan_manage/config/planner.yaml | 局部规划配置 |
+| src/FASTLIO2_ROS2-main/localizer/config/localizer.yaml | 定位配置 |
+| maps/map108/ | 当前地图和关键帧 |
+
+## 14. 后续优化
+
+按以下顺序实施、验收：
+
+1. map108 定位对齐、运动定位稳定、普通及窄通道规划；对比过滤前后地图。
+2. SCAN 绕障、无路停车、输入断流停车、遥控器接管、速度超时停止。
+3. 将 keepout 接入 SCAN；实现 passable 静态误障碍修补、preferred 软代价。实时障碍和禁行区始终优先。
+4. 用整机长宽与转弯范围完善净空检查，在保留窄路的同时减少贴墙。
+5. 改善动态点过滤，保护地面与真实细小障碍，提供处理前后差异报告。
+6. 按地图绑定参数、区域、锚点和点位，提供名称清楚的通用启动入口。
+7. 实现点位存取、多点任务、真实到点判断、四元数朝向调整、超时与任务取消。
+8. 提供 Web 控制台：地图选择、点位管理、任务执行、状态、取消和停车。

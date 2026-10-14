@@ -20,8 +20,12 @@ def generate_launch_description():
     planning_use_octomap_map = LaunchConfiguration("planning_use_octomap_map")
     pcd_loader = LaunchConfiguration("pcd_loader")
     resolution = LaunchConfiguration("resolution")
+    min_points_per_voxel = LaunchConfiguration("min_points_per_voxel")
+    ground_robot_radius = LaunchConfiguration("ground_robot_radius")
+    ground_support_depth_cells = LaunchConfiguration("ground_support_depth_cells")
     occupancy_grid_min_z = LaunchConfiguration("occupancy_grid_min_z")
     occupancy_grid_max_z = LaunchConfiguration("occupancy_grid_max_z")
+    navigation_zone_file = LaunchConfiguration("navigation_zone_file")
     rosbridge_port = LaunchConfiguration("rosbridge_port")
     config_path = LaunchConfiguration("config_path")
     rviz_config = LaunchConfiguration("rviz_config")
@@ -38,6 +42,18 @@ def generate_launch_description():
         ),
         "map.pcd_loader": pcd_loader,
         "map.resolution": ParameterValue(resolution, value_type=float),
+        "map.min_points_per_voxel": ParameterValue(
+            min_points_per_voxel,
+            value_type=int,
+        ),
+        "planning.ground_robot_radius": ParameterValue(
+            ground_robot_radius,
+            value_type=float,
+        ),
+        "planning.ground_support_depth_cells": ParameterValue(
+            ground_support_depth_cells,
+            value_type=int,
+        ),
         "map.occupancy_grid_min_z": ParameterValue(
             occupancy_grid_min_z,
             value_type=float,
@@ -46,6 +62,7 @@ def generate_launch_description():
             occupancy_grid_max_z,
             value_type=float,
         ),
+        "planning.navigation_zone_file": ParameterValue(navigation_zone_file, value_type=str),
     }
 
     return LaunchDescription(
@@ -71,8 +88,28 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument("pcd_loader", default_value="builtin"),
             DeclareLaunchArgument("resolution", default_value="0.2"),
+            DeclareLaunchArgument(
+                "min_points_per_voxel",
+                default_value="1",
+                description="Minimum PCD points required to retain a planning voxel.",
+            ),
+            DeclareLaunchArgument(
+                "ground_robot_radius",
+                default_value="0.25",
+                description="Ground planner horizontal robot radius in metres.",
+            ),
+            DeclareLaunchArgument(
+                "ground_support_depth_cells",
+                default_value="1",
+                description="How many voxels below a ground state may provide support.",
+            ),
             DeclareLaunchArgument("occupancy_grid_min_z", default_value="0.2"),
             DeclareLaunchArgument("occupancy_grid_max_z", default_value="0.9"),
+            DeclareLaunchArgument(
+                "navigation_zone_file",
+                default_value="",
+                description="navigation_zones.yaml; keepout polygons are enforced by planning and safety.",
+            ),
             DeclareLaunchArgument("rosbridge", default_value="true"),
             DeclareLaunchArgument("rosbridge_port", default_value="9090"),
             DeclareLaunchArgument("rviz", default_value="true"),

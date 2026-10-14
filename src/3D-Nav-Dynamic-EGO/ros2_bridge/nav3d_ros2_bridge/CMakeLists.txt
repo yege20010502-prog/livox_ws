@@ -17,6 +17,7 @@ find_package(tf2 REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(visualization_msgs REQUIRED)
+find_package(yaml-cpp REQUIRED)
 find_package(octomap_msgs QUIET)
 
 set(NAV3D_REPO_ROOT
@@ -38,7 +39,7 @@ if(PCL_FOUND AND NOT TARGET nav3d_pcl_tools)
 endif()
 
 add_executable(nav3d_bridge_node src/nav3d_bridge_node.cpp)
-target_link_libraries(nav3d_bridge_node nav3d_core)
+target_link_libraries(nav3d_bridge_node nav3d_core yaml-cpp)
 if(PCL_FOUND)
   target_link_libraries(nav3d_bridge_node nav3d_pcl_tools)
   target_compile_definitions(nav3d_bridge_node PRIVATE NAV3D_HAS_PCL=1)

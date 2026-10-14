@@ -42,6 +42,7 @@
 #include <tf2/utils.h>
 #include <visualization_msgs/msg/marker.hpp>
 #include <visualization_msgs/msg/marker_array.hpp>
+#include <yaml-cpp/yaml.h>
 
 #ifdef NAV3D_HAS_OCTOMAP_MSGS
 #include <octomap_msgs/conversions.h>
@@ -78,6 +79,139 @@ enum class PlanningTraversabilityMode {
   Uav,
   Ground,
 };
+
+struct KeepoutPolygon {
+  std::string name;
+  std::vector<std::pair<double, double>> vertices;
+};
+
+bool pointOnSegment(
+  double x, double y, double ax, double ay, double bx, double by)
+{
+  const double cross = (x - ax) * (by - ay) - (y - ay) * (bx - ax);
+  if (std::abs(cross) > 1e-8) {
+    return false;
+  }
+  return x >= std::min(ax, bx) - 1e-8 && x <= std::max(ax, bx) + 1e-8 &&
+         y >= std::min(ay, by) - 1e-8 && y <= std::max(ay, by) + 1e-8;
+}
+
+bool pointInPolygon(double x, double y, const KeepoutPolygon& polygon)
+{
+  bool inside = false;
+  const auto& vertices = polygon.vertices;
+  for (std::size_t i = 0, j = vertices.size() - 1; i < vertices.size(); j = i++) {
+    const auto [xi, yi] = vertices[i];
+    const auto [xj, yj] = vertices[j];
+    if (pointOnSegment(x, y, xi, yi, xj, yj)) {
+      return true;
+    }
+    const bool crosses = ((yi > y) != (yj > y)) &&
+      (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+    if (crosses) {
+      inside = !inside;
+    }
+  }
+  return inside;
+}
+
+double distanceToSegment(
+  double x, double y, double ax, double ay, double bx, double by)
+{
+  const double dx = bx - ax;
+  const double dy = by - ay;
+  const double length_squared = dx * dx + dy * dy;
+  if (length_squared <= 1e-12) {
+    return std::hypot(x - ax, y - ay);
+  }
+  const double t = std::clamp(((x - ax) * dx + (y - ay) * dy) / length_squared, 0.0, 1.0);
+  return std::hypot(x - (ax + t * dx), y - (ay + t * dy));
+}
+
+class KeepoutMap final : public nav3d::map::IMap {
+public:
+  KeepoutMap(const nav3d::map::IMap& map, const std::vector<KeepoutPolygon>& polygons)
+    : map_(map), polygons_(polygons) {}
+
+  bool isOccupied(const nav3d::common::Point3D& p) const override
+  {
+    return inKeepout(p) || map_.isOccupied(p);
+  }
+
+  bool isFree(const nav3d::common::Point3D& p) const override
+  {
+    return map_.isInBounds(p) && !isOccupied(p);
+  }
+
+  double getDistance(const nav3d::common::Point3D& p) const override
+  {
+    if (inKeepout(p)) {
+      return 0.0;
+    }
+    double distance = map_.getDistance(p);
+    for (const auto& polygon : polygons_) {
+      for (std::size_t i = 0; i < polygon.vertices.size(); ++i) {
+        const auto [ax, ay] = polygon.vertices[i];
+        const auto [bx, by] = polygon.vertices[(i + 1) % polygon.vertices.size()];
+        distance = std::min(distance, distanceToSegment(p.x, p.y, ax, ay, bx, by));
+      }
+    }
+    return distance;
+  }
+
+  bool isInBounds(const nav3d::common::Point3D& p) const override { return map_.isInBounds(p); }
+  double getResolution() const override { return map_.getResolution(); }
+  nav3d::common::BoundingBox getBounds() const override { return map_.getBounds(); }
+
+private:
+  bool inKeepout(const nav3d::common::Point3D& p) const
+  {
+    return std::any_of(polygons_.begin(), polygons_.end(), [&](const auto& polygon) {
+      return pointInPolygon(p.x, p.y, polygon);
+    });
+  }
+
+  const nav3d::map::IMap& map_;
+  const std::vector<KeepoutPolygon>& polygons_;
+};
+
+std::vector<KeepoutPolygon> loadKeepoutPolygons(const std::string& path)
+{
+  std::vector<KeepoutPolygon> polygons;
+  if (path.empty()) {
+    return polygons;
+  }
+  const YAML::Node document = YAML::LoadFile(path);
+  if (document["frame_id"] && document["frame_id"].as<std::string>() != "map") {
+    throw std::invalid_argument("navigation zone frame_id must be map");
+  }
+  const YAML::Node zones = document["zones"];
+  if (!zones || !zones.IsSequence()) {
+    return polygons;
+  }
+  for (const auto& zone : zones) {
+    if (!zone["type"] || zone["type"].as<std::string>() != "keepout") {
+      continue;
+    }
+    KeepoutPolygon polygon;
+    polygon.name = zone["name"] ? zone["name"].as<std::string>() : "unnamed";
+    const YAML::Node points = zone["points"];
+    if (!points || !points.IsSequence()) {
+      throw std::invalid_argument("keepout zone '" + polygon.name + "' has no points");
+    }
+    for (const auto& point : points) {
+      if (!point.IsSequence() || point.size() < 2) {
+        throw std::invalid_argument("invalid point in keepout zone '" + polygon.name + "'");
+      }
+      polygon.vertices.emplace_back(point[0].as<double>(), point[1].as<double>());
+    }
+    if (polygon.vertices.size() < 3) {
+      throw std::invalid_argument("keepout zone '" + polygon.name + "' needs at least 3 points");
+    }
+    polygons.push_back(std::move(polygon));
+  }
+  return polygons;
+}
 
 struct GroundIndex {
   int x = 0;
@@ -990,6 +1124,13 @@ public:
     map_build_config_ = readMapBuildConfig();
     map_ = std::make_unique<nav3d::map::VoxelGridMap>(buildMap(map_build_config_));
     octomap_ = std::make_unique<nav3d::map::OctomapManager>(buildOctomap(map_build_config_));
+    navigation_zone_file_ = declare_parameter<std::string>("planning.navigation_zone_file", "");
+    keepout_polygons_ = loadKeepoutPolygons(navigation_zone_file_);
+    if (!keepout_polygons_.empty()) {
+      RCLCPP_INFO(
+        get_logger(), "Loaded %zu keepout navigation zone(s) from %s",
+        keepout_polygons_.size(), navigation_zone_file_.c_str());
+    }
     local_grid_ray_clearing_enabled_ =
       declare_parameter<bool>("local_grid.ray_clearing.enabled", true);
     local_grid_enabled_ = declare_parameter<bool>("local_grid.enabled", true);
@@ -1543,6 +1684,20 @@ private:
     grid.info.origin.position.z = projected->origin.z;
     grid.info.origin.orientation.w = 1.0;
     grid.data = projected->data;
+    if (!keepout_polygons_.empty()) {
+      for (std::uint32_t y = 0; y < grid.info.height; ++y) {
+        for (std::uint32_t x = 0; x < grid.info.width; ++x) {
+          const double world_x = grid.info.origin.position.x + (x + 0.5) * grid.info.resolution;
+          const double world_y = grid.info.origin.position.y + (y + 0.5) * grid.info.resolution;
+          const bool keepout = std::any_of(
+            keepout_polygons_.begin(), keepout_polygons_.end(),
+            [&](const auto& polygon) { return pointInPolygon(world_x, world_y, polygon); });
+          if (keepout) {
+            grid.data[static_cast<std::size_t>(y) * grid.info.width + x] = 100;
+          }
+        }
+      }
+    }
     return grid;
   }
 
@@ -2469,8 +2624,11 @@ private:
   decltype(auto) makeCollisionPlanningMap(Callback&& callback) const
   {
     const nav3d::map::IMap& global_map = activeGlobalPlanningMap();
+    KeepoutMap keepout_map(global_map, keepout_polygons_);
+    const nav3d::map::IMap& zoned_global_map =
+      keepout_polygons_.empty() ? global_map : static_cast<const nav3d::map::IMap&>(keepout_map);
     if (hasLocalObservations()) {
-      nav3d::map::MapComposite composite(global_map, *local_grid_);
+      nav3d::map::MapComposite composite(zoned_global_map, *local_grid_);
       if (planning_inflation_radius_ > 0.0) {
         nav3d::collision::InflationLayer planning_map(
           composite,
@@ -2481,11 +2639,11 @@ private:
     }
     if (planning_inflation_radius_ > 0.0) {
       nav3d::collision::InflationLayer planning_map(
-        global_map,
+        zoned_global_map,
         planning_inflation_radius_);
       return std::forward<Callback>(callback)(planning_map);
     }
-    return std::forward<Callback>(callback)(global_map);
+    return std::forward<Callback>(callback)(zoned_global_map);
   }
 
   template <typename Callback>
@@ -3502,6 +3660,8 @@ private:
   PcdLoaderBackend pcd_loader_backend_ = PcdLoaderBackend::Builtin;
   PlanningTraversabilityMode planning_traversability_mode_ = PlanningTraversabilityMode::Uav;
   bool planning_use_octomap_map_ = false;
+  std::string navigation_zone_file_;
+  std::vector<KeepoutPolygon> keepout_polygons_;
   GroundSearchOptions ground_search_options_;
   nav3d::common::Point3D start_;
   std::optional<nav3d::common::Point3D> current_position_;
