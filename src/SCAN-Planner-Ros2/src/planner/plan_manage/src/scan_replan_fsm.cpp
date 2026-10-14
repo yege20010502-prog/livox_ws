@@ -762,9 +762,29 @@ namespace scan_planner
 
     if (navi_mode_ == NAVI_MODE::REFERENCE_PATH)
     {
-      start_pt_ = info->position_traj_.evaluateDeBoorT(t_cur);
-      start_vel_ = info->velocity_traj_.evaluateDeBoorT(t_cur);
-      start_acc_ = info->acceleration_traj_.evaluateDeBoorT(t_cur);
+      // The body can lag the scheduled trajectory, especially while turning.
+      // Never seed a new plan at a future pose on the other side of a corner.
+      const double scheduled_error =
+          (info->position_traj_.evaluateDeBoorT(t_cur) - odom_pos_).head<2>().norm();
+      if (scheduled_error > 0.35)
+        RCLCPP_WARN(node_->get_logger(),
+                    "Replan scheduled/body mismatch %.3f m; anchoring to actual body", scheduled_error);
+      start_pt_ = odom_pos_;
+      // Incoming twist is sensor-frame velocity in the current bridge; do
+      // not pass it directly as a map-frame planning boundary condition.
+      double body_t = 0.0;
+      double nearest = std::numeric_limits<double>::infinity();
+      for (double t = 0.0; t <= info->duration_; t += 0.02) {
+        const double distance =
+            (info->position_traj_.evaluateDeBoorT(t) - odom_pos_).head<2>().squaredNorm();
+        if (distance < nearest) { nearest = distance; body_t = t; }
+      }
+      start_vel_ = info->velocity_traj_.evaluateDeBoorT(body_t);
+      const double planned_speed = start_vel_.norm();
+      const double measured_speed = odom_vel_.norm();
+      if (planned_speed > 1e-6)
+        start_vel_ *= std::min(1.0, measured_speed / planned_speed);
+      start_acc_.setZero();
 
       bool success = callReboundReplan(false, false);
       if (!success)

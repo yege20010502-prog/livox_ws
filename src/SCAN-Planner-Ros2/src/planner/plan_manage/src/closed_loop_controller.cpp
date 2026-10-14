@@ -32,6 +32,7 @@ public:
     max_vy_ = declare_parameter<double>("max_vy", 0.35);
     max_vyaw_ = std::min(declare_parameter<double>("max_vyaw", 1.0), kMaxVYawLimit);
     finish_dist_ = declare_parameter<double>("finish_dist", 0.15);
+    max_start_error_ = declare_parameter<double>("max_start_error", 0.35);
 
     bspline_sub_ = create_subscription<scan_planner_msgs::msg::Bspline>(
         "planning/bspline", 10,
@@ -101,6 +102,19 @@ private:
     for (size_t i = 0; i < msg->knots.size(); ++i) knots(i) = msg->knots[i];
     UniformBspline position(points, msg->order, 0.1);
     position.setKnot(knots);
+    const Eigen::Vector3d start = position.evaluateDeBoorT(0.0);
+    const double start_error = (start - odom_pos_).head<2>().norm();
+    if (!have_odom_ || (now() - last_odom_receive_time_).seconds() > odom_timeout_sec_ ||
+        !start.allFinite() || !std::isfinite(start_error) || start_error > max_start_error_)
+    {
+      receive_traj_ = false;
+      publishStop();
+      RCLCPP_ERROR(get_logger(),
+                   "Reject trajectory %lld: start/body error %.3f m (limit %.3f), fresh pose=%s",
+                   static_cast<long long>(msg->traj_id), start_error, max_start_error_,
+                   have_odom_ ? "available" : "missing");
+      return;
+    }
     traj_ = {position, position.getDerivative()};
     traj_.push_back(traj_[1].getDerivative());
     traj_duration_ = traj_[0].getTimeSum();
@@ -193,6 +207,7 @@ private:
   double time_forward_, heading_error_threshold_, kp_pos_, kp_yaw_;
   double max_vx_, max_vy_, max_vyaw_, finish_dist_;
   double odom_timeout_sec_{1.0};
+  double max_start_error_{0.35};
 };
 }  // namespace scan_planner
 

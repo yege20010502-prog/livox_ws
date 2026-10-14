@@ -12,6 +12,7 @@ closed_loop_controller:
     max_vy: 0.10
     max_vyaw: 0.25
     finish_dist: 0.15
+    max_start_error: 0.35
 
 open_loop_controller:
   ros__parameters:
